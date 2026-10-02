@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root {
+    --nuit: #120d33; --nuit2: #1b1446; --violet: #3a2a7c;
+    --or: #ffd166; --lumiere: #ffe066; --turquoise: #6fe3d8;
+    --terre: #c1440e; --creme: #f6ebd3; --rouge: #ff6b6b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:1280px; height:720px; overflow:hidden; background:var(--nuit);
+    font-family: 'Segoe UI', system-ui, sans-serif; }
+  #scene { position:relative; width:1280px; height:720px;
+    background: radial-gradient(120% 90% at 50% -10%, #4a3597 0%, var(--nuit2) 55%, var(--nuit) 100%);
+    overflow:hidden; }
+
+  /* Ciel étoilé de fond, toujours présent */
+  .etoile-fond { position:absolute; border-radius:50%; background:#fff;
+    box-shadow:0 0 6px 1px rgba(255,255,255,.7); opacity:.85; }
+  .zone-sombre { position:absolute; border-radius:50%;
+    background: radial-gradient(circle, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 70%); }
+
+  /* Caméra : transform wrapper pour zoom/travelling */
+  #camera { position:absolute; inset:0; transform-origin:center center; }
+
+  /* Mathéo : étoile vivante — JAMAIS un robot */
+  .matheo { position:absolute; width:100px; height:116px; }
+  .matheo svg { width:100%; height:100%; overflow:visible; }
+  .matheo.tremble { animation: tremble 0.15s ease-in-out infinite; }
+  @keyframes tremble { 0%,100% { transform: translateX(0); } 50% { transform: translateX(2px); } }
+  .matheo.rayonne .halo-m { animation: pulse-fort 1.2s ease-in-out infinite; }
+  @keyframes pulse-fort { 0%,100% { transform: scale(1); opacity:.9; } 50% { transform: scale(1.25); opacity:1; } }
+
+  /* Kola : personnage, avatar enfant */
+  .kola { position:absolute; width:90px; height:140px; }
+  .kola svg { width:100%; height:100%; overflow:visible; }
+
+  /* Objets mathématiques (mangues / billes) */
+  .objet { position:absolute; width:34px; height:34px; border-radius:50%;
+    opacity:0; }
+  .objet.vu { opacity:1; }
+  .objet.mangue { background: radial-gradient(circle at 35% 30%, #ffd166, #f77f00 55%, #c8321c 100%);
+    box-shadow: inset -3px -3px 6px rgba(0,0,0,.25); }
+  .objet.bille { background: radial-gradient(circle at 35% 30%, #a0e8f0, #4fb3c9 55%, #1e6b7d 100%);
+    box-shadow: inset -3px -3px 6px rgba(0,0,0,.25); }
+  .objet.pris { filter: drop-shadow(0 0 10px var(--lumiere)) brightness(1.2); }
+  .objet.non-pris { opacity:.35; filter: grayscale(.4); }
+
+  .groupe-cercle { position:absolute; border-radius:50%; border:3px solid var(--turquoise);
+    background: rgba(111,227,216,.08); opacity:0; }
+  .groupe-cercle.vu { opacity:1; }
+  .groupe-cercle.illumine { border-color: var(--lumiere); background: rgba(255,224,102,.18);
+    box-shadow: 0 0 24px rgba(255,224,102,.4); }
+
+  /* Texte à l'écran */
+  .texte-ecran { position:absolute; font-weight:800; color:#fff; text-align:center;
+    text-shadow: 0 2px 12px rgba(0,0,0,.6); opacity:0; }
+  .texte-ecran.vu { opacity:1; }
+  .texte-ecran.turquoise { color: var(--turquoise); }
+  .texte-ecran.or { color: var(--lumiere); }
+  .texte-ecran.rouge { color: var(--rouge); }
+  .texte-ecran.geant { font-size: 120px; }
+  .texte-ecran.enorme { font-size: 180px; }
+
+  .sous-titre { position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+    max-width:1000px; background:rgba(0,0,0,.55); color:#fff; font-size:28px; font-weight:600;
+    padding:14px 28px; border-radius:14px; text-align:center; line-height:1.3; opacity:0; }
+  .sous-titre.vu { opacity:1; }
+
+  .bulle-perso { position:absolute; background:var(--creme); color:#2b1d4a; font-weight:700;
+    font-size:22px; padding:10px 18px; border-radius:16px; opacity:0; }
+  .bulle-perso.vu { opacity:1; }
+
+  .fondu-noir { position:absolute; inset:0; background:#000; opacity:0; pointer-events:none;
+    z-index:50; }
+  .fondu-noir.actif { opacity:1; }
+</style>
+</head>
+<body>
+<div id="scene">
+  <div id="ciel-fixe"></div>
+  <div id="camera">
+    <div id="contenu"></div>
+  </div>
+  <div class="sous-titre" id="sous-titre"></div>
+  <div class="fondu-noir" id="fondu"></div>
+</div>
+
+<script>
+/* ===================================================================
+   MOTEUR DE RENDU DÉTERMINISTE — N22 v2
+   Piloté par un TEMPS VIRTUEL (window.__T en secondes), pas le temps
+   réel : chaque image est rendue pour un instant exact demandé par le
+   script de capture Puppeteer. Garantit un rendu reproductible et
+   image-parfait, contrairement à une vidéo IA générative.
+   =================================================================== */
+
+const scene = document.getElementById('scene');
+const contenu = document.getElementById('contenu');
+const camera = document.getElementById('camera');
+const sousTitre = document.getElementById('sous-titre');
+const fondu = document.getElementById('fondu');
+const ciel = document.getElementById('ciel-fixe');
+
+// --- Ciel étoilé fixe (généré une fois, déterministe par seed) ---
+function seedRandom(seed) {
+  let s = seed;
+  return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+const rnd = seedRandom(42);
+let cielHTML = '';
+for (let i = 0; i < 90; i++) {
+  const x = rnd() * 1280, y = rnd() * 500, r = 1 + rnd() * 2;
+  cielHTML += `<div class="etoile-fond" style="left:${x}px;top:${y}px;width:${r}px;height:${r}px"></div>`;
+}
+cielHTML += `<div class="zone-sombre" style="left:820px;top:380px;width:420px;height:420px"></div>`;
+ciel.innerHTML = cielHTML;
+
+// --- Personnages (SVG identiques au canon art.js) ---
+function svgMatheo(humeur) {
+  const bouche = {
+    content: '<path d="M51 86 q9 10 18 0" stroke="#7a3b00" stroke-width="3" fill="none" stroke-linecap="round"/>',
+    joie: '<path d="M48 84 q12 16 24 0 z" fill="#7a3b00"/><path d="M52 90 q8 5 16 0" fill="#ff8f6b"/>',
+    surpris: '<ellipse cx="60" cy="88" rx="5" ry="6.5" fill="#7a3b00"/>',
+    inquiet: '<path d="M52 90 q8 -6 16 0" stroke="#7a3b00" stroke-width="3" fill="none" stroke-linecap="round"/>',
+    pense: '<path d="M52 89 q8 -4 16 0" stroke="#7a3b00" stroke-width="3" fill="none" stroke-linecap="round"/>'
+  }[humeur] || '';
+  return `<svg viewBox="0 0 120 140">
+    <defs>
+      <radialGradient id="g-matheo" cx="40%" cy="33%" r="78%"><stop offset="0" stop-color="#fffdd9"/><stop offset=".55" stop-color="#ffe066"/><stop offset="1" stop-color="#ffbf2e"/></radialGradient>
+      <radialGradient id="g-halo"><stop offset="0" stop-color="#6fe3d8" stop-opacity=".9"/><stop offset=".6" stop-color="#6fe3d8" stop-opacity=".25"/><stop offset="1" stop-color="#6fe3d8" stop-opacity="0"/></radialGradient>
+    </defs>
+    <circle class="halo-m" cx="60" cy="82" r="58" fill="url(#g-halo)"/>
+    <path d="M46 40 Q38 20 30 12" stroke="#ffbf2e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <circle cx="29" cy="11" r="5.5" fill="#fffbd0"/>
+    <path d="M74 40 Q82 20 90 12" stroke="#ffbf2e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <circle cx="91" cy="11" r="5.5" fill="#fffbd0"/>
+    <ellipse cx="60" cy="82" rx="40" ry="44" fill="url(#g-matheo)" stroke="#e3a300" stroke-width="2"/>
+    <ellipse cx="46" cy="76" rx="7" ry="9.5" fill="#2b1d4a"/><ellipse cx="74" cy="76" rx="7" ry="9.5" fill="#2b1d4a"/>
+    <circle cx="43.6" cy="72" r="2.8" fill="#fff"/><circle cx="71.6" cy="72" r="2.8" fill="#fff"/>
+    ${bouche}
+  </svg>`;
+}
+function svgKola(pose) {
+  // Kola : enfant, avatar du joueur. Pose simple cohérente (bd.js original).
+  const bras = pose === 'trie' ?
+    '<path d="M30 70 Q15 85 12 100" stroke="#c98a52" stroke-width="8" fill="none" stroke-linecap="round"/>' :
+    '<path d="M30 70 Q18 80 14 92" stroke="#c98a52" stroke-width="8" fill="none" stroke-linecap="round"/>';
+  return `<svg viewBox="0 0 90 140">
+    <ellipse cx="45" cy="128" rx="28" ry="10" fill="rgba(0,0,0,.25)"/>
+    <rect x="22" y="70" width="46" height="55" rx="14" fill="#2f6fb5"/>
+    <circle cx="45" cy="45" r="28" fill="#c98a52"/>
+    <path d="M18 40 Q20 10 45 10 Q70 10 72 40 Q60 28 45 28 Q30 28 18 40Z" fill="#2b1d4a"/>
+    <circle cx="35" cy="47" r="3.2" fill="#2b1d4a"/><circle cx="55" cy="47" r="3.2" fill="#2b1d4a"/>
+    <path d="M36 58 Q45 64 54 58" stroke="#7a3b00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    ${bras}
+    <path d="M60 70 Q75 85 78 100" stroke="#c98a52" stroke-width="8" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// --- Grilles d'objets (mangues 24, billes 20) ---
+function grilleMangues() {
+  const positions = [];
+  for (let i = 0; i < 24; i++) {
+    const col = i % 6, row = Math.floor(i / 6);
+    positions.push({ x: 420 + col * 75, y: 260 + row * 75 });
+  }
+  return positions;
+}
+function grilleBilles() {
+  const positions = [];
+  for (let i = 0; i < 20; i++) {
+    const col = i % 5, row = Math.floor(i / 5);
+    positions.push({ x: 450 + col * 80, y: 280 + row * 80 });
+  }
+  return positions;
+}
+// 4 groupes de 6 (mangues) : positions cibles
+function positionsGroupes4(n = 24, parGroupe = 6, gx = [260, 560, 860, 1140], gy = 455) {
+  const pos = [];
+  for (let i = 0; i < n; i++) {
+    const g = Math.floor(i / parGroupe), d = i % parGroupe;
+    const dx = [-18, 0, 18, -18, 0, 18][d] || 0, dy = [-18, -18, -18, 18, 18, 18][d] || 0;
+    pos.push({ x: gx[g] + dx, y: gy + dy });
+  }
+  return pos;
+}
+// 5 groupes de 4 (billes)
+function positionsGroupes5(n = 20, parGroupe = 4, gx = [180, 400, 620, 840, 1060], gy = 500) {
+  const pos = [];
+  for (let i = 0; i < n; i++) {
+    const g = Math.floor(i / parGroupe), d = i % parGroupe;
+    const dx = [-16, 16, -16, 16][d] || 0, dy = [-16, -16, 16, 16][d] || 0;
+    pos.push({ x: gx[g] + dx, y: gy + dy });
+  }
+  return pos;
+}
+
+// ===================================================================
+// DÉFINITION DES SCÈNES : chaque scène a une fonction render(t) où t
+// est le temps ÉCOULÉ DEPUIS LE DÉBUT DE LA SCÈNE (pas le temps global).
+// ===================================================================
+
+const SCENES = [
+  { id:'S1', debut:0, fin:15, render: renderS1 },
+  { id:'S2', debut:15, fin:35, render: renderS2 },
+  { id:'S3', debut:35, fin:55, render: renderS3 },
+  { id:'S4', debut:55, fin:80, render: renderS4 },
+  { id:'S5', debut:80, fin:105, render: renderS5 },
+  { id:'S6', debut:105, fin:120, render: renderS6 },
+  { id:'S7', debut:120, fin:140, render: renderS7 },
+  { id:'S8', debut:140, fin:170, render: renderS8 },
+  { id:'S9', debut:170, fin:185, render: renderS9 },
+  { id:'S10', debut:185, fin:195, render: renderS10 }
+];
+
+const SOUS_TITRES = [
+  {t0:0, t1:5.2, texte:"Kola... regarde le ciel. Une de mes amies est encore là-bas."},
+  {t0:15, t1:19.5, texte:"Pour la retrouver, nous devons prendre les trois quarts de ces vingt-quatre mangues."},
+  {t0:19.5, t1:22.4, texte:"Tu es prêt ?"},
+  {t0:35, t1:40.8, texte:"Voilà nos vingt-quatre mangues."},
+  {t0:40.8, t1:46.8, texte:"Comment allons-nous prendre les trois quarts de vingt-quatre ?"},
+  {t0:55, t1:62, texte:"Regarde le quatre, en bas de la fraction."},
+  {t0:62, t1:70, texte:"Le quatre nous dit en combien de parts égales partager les vingt-quatre mangues."},
+  {t0:70, t1:76, texte:"Un, deux, trois, quatre groupes, bien égaux. Chaque groupe a six mangues."},
+  {t0:76, t1:80, texte:"Vingt-quatre, divisé par quatre, égale six."},
+  {t0:80, t1:86, texte:"Et maintenant, regarde le trois, en haut."},
+  {t0:86, t1:92, texte:"Le trois nous dit combien de groupes nous devons prendre."},
+  {t0:92, t1:98, texte:"Un groupe... deux groupes... trois groupes sur les quatre !"},
+  {t0:98, t1:102, texte:"Six, plus six, plus six, égale dix-huit."},
+  {t0:102, t1:105, texte:"Les trois quarts de vingt-quatre, c'est dix-huit !"},
+  {t0:105, t1:110, texte:"Voilà comment on fait."},
+  {t0:110, t1:114, texte:"Vingt-quatre, divisé par quatre, égale six."},
+  {t0:114, t1:117, texte:"Six, multiplié par trois, égale dix-huit."},
+  {t0:117, t1:120, texte:"On partage d'abord... puis on prend le numérateur."},
+  {t0:120, t1:124, texte:"Alors... vingt-quatre fois trois ?"},
+  {t0:124, t1:129, texte:"Oups ! Ça ferait soixante-douze. Ça ne peut pas être ça !"},
+  {t0:129, t1:140, texte:"On cherche seulement trois parts sur quatre, on ne peut pas dépasser vingt-quatre."},
+  {t0:140, t1:146, texte:"Essayons avec autre chose. Vingt billes, et les deux cinquièmes."},
+  {t0:146, t1:151, texte:"Vingt, divisé par cinq, égale quatre."},
+  {t0:151, t1:156, texte:"On prend deux groupes sur cinq."},
+  {t0:156, t1:160, texte:"Quatre, plus quatre, égale huit."},
+  {t0:160, t1:163, texte:"Les deux cinquièmes de vingt, c'est huit !"},
+  {t0:170, t1:179, texte:"Je partage d'abord en autant de parts que le dénominateur..."},
+  {t0:179, t1:185, texte:"puis je prends autant de parts que le numérateur."},
+  {t0:185, t1:190, texte:"À toi, maintenant ! Les trois cinquièmes de vingt-cinq... ça fait combien ?"},
+  {t0:190, t1:195, texte:"Mets la vidéo en pause, et cherche !"}
+];
+
+function majSousTitre(tGlobal) {
+  const actif = SOUS_TITRES.find(s => tGlobal >= s.t0 && tGlobal < s.t1);
+  if (actif) { sousTitre.textContent = actif.texte; sousTitre.classList.add('vu'); }
+  else { sousTitre.classList.remove('vu'); }
+}
+
+function vider() { contenu.innerHTML = ''; camera.style.transform = 'scale(1) translate(0,0)'; }
+function el(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html.trim();
+  const node = d.firstElementChild;
+  contenu.appendChild(node);
+  return node;
+}
+function voir(node) { node.classList.add('vu'); return node; }
+
+// ---------------- SCÈNE 1 — LE CIEL ----------------
+function renderS1(t) {
+  vider();
+  const m = el(`<div class="matheo tremble" style="left:560px;top:420px">${svgMatheo('inquiet')}</div>`);
+  // petite lumière lointaine qui scintille, apparaît progressivement
+  if (t > 6) {
+    const op = Math.min(1, (t - 6) / 3);
+    el(`<div style="position:absolute;left:1020px;top:180px;width:10px;height:10px;border-radius:50%;
+      background:#fff;opacity:${op};box-shadow:0 0 ${10+op*20}px ${4+op*8}px rgba(255,224,102,${op})"></div>`);
+  }
+  // zoom lent
+  const prog = Math.min(1, t / 15);
+  camera.style.transform = `scale(${1 + prog * 0.05})`;
+}
+
+// ---------------- SCÈNE 2 — LA MISSION ----------------
+function renderS2(t) {
+  vider();
+  el(`<div class="matheo" style="left:480px;top:400px">${svgMatheo('content')}</div>`);
+  // Mamie Sègla silhouette simple (arrière-plan)
+  el(`<div style="position:absolute;left:980px;top:360px;width:120px;height:200px;opacity:.35;
+    background:radial-gradient(ellipse at center, #c1440e 0%, transparent 70%);border-radius:50% 50% 0 0"></div>`);
+  // Kola apparaît progressivement (travelling révèle), fondu calculé par t (rendu déterministe)
+  if (t > 4) {
+    const opK = Math.min(1, (t - 4) / 2);
+    el(`<div class="kola" style="left:650px;top:420px;opacity:${opK}">${svgKola('normal')}</div>`);
+  }
+  camera.style.transform = `translateX(${-30 + Math.min(1, t/20) * 30}px)`;
+}
+
+// ---------------- SCÈNE 3 — LES 24 MANGUES ----------------
+function renderS3(t) {
+  vider();
+  el(`<div class="kola" style="left:90px;top:520px;transform:scale(.7)">${svgKola('normal')}</div>`);
+  const positions = grilleMangues();
+  const apparuJusqua = Math.min(24, Math.floor((t / 20) * 24 * 1.3));
+  positions.forEach((p, i) => {
+    const o = el(`<div class="objet mangue" style="left:${p.x}px;top:${p.y}px"></div>`);
+    if (i <= apparuJusqua) voir(o);
+  });
+  const prog = Math.min(1, t / 20);
+  camera.style.transform = `scale(${1 + prog * 0.08})`;
+}
+
+// ---------------- SCÈNE 4 — COMPRENDRE LE 4 ----------------
+function renderS4(t) {
+  vider();
+  // fraction 3/4 en haut, le 4 grossit
+  voir(el(`<div class="texte-ecran turquoise" style="left:560px;top:20px;font-size:50px">3</div>`));
+  const taille4 = 50 + Math.min(1, t/4) * 40;
+  const t4 = el(`<div class="texte-ecran or" style="left:555px;top:70px;font-size:${taille4}px">4</div>`);
+  voir(t4);
+
+  const depart = grilleMangues();
+  const arrivee = positionsGroupes4();
+  const progression = Math.min(1, Math.max(0, (t - 5) / 12)); // migration entre t=5 et t=17
+
+  depart.forEach((p0, i) => {
+    const p1 = arrivee[i];
+    const x = p0.x + (p1.x - p0.x) * progression;
+    const y = p0.y + (p1.y - p0.y) * progression;
+    const o = el(`<div class="objet mangue" style="left:${x}px;top:${y}px"></div>`);
+    voir(o);
+  });
+
+  if (progression >= 0.98) {
+    [260, 560, 860, 1140].forEach(gx => {
+      const c = el(`<div class="groupe-cercle" style="left:${gx-55}px;top:400px;width:110px;height:110px"></div>`);
+      voir(c);
+    });
+  }
+
+  if (t > 20) {
+    const txt = el(`<div class="texte-ecran or" style="left:300px;top:230px;font-size:56px">24 ÷ 4 = 6</div>`);
+    voir(txt);
+  }
+}
+
+// ---------------- SCÈNE 5 — COMPRENDRE LE 3 ----------------
+function renderS5(t) {
+  vider();
+  voir(el(`<div class="texte-ecran or" style="left:120px;top:20px;font-size:80px">3</div>`));
+  voir(el(`<div class="texte-ecran turquoise" style="left:120px;top:90px;font-size:46px">4</div>`));
+
+  const positions = positionsGroupes4();
+  const groupesIllumines = Math.min(3, Math.floor(t / 6) + (t > 0 ? 1 : 0));
+
+  positions.forEach((p, i) => {
+    const groupe = Math.floor(i / 6);
+    const classe = groupe < groupesIllumines ? 'objet mangue pris' : (groupe === 3 ? 'objet mangue non-pris' : 'objet mangue');
+    const o = el(`<div class="${classe}" style="left:${p.x}px;top:${p.y}px"></div>`);
+    voir(o);
+  });
+
+  [260, 560, 860, 1140].forEach((gx, gi) => {
+    const illumine = gi < groupesIllumines;
+    const c = el(`<div class="groupe-cercle${illumine ? ' illumine' : ''}" style="left:${gx-55}px;top:400px;width:110px;height:110px"></div>`);
+    voir(c);
+  });
+
+  if (t > 15) {
+    voir(el(`<div class="texte-ecran or" style="left:420px;top:40px;font-size:48px">6+6+6 = 18</div>`));
+  }
+  if (t > 20) {
+    voir(el(`<div class="texte-ecran turquoise" style="left:420px;top:150px;font-size:50px">3/4 de 24 = 18</div>`));
+  }
+  el(`<div class="matheo rayonne" style="left:1080px;top:60px">${svgMatheo(t>20?'joie':'content')}</div>`);
+}
+
+// ---------------- SCÈNE 6 — FORMULE ----------------
+function renderS6(t) {
+  vider();
+  el(`<div class="matheo" style="left:60px;top:560px;transform:scale(.6)">${svgMatheo('content')}</div>`);
+  if (t > 1) voir(el(`<div class="texte-ecran turquoise" style="left:300px;top:200px;font-size:48px">Étape 1 : 24 ÷ 4 = 6</div>`));
+  if (t > 6) voir(el(`<div class="texte-ecran turquoise" style="left:300px;top:300px;font-size:48px">Étape 2 : 6 × 3 = 18</div>`));
+  if (t > 11) voir(el(`<div class="texte-ecran or" style="left:280px;top:420px;font-size:56px">3/4 de 24 = 18</div>`));
+}
+
+// ---------------- SCÈNE 7 — L'ERREUR ----------------
+function renderS7(t) {
+  vider();
+  el(`<div class="matheo" style="left:560px;top:440px">${svgMatheo(t<8?'pense':(t<12?'surpris':'inquiet'))}</div>`);
+  el(`<div class="kola" style="left:900px;top:460px;transform:scale(.8)">${svgKola('normal')}</div>`);
+
+  // Petites 24 mangues restent visibles, en réduction
+  const depart = grilleMangues();
+  depart.forEach(p => {
+    el(`<div class="objet mangue vu" style="left:${100+(p.x-420)*0.25}px;top:${80+(p.y-260)*0.25}px;transform:scale(.4)"></div>`);
+  });
+
+  if (t > 6 && t < 14) {
+    const scale = Math.min(1.6, 1 + (t - 6) * 0.15);
+    const txt = el(`<div class="texte-ecran rouge" style="left:420px;top:280px;font-size:${60*scale}px">24 × 3 = 72</div>`);
+    voir(txt);
+  }
+  if (t >= 14) {
+    const txt = el(`<div class="texte-ecran rouge" style="left:420px;top:260px;font-size:82px;text-decoration:line-through">24 × 3 = 72</div>`);
+    voir(txt);
+    voir(el(`<div class="texte-ecran or" style="left:200px;top:355px;font-size:28px;width:880px">Une fraction ne peut pas dépasser le tout !</div>`));
+  }
+}
+
+// ---------------- SCÈNE 8 — DEUXIÈME EXEMPLE ----------------
+function renderS8(t) {
+  vider();
+  el(`<div class="kola" style="left:120px;top:460px">${svgKola('trie')}</div>`);
+  el(`<div class="matheo" style="left:1080px;top:460px;transform:scale(.8)">${svgMatheo('content')}</div>`);
+
+  const depart = grilleBilles();
+  const arrivee = positionsGroupes5();
+  const progression = Math.min(1, Math.max(0, (t - 4) / 10));
+
+  depart.forEach((p0, i) => {
+    const p1 = arrivee[i];
+    const x = p0.x + (p1.x - p0.x) * progression;
+    const y = p0.y + (p1.y - p0.y) * progression;
+    const groupe = Math.floor(i / 4);
+    const pris = progression >= 0.95 && t > 20 && groupe < 2;
+    const classe = pris ? 'objet bille pris' : 'objet bille';
+    voir(el(`<div class="${classe}" style="left:${x}px;top:${y}px"></div>`));
+  });
+
+  if (progression >= 0.95) {
+    [180, 400, 620, 840, 1060].forEach((gx, gi) => {
+      const illumine = t > 20 && gi < 2;
+      voir(el(`<div class="groupe-cercle${illumine?' illumine':''}" style="left:${gx-48}px;top:452px;width:96px;height:96px"></div>`));
+    });
+  }
+  if (t > 14) voir(el(`<div class="texte-ecran or" style="left:420px;top:150px;font-size:46px">20 ÷ 5 = 4</div>`));
+  if (t > 24) voir(el(`<div class="texte-ecran turquoise" style="left:420px;top:230px;font-size:46px">4 × 2 = 8</div>`));
+}
+
+// ---------------- SCÈNE 9 — RÉSUMÉ ----------------
+function renderS9(t) {
+  vider();
+  const prog = Math.min(1, t / 15);
+  camera.style.transform = `scale(${1.05 - prog * 0.05})`;
+  el(`<div class="matheo rayonne" style="left:590px;top:280px;transform:scale(1.3)">${svgMatheo('joie')}</div>`);
+
+  const mots = ['PARTAGER', 'PRENDRE', 'CALCULER'];
+  const idx = Math.min(2, Math.floor(t / 5));
+  const mot = mots[idx];
+  voir(el(`<div class="texte-ecran or" style="left:290px;top:420px;font-size:70px;width:700px;text-align:center" key="${mot}">${mot}</div>`));
+}
+
+// ---------------- SCÈNE 10 — MINI-DÉFI ----------------
+function renderS10(t) {
+  vider();
+  el(`<div class="matheo" style="left:520px;top:420px">${svgMatheo('pense')}</div>`);
+  el(`<div class="kola" style="left:650px;top:440px">${svgKola('normal')}</div>`);
+
+  const intensite = Math.min(1, t / 10);
+  el(`<div style="position:absolute;left:1020px;top:180px;width:${10+intensite*14}px;height:${10+intensite*14}px;border-radius:50%;
+    background:#fff;box-shadow:0 0 ${20+intensite*40}px ${8+intensite*16}px rgba(255,224,102,${0.6+intensite*0.4})"></div>`);
+
+  const scintille = Math.sin(t * 6) > 0 ? 1 : 0.75;
+  voir(el(`<div class="texte-ecran or geant" style="left:380px;top:120px;font-size:72px;opacity:${scintille}">3/5 de 25 = ?</div>`));
+}
+
+// ===================================================================
+// FONCTION PRINCIPALE : rendre un instant précis (temps virtuel)
+// ===================================================================
+window.renderAt = function(tGlobal) {
+  const scene = SCENES.find(s => tGlobal >= s.debut && tGlobal < s.fin) || SCENES[SCENES.length - 1];
+  const tLocal = tGlobal - scene.debut;
+  scene.render(tLocal);
+  majSousTitre(tGlobal);
+  // fondu léger aux tout premiers instants et tout derniers
+  if (tGlobal < 0.6) fondu.style.opacity = String(1 - tGlobal / 0.6);
+  else if (tGlobal > 194.4) fondu.style.opacity = String((tGlobal - 194.4) / 0.6);
+  else fondu.style.opacity = '0';
+  window.__frameReady = true;
+};
+window.__frameReady = false;
+</script>
+</body>
+</html>

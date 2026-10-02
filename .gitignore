@@ -1,3 +1,7 @@
 ﻿
 .netlify/
 node_modules/
+matheo/LESSONS/N22/renders/frames/
+matheo/LESSONS/N22/scenes/node_modules/
+matheo/LESSONS/N22/scenes/test_capture.js
+matheo/LESSONS/N22/scenes/package*.json
