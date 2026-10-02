@@ -1,0 +1,34 @@
+{
+  "id": "E0",
+  "titre": "Épisode 0 : l'arrivée de Mathéo",
+  "src": "architecte-v0.2 : BD de 5 cases (récit de la bible narrative, section 2) et tutoriel d'utilisation ; à faire relire par le relecteur local.",
+  "bd": {
+    "titre": "L'arrivée de Mathéo",
+    "cases": [
+      { "n": 1, "scene": { "fond": "nuit", "personnages": [ { "qui": "Mamie Sègla", "x": 130, "y": 70, "w": 90 } ], "objets": [ { "t": "fragment", "x": 20, "y": 20, "w": 30 }, { "t": "fragment", "x": 90, "y": 8, "w": 24 }, { "t": "fragment", "x": 160, "y": 18, "w": 30 }, { "t": "fragment", "x": 240, "y": 6, "w": 26 }, { "t": "fragment", "x": 300, "y": 24, "w": 28 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Chaque nuit, douze étoiles forment la Grande Pirogue du ciel." } ], "legende": "Une nuit, près d'un village du Bénin." },
+      { "n": 2, "scene": { "fond": "champ", "personnages": [ { "qui": "Anita", "x": 70, "y": 120, "w": 60 }, { "qui": "Kola", "x": 200, "y": 120, "w": 60 } ], "objets": [], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Regarde, Kola ! Toutes les étoiles sont éteintes !" }, { "qui": "Kola", "texte": "Le ciel est tout noir !" } ] },
+      { "n": 3, "scene": { "fond": "champ", "personnages": [ { "qui": "Mathéo", "x": 130, "y": 50, "w": 90, "humeur": "surpris" }, { "qui": "Anita", "x": 20, "y": 130, "w": 56 }, { "qui": "Kola", "x": 290, "y": 130, "w": 56 } ], "objets": [], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Une lumière tombe dans le champ !" }, { "qui": "Mathéo", "texte": "Bip ! Aïe, quelle chute !", "humeur": "surpris" } ] },
+      { "n": 4, "scene": { "fond": "champ", "personnages": [ { "qui": "Mathéo", "x": 130, "y": 60, "w": 100, "humeur": "joie" }, { "qui": "Anita", "x": 20, "y": 130, "w": 56 }, { "qui": "Kola", "x": 290, "y": 130, "w": 56 } ], "objets": [], "devant": true },
+        "bulles": [ { "qui": "Mathéo", "texte": "Bip ! Je suis Mathéo, une petite étoile." }, { "qui": "Mathéo", "texte": "Le ciel s'est éteint sans moi !", "humeur": "pense" } ] },
+      { "n": 5, "scene": { "fond": "nuit", "personnages": [ { "qui": "Mathéo", "x": 30, "y": 80, "w": 80, "humeur": "pense" } ], "objets": [ { "t": "nuage", "x": 180, "y": 30, "w": 130, "humeur": "endormi" } ], "devant": true },
+        "bulles": [ { "qui": "Mathéo", "texte": "Attention au Nuage-Paresse ! Il souffle sur les étoiles quand on abandonne.", "humeur": "surpris" }, { "qui": "Kola", "texte": "Alors, on n'abandonne jamais !" } ] },
+      { "n": 6, "scene": { "fond": "ecole", "personnages": [ { "qui": "Maître Léo", "x": 150, "y": 56, "w": 64 }, { "qui": "Anita", "x": 40, "y": 130, "w": 54 }, { "qui": "Kola", "x": 100, "y": 130, "w": 54 }, { "qui": "Mathéo", "x": 262, "y": 120, "w": 52, "humeur": "joie" } ], "objets": [], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Un problème de maths résolu rallume une étoile." }, { "qui": "Mathéo", "texte": "Bip ! Avec ton aide, tout s'allume !", "humeur": "joie" } ], "encadre": "Résous les problèmes de maths : chaque réussite rallume une étoile du ciel." }
+    ]
+  },  "tutoriel": {
+    "intro": "Voici comment on joue. Je t'explique, puis tu essaies.",
+    "aide_texte": "Si tu hésites, touche l'ampoule : je te donne un indice, jamais la solution d'un coup.",
+    "ecoute_texte": "Touche le petit haut-parleur pour écouter une phrase.",
+    "etapes": [
+      { "type": "choix", "intro": "Premier essai : touche la bonne réponse.", "question": "Quelle galette est coupée en 2 parts égales ?",
+        "options": [ { "visuel": { "t": "disque", "den": 2, "alt": "Une galette coupée en 2 parts égales" }, "ok": true }, { "visuel": { "t": "disque", "den": 2, "coupes": [0.8], "alt": "Une galette coupée en 2 parts inégales" }, "e": "E3", "retour": "Bip ! Ces deux parts n'ont pas la même taille. Une erreur n'est pas grave : on réessaie !" } ] },
+      { "type": "nombre", "intro": "Deuxième essai : tape un nombre avec le clavier.", "question": "Combien font 2 + 3 ?", "reponse": 5, "erreurs": [ { "reponses": [6], "type": "E3", "texte": "Bip ! Presque. Compte encore : 2 plus 3. Une erreur n'est pas grave." } ] },
+      { "type": "construire", "forme": "barre", "den": 2, "num": 1, "options_den": [2, 3, 4], "intro": "Dernier essai : on partage et on colorie.", "question_partage": "Partage la barre en 2 parts égales.", "retour_partage": "Bip ! Il faut 2 parts égales. Réessaie !", "retour_partage_haut": "Bip ! Il faut 2 parts égales. Réessaie !", "question_colorier": "Touche 1 part pour la colorier.", "retour_trop": "Bip ! Il faut colorier 1 seule part.", "retour_peu": "Bip ! Il faut colorier 1 part.", "voix_fin": "Bravo ! Tu sais jouer." }
+    ],
+    "fin": "Bip bip ! Tu es prêt. Allumons la première étoile !"
+  },
+  "interface": { "fragment": "Bip ! Tu es prêt." }
+}

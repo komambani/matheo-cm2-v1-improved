@@ -1,0 +1,248 @@
+{
+  "id": "N23",
+  "version": "0.1",
+  "titre": "Résoudre des problèmes avec des fractions",
+  "domaine": "Fractions",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Dans un problème de fraction, je relie toujours la fraction à une quantité réelle.",
+  "erreurs_ciblees": ["E1 : calculer sans donner de sens à la fraction", "E9 : répondre à une autre question que celle posée", "E8 : choisir la mauvaise opération (multiplier au lieu de partager)"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 },
+      { "qui": "Anita", "x": 40, "y": 126, "w": 54 },
+      { "qui": "Mathéo", "x": 128, "y": 100, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "objets", "genre": "mangue", "n": 10, "x": 40, "y": 112, "colonnes": 10, "pas": 21, "taille": 20 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Le soir, au marché, Mamie Sègla range son étal." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est dans sa caisse !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "Je te le rends si tu m'aides à compter." },
+    { "qui": "Mamie Sègla", "texte": "J'avais 30 mangues. J'en ai vendu 1/5 le matin et 2/5 l'après-midi." },
+    { "qui": "Anita", "texte": "Combien de mangues lui reste-t-il ?" },
+    { "qui": "Narrateur", "texte": "Comment résoudre un problème avec des fractions ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Mamie Sègla a 30 mangues. Le matin, elle en vend 1/5. L'après-midi, elle en vend 2/5. Combien de mangues lui reste-t-il ?",
+    "reponse": "12",
+    "reussite": "Bip bip ! Il lui reste 12 mangues. On a relié chaque fraction à une quantité.",
+    "etapes": [
+      {
+        "type": "selection",
+        "intro": "D'abord, trions les informations de l'énoncé.",
+        "question": "Touche les phrases qui servent à répondre.",
+        "items": [
+          "Mamie Sègla a 30 mangues.",
+          "Le marché ouvre à sept heures.",
+          "Le matin, elle en vend 1/5.",
+          "Elle range ses mangues dans un panier rouge.",
+          "L'après-midi, elle en vend 2/5."
+        ],
+        "utiles": [0, 2, 4],
+        "retour_trop": "Bip ! Une de ces informations ne sert pas à répondre. L'heure et la couleur du panier ne comptent pas.",
+        "retour_manque": "Bip ! Il manque une information utile. Il faut le total de mangues et les deux ventes."
+      },
+      {
+        "type": "nombre",
+        "intro": "Maintenant, relions la fraction à une quantité. Le matin : 1/5 de 30.",
+        "question": "Combien de mangues Mamie vend-elle le matin ? C'est 1/5 de 30.",
+        "reponse": 6,
+        "erreurs": [
+          { "reponses": [150], "type": "E8", "texte": "Bip ! 150, c'est plus que 30 mangues. Une partie du tout est plus petite. On partage d'abord 30 en 5." },
+          { "reponses": [5], "type": "E1", "texte": "Bip ! 5, c'est le bas de la fraction. Partage 30 en 5 lots égaux. Combien dans un lot ?" },
+          { "reponses": [25], "type": "E1", "texte": "Bip ! 30 − 5 = 25 ne donne pas 1/5. Partage 30 en 5 lots égaux, puis prends 1 lot." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "L'après-midi : 2/5 de 30.",
+        "question": "Combien de mangues Mamie vend-elle l'après-midi ? C'est 2/5 de 30.",
+        "reponse": 12,
+        "erreurs": [
+          { "reponses": [6], "type": "E5", "texte": "Bip ! 6, c'est la taille d'une part. 2/5 veut dire 2 parts. Combien de mangues dans 2 parts ?" },
+          { "reponses": [15], "type": "E2", "texte": "Bip ! Tu as partagé avec le 2. Regarde le 5, en bas : partage 30 en 5 lots." },
+          { "reponses": [60], "type": "E8", "texte": "Bip ! 60, c'est plus que 30 mangues. Une partie du tout est plus petite." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "Maintenant, additionnons les deux ventes.",
+        "question": "Combien de mangues Mamie a-t-elle vendues en tout ?",
+        "reponse": 18,
+        "erreurs": [
+          { "reponses": [12], "type": "E9", "texte": "Bip ! 12, ce sont les mangues de l'après-midi. Le matin aussi : 6 + 12." },
+          { "reponses": [6], "type": "E9", "texte": "Bip ! 6, ce sont les mangues du matin. L'après-midi aussi : 6 + 12." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "Dernière étape : relisons la question.",
+        "question": "Combien de mangues lui reste-t-il ?",
+        "reponse": 12,
+        "erreurs": [
+          { "reponses": [18], "type": "E9", "texte": "Bip ! 18, ce sont les mangues vendues. Que demande la question ? Ce qu'il lui reste." },
+          { "reponses": [48], "type": "E8", "texte": "Bip ! 48, c'est plus que 30 mangues. Pour trouver ce qui reste, on enlève ce qui est vendu." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Lis bien l'énoncé. Que sais-tu ? Que cherches-tu ?" },
+    { "niveau": 2, "texte": "Relie chaque fraction à une quantité : 1/5 de 30 mangues." },
+    { "niveau": 3, "texte": "Pour 1/5 de 30, partage 30 en 5 lots égaux, puis prends 1 lot." },
+    { "niveau": 4, "texte": "Exemple : 1/4 de 20 mangues. 20 ÷ 4 = 5. À toi, avec 30 et 1/5 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je trouve chaque quantité, j'additionne, puis je soustrais." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Mamie a 20 mangues. Elle en vend 1/4.",
+      "etapes": [
+        { "type": "nombre", "intro": "Relie la fraction à la quantité : 1/4 de 20.", "question": "Combien de mangues Mamie vend-elle ?", "reponse": 5, "erreurs": [ { "reponses": [80], "type": "E8", "texte": "Bip ! 80, c'est plus que 20. Partage 20 en 4 lots égaux." }, { "reponses": [4], "type": "E1", "texte": "Bip ! 4, c'est le bas de la fraction. Partage 20 en 4 lots : combien dans un lot ?" } ] },
+        { "type": "nombre", "question": "Combien de mangues lui reste-t-il ?", "reponse": 15, "erreurs": [ { "reponses": [5], "type": "E9", "texte": "Bip ! 5, ce sont les mangues vendues. Que demande la question ? Ce qu'il lui reste." } ] }
+      ],
+      "fin": "1/4 de 20 font 5. Il reste 15 mangues."
+    },
+    {
+      "enonce": "Kola a 18 billes. Il en perd 1/3.",
+      "etapes": [
+        { "type": "nombre", "intro": "Relie la fraction à la quantité : 1/3 de 18.", "question": "Combien de billes Kola perd-il ?", "reponse": 6, "erreurs": [ { "reponses": [54], "type": "E8", "texte": "Bip ! 54, c'est plus que 18. Partage 18 en 3 lots égaux." }, { "reponses": [3], "type": "E1", "texte": "Bip ! 3, c'est le bas de la fraction. Partage 18 en 3 lots : combien dans un lot ?" } ] },
+        { "type": "nombre", "question": "Combien de billes lui reste-t-il ?", "reponse": 12, "erreurs": [ { "reponses": [6], "type": "E9", "texte": "Bip ! 6, ce sont les billes perdues. Que demande la question ? Ce qu'il lui reste." } ] }
+      ],
+      "fin": "1/3 de 18 font 6. Il reste 12 billes."
+    },
+    {
+      "enonce": "Reviens à Mamie : 1/5 de 30 mangues.",
+      "etapes": [
+        { "type": "nombre", "question": "Combien font 1/5 de 30 ?", "reponse": 6, "erreurs": [ { "reponses": [150], "type": "E8", "texte": "Bip ! 150, c'est plus que 30. Partage 30 en 5 lots égaux." } ] }
+      ],
+      "fin": "1/5 de 30 font 6."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Dans « 1/5 de 30 mangues », que représente le nombre 30 ?", "bonne": "Le tout : toutes les mangues",
+      "mauvaises": [
+        { "t": "Le nombre de parts", "e": "E2", "retour": "Bip ! Le nombre de parts, c'est le bas de la fraction : 5. Le 30, ce sont toutes les mangues." },
+        { "t": "La fraction", "e": "E1", "retour": "Bip ! La fraction, c'est 1/5. Le 30 est la quantité de départ : toutes les mangues." },
+        { "t": "Ce qui reste", "e": "E9", "retour": "Bip ! Ce qui reste se calcule après. Le 30, ce sont toutes les mangues de départ." } ] },
+    { "id": "A2", "niveau": "A", "question": "Pour trouver 1/5 de 30, on partage 30 en combien de parts égales ?", "bonne": "5",
+      "mauvaises": [
+        { "t": "1", "e": "E2", "retour": "Bip ! Le 1 dit combien de parts on prend. On partage avec le bas : 5." },
+        { "t": "30", "e": "E1", "retour": "Bip ! 30 est la quantité à partager, pas le nombre de parts. Le bas de 1/5 dit : 5." },
+        { "t": "6", "e": "E1", "retour": "Bip ! 6, c'est le résultat. Pour partager, on utilise le bas de la fraction : 5." } ] },
+    { "id": "B1", "niveau": "B", "question": "Combien font 1/4 de 20 ?", "bonne": "5",
+      "mauvaises": [
+        { "t": "4", "e": "E1", "retour": "Bip ! 4, c'est le bas de la fraction. On partage 20 en 4 lots : 20 ÷ 4 = 5." },
+        { "t": "80", "e": "E8", "retour": "Bip ! 80, c'est plus que 20. Une partie du tout est plus petite. On partage." },
+        { "t": "15", "e": "E9", "retour": "Bip ! 15, c'est ce qui reste. 1/4 de 20, c'est 5." } ] },
+    { "id": "B2", "niveau": "B", "question": "Combien font 3/4 de 20 ?", "bonne": "15",
+      "mauvaises": [
+        { "t": "5", "e": "E5", "retour": "Bip ! 5, c'est la taille d'une part. 3/4 veut dire 3 parts : 5 × 3 = 15." },
+        { "t": "60", "e": "E8", "retour": "Bip ! 60, c'est plus que 20. On partage d'abord par 4." },
+        { "t": "23", "e": "E1", "retour": "Bip ! On n'ajoute pas 3 à 20. On partage 20 en 4, puis on prend 3 parts." } ] },
+    { "id": "C1", "niveau": "C", "question": "Kola a 24 billes. Il en perd 1/3. Combien de billes lui reste-t-il ?", "bonne": "16",
+      "mauvaises": [
+        { "t": "8", "e": "E9", "retour": "Bip ! 8, ce sont les billes perdues. Que demande la question ? Ce qu'il lui reste." },
+        { "t": "21", "e": "E1", "retour": "Bip ! On ne soustrait pas 3. 1/3 de 24, c'est 24 ÷ 3 = 8. Puis 24 − 8." },
+        { "t": "72", "e": "E8", "retour": "Bip ! 72, c'est plus que 24. 1/3 de 24 se calcule en partageant par 3." } ] },
+    { "id": "C2", "niveau": "C", "question": "Un sac de riz pèse 40 kg. On en vend 1/4, puis 1/2 du sac. Combien de kilos a-t-on vendus en tout ?", "bonne": "30 kg",
+      "mauvaises": [
+        { "t": "10 kg", "e": "E9", "retour": "Bip ! 10 kg, c'est 1/4 seulement. Il faut aussi 1/2 du sac : 10 + 20." },
+        { "t": "20 kg", "e": "E9", "retour": "Bip ! 20 kg, c'est 1/2 seulement. Il faut aussi 1/4 du sac : 10 + 20." },
+        { "t": "10 kg restent", "e": "E9", "retour": "Bip ! La question demande ce qu'on a vendu : 10 + 20 = 30 kg." } ] },
+    { "id": "D1", "niveau": "D", "question": "Anita dit : « 1/3 de 12, c'est 12 − 3 = 9. » A-t-elle raison ?", "bonne": "Non, il faut partager 12 en 3 : 1/3 de 12, c'est 4",
+      "mauvaises": [
+        { "t": "Oui, 1/3 veut dire enlever 3", "e": "E1", "retour": "Bip ! Le 3 dit en combien de parts on partage. On ne soustrait pas." },
+        { "t": "Non, il faut multiplier 12 par 3", "e": "E8", "retour": "Bip ! 12 × 3 fait 36, c'est plus que 12. Une partie du tout est plus petite." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : partage 12 en 3 lots égaux, puis prends 1 lot." } ] },
+    { "id": "D2", "niveau": "D", "question": "Mamie a 24 mangues. Elle en vend 1/2 le matin et 1/4 l'après-midi. Elle dit : « Il m'en reste 6. » Est-ce vrai ?", "bonne": "Oui : 12 + 6 = 18 vendues, et 24 − 18 = 6",
+      "mauvaises": [
+        { "t": "Non, il en reste 12", "e": "E9", "retour": "Bip ! 12, c'est la moitié vendue le matin. Il faut aussi retirer 6 de l'après-midi." },
+        { "t": "Non, il en reste 18", "e": "E9", "retour": "Bip ! 18, ce sont les mangues vendues. Il en reste 24 − 18 = 6." },
+        { "t": "Non, il en reste 8", "e": "E1", "retour": "Bip ! Vérifions : 1/2 de 24 = 12, 1/4 de 24 = 6. Il en reste 24 − 12 − 6 = 6." } ] }
+  ],
+
+  "boss": {
+    "question": "Un champ mesure 60 mètres de long. Mamie Sègla plante du maïs sur 1/3 de la longueur et du manioc sur 1/4 de la longueur. Quelle longueur reste libre ?",
+    "reponse": "25 mètres",
+    "mauvaises": [
+      { "valeur": "35 mètres", "e": "E9", "retour": "Bip ! 35 mètres, c'est la longueur plantée : 20 + 15. Que demande la question ? Ce qui reste libre." },
+      { "valeur": "20 mètres", "e": "E5", "retour": "Bip ! 20 mètres, c'est seulement le maïs. Il y a aussi le manioc." },
+      { "valeur": "15 mètres", "e": "E5", "retour": "Bip ! 15 mètres, c'est seulement le manioc. Il y a aussi le maïs." }
+    ],
+    "indice": "Trouve 1/3 de 60, puis 1/4 de 60. Additionne, puis enlève au champ entier."
+  },
+
+  "video": {
+    "titre": "Résoudre un problème avec des fractions",
+    "duree": 165,
+    "segments": [
+      { "debut": 0, "fin": 15, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, résoudre un problème avec des fractions." },
+          { "t": 6, "texte": "Mamie Sègla a 30 mangues. Elle en vend 1/5, puis 2/5." } ],
+        "etapes": [ { "t": 6.4, "a": "ecrire", "id": "p1", "texte": "30 mangues", "x": 180, "y": 80, "taille": 48 }, { "t": 8.5, "a": "ecrire", "id": "p2", "texte": "1/5 puis 2/5", "x": 180, "y": 148, "taille": 48, "couleur": "#6fe3d8" } ] },
+      { "debut": 15, "fin": 40, "parties": [
+          { "t": 0, "texte": "Premier pas : je lis et je trie." },
+          { "t": 5, "texte": "Je garde le total et les deux ventes." },
+          { "t": 12, "texte": "Je cherche combien il lui reste." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "carte", "id": "c2", "x": 40, "y": 24, "w": 280, "h": 156, "lignes": [ { "t": 0.4, "texte": "Je sais : 30 mangues", "couleur": "#2b1d4a" }, { "t": 5, "texte": "1/5 puis 2/5", "couleur": "#0e7f74" }, { "t": 12, "texte": "Je cherche : le reste", "couleur": "#b45309" } ] } ] },
+      { "debut": 40, "fin": 80, "parties": [
+          { "t": 0, "texte": "Deuxième pas : je relie chaque fraction à une quantité." },
+          { "t": 8, "texte": "1/5 de 30. Je partage 30 en 5 : 30 divisé par 5 égale 6." },
+          { "t": 20, "texte": "Le matin, elle vend 6 mangues." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "d3a", "texte": "1/5 de 30", "x": 180, "y": 70, "taille": 46 }, { "t": 9, "a": "ecrire", "id": "d3b", "texte": "30 ÷ 5 = 6", "x": 180, "y": 130, "taille": 46, "couleur": "#ffe066" }, { "t": 21, "a": "ecrire", "id": "d3c", "texte": "6 mangues", "x": 180, "y": 184, "taille": 38, "couleur": "#6fe3d8" } ] },
+      { "debut": 80, "fin": 110, "parties": [
+          { "t": 0, "texte": "2/5 de 30. Une part fait 6." },
+          { "t": 7, "texte": "Deux parts : 6 fois 2 égale 12." },
+          { "t": 15, "texte": "L'après-midi, elle vend 12 mangues." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "e4a", "texte": "2/5 de 30", "x": 180, "y": 70, "taille": 46 }, { "t": 8, "a": "ecrire", "id": "e4b", "texte": "6 × 2 = 12", "x": 180, "y": 130, "taille": 46, "couleur": "#ffe066" }, { "t": 16, "a": "ecrire", "id": "e4c", "texte": "12 mangues", "x": 180, "y": 184, "taille": 38, "couleur": "#6fe3d8" } ] },
+      { "debut": 110, "fin": 145, "parties": [
+          { "t": 0, "texte": "Troisième pas : j'additionne les ventes. 6 plus 12 égale 18." },
+          { "t": 11, "texte": "Dernier pas : je relis la question. Elle demande ce qui reste." },
+          { "t": 22, "texte": "30 moins 18 égale 12. Il reste 12 mangues." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "f5a", "texte": "6 + 12 = 18", "x": 180, "y": 70, "taille": 46 }, { "t": 12, "a": "ecrire", "id": "f5b", "texte": "30 − 18 = 12", "x": 180, "y": 134, "taille": 46, "couleur": "#6fe3d8" } ] },
+      { "debut": 145, "fin": 165, "parties": [
+          { "t": 0, "texte": "Attention ! 18, ce sont les mangues vendues." },
+          { "t": 6, "texte": "La question demande ce qui reste : 12." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "g6a", "texte": "18 ?", "x": 180, "y": 80, "taille": 52, "couleur": "#fff" }, { "t": 3, "a": "croix", "x1": 130, "y1": 40, "x2": 230, "y2": 92 }, { "t": 6.5, "a": "ecrire", "id": "g6b", "texte": "12", "x": 180, "y": 160, "taille": 56, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Les mangues du soir",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 }, { "qui": "Anita", "x": 40, "y": 126, "w": 54 }, { "qui": "Mathéo", "x": 128, "y": 100, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "objets", "genre": "mangue", "n": 10, "x": 40, "y": 112, "colonnes": 10, "pas": 21, "taille": 20 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "J'avais 30 mangues. J'en ai vendu 1/5, puis 2/5." }, { "qui": "Anita", "texte": "Combien lui en reste-t-il ?" } ], "legende": "Le soir, au marché." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 112, "w": 66 } ], "objets": [ { "t": "texte", "texte": "30 − 1 − 2 = 27", "x": 230, "y": 120, "taille": 34, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Facile ! 30 moins 1 moins 2 : 27 !" }, { "qui": "Anita", "texte": "Non, Kola. 1/5 n'est pas 1 mangue." } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "texte", "texte": "1/5 de 30", "x": 256, "y": 90, "taille": 36, "couleur": "#c1440e" }, { "t": "texte", "texte": "30 ÷ 5 = 6", "x": 256, "y": 150, "taille": 36, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "On relie la fraction à la quantité." }, { "qui": "Kola", "texte": "On partage 30 en 5 !" } ], "legende": "1/5 de 30 mangues : 6 mangues." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "joie" } ], "objets": [ { "t": "texte", "texte": "6 + 12 = 18", "x": 150, "y": 100, "taille": 50, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Mathéo", "texte": "Bip ! 6 le matin, 12 l'après-midi !", "humeur": "joie" }, { "qui": "Anita", "texte": "Elle en a vendu 18." } ], "legende": "6 + 12 = 18 mangues vendues." },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "30 − 18 = 12", "x": 180, "y": 130, "taille": 50, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Donc elle a 18 mangues !" }, { "qui": "Anita", "texte": "La question demande ce qui reste : 12." } ] },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 }, { "qui": "Mathéo", "x": 60, "y": 104, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 126, "y": 128, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! Il me reste 12 mangues." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Je trie, je relie la fraction à la quantité, je calcule, puis je réponds à la question." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Je relie la fraction à une quantité réelle, puis je réponds à la question.",
+  "carte": "1/5 de 30 = 6 ; 2/5 de 30 = 12 ; 6 + 12 = 18 ; 30 − 18 = 12.",
+  "pourquoi": "Pourquoi relire la question ? Pour répondre à ce qu'on demande, pas à une étape du calcul.",
+  "fiche": { "titre": "N23 · Résoudre des problèmes avec des fractions", "piege": "S'arrêter à 18 : ce sont les mangues vendues. La question demande ce qui reste : 12." },
+  "controles": [ { "expr": "30/5", "attendu": 6 }, { "expr": "30/5*2", "attendu": 12 }, { "expr": "6+12", "attendu": 18 }, { "expr": "30-18", "attendu": 12 }, { "expr": "20/4", "attendu": 5 }, { "expr": "20-5", "attendu": 15 }, { "expr": "18/3", "attendu": 6 }, { "expr": "18-6", "attendu": 12 }, { "expr": "20/4*3", "attendu": 15 }, { "expr": "24-24/3", "attendu": 16 }, { "expr": "40/4+40/2", "attendu": 30 }, { "expr": "12/3", "attendu": 4 }, { "expr": "24/2+24/4", "attendu": 18 }, { "expr": "24-18", "attendu": 6 }, { "expr": "60/3", "attendu": 20 }, { "expr": "60/4", "attendu": 15 }, { "expr": "60-20-15", "attendu": 25 } ]
+}

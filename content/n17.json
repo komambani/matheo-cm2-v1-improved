@@ -1,0 +1,245 @@
+{
+  "id": "N17",
+  "version": "0.1",
+  "titre": "Comprendre une fraction",
+  "domaine": "Fractions",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Une fraction décrit une ou plusieurs parts égales d'un même tout.",
+  "erreurs_ciblees": ["E3 : oublier que les parts doivent être égales", "E2 : confondre numérateur et dénominateur", "E1 : calculer sans donner de sens à la fraction"],
+
+  "mission_scene": {
+    "fond": "cour",
+    "personnages": [
+      { "qui": "Maître Léo", "x": 250, "y": 58, "w": 58 },
+      { "qui": "Anita", "x": 22, "y": 126, "w": 54 },
+      { "qui": "Kola", "x": 92, "y": 126, "w": 54 },
+      { "qui": "Mathéo", "x": 176, "y": 96, "w": 50 }
+    ],
+    "objets": [ { "t": "galette", "cx": 150, "cy": 204, "r": 20 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Dans la cour de l'école, Mathéo flotte sous un arbre." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile ! Elle est dans la poche de Maître Léo !", "humeur": "surpris" },
+    { "qui": "Maître Léo", "texte": "Je te le rends si tu aides Anita et Kola." },
+    { "qui": "Kola", "texte": "Je coupe la galette ! Un gros morceau pour moi !" },
+    { "qui": "Anita", "texte": "Ce n'est pas juste, Kola ! Mathéo, aide-nous !" },
+    { "qui": "Narrateur", "texte": "Comment partager une galette pour que chacun ait pareil ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Une galette est coupée en 4 parts égales. Anita en mange 3. Quelle fraction de la galette Anita mange-t-elle ?",
+    "reponse": "3/4",
+    "reussite": "Bip bip ! 3/4 de la galette ! Trois parts sur quatre parts égales.",
+    "etapes": [
+      {
+        "type": "choix",
+        "intro": "Kola coupe une galette. Regarde bien les parts.",
+        "question": "Quelle galette est coupée en parts égales ?",
+        "options": [
+          { "visuel": { "t": "disque", "den": 4, "alt": "Une galette coupée en 4 parts égales" }, "ok": true },
+          { "visuel": { "t": "disque", "den": 3, "coupes": [0.12, 0.5], "alt": "Une galette coupée en 3 parts inégales" }, "e": "E3", "retour": "Bip ! Ces parts n'ont pas la même taille. Une fraction compte des parts égales." },
+          { "visuel": { "t": "disque", "den": 4, "coupes": [0.1, 0.3, 0.7], "alt": "Une galette coupée en 4 parts inégales" }, "e": "E3", "retour": "Bip ! Il y a 4 parts, mais elles n'ont pas la même taille. Les parts d'une fraction sont égales." },
+          { "visuel": { "t": "disque", "den": 2, "coupes": [0.8], "alt": "Une galette coupée en 2 parts inégales" }, "e": "E3", "retour": "Bip ! Un morceau est beaucoup plus grand que l'autre. Il faut des parts égales." }
+        ]
+      },
+      {
+        "type": "construire",
+        "forme": "disque",
+        "den": 4,
+        "num": 3,
+        "options_den": [2, 3, 4, 6],
+        "intro": "Coupons la galette ensemble.",
+        "question_partage": "Coupe la galette en 4 parts égales. Choisis le bon partage.",
+        "retour_partage_haut": "Bip ! Le 3, ce sont les parts d'Anita. Pour couper la galette, il faut 4 parts égales.",
+        "retour_partage": "Bip ! La galette doit être coupée en 4 parts égales. Réessaie !",
+        "question_colorier": "Anita mange 3 parts. Touche ces parts pour les colorier.",
+        "retour_trop": "Bip ! Tu as colorié trop de parts. Anita en mange 3.",
+        "retour_peu": "Bip ! Il n'y a pas assez de parts coloriées. Anita en mange 3.",
+        "voix_fin": "Tu viens de colorier trois parts sur quatre."
+      },
+      {
+        "type": "fraction",
+        "num": 3,
+        "den": 4,
+        "visuel": { "t": "disque", "den": 4, "num": 3, "alt": "Une galette de 4 parts dont 3 sont coloriées" },
+        "intro": "Écris maintenant la fraction de la galette.",
+        "question_haut": "Combien de parts Anita mange-t-elle ? C'est le nombre du haut.",
+        "question_bas": "En combien de parts égales la galette est-elle coupée ? C'est le nombre du bas.",
+        "retour_haut": "Bip ! Compte les parts coloriées. Ce sont les parts d'Anita.",
+        "retour_inverse": "Bip ! Ce nombre dit en combien de parts on coupe la galette. Ici, on cherche les parts d'Anita.",
+        "retour_bas": "Bip ! Compte toutes les parts de la galette, coloriées ou non.",
+        "retour_inverse_bas": "Bip ! Ce nombre dit combien de parts Anita mange. Ici, on cherche le nombre de parts égales de la galette."
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Regarde la galette. Les parts ont-elles la même taille ?" },
+    { "niveau": 2, "texte": "Compte toutes les parts de la galette. Combien y en a-t-il ?" },
+    { "niveau": 3, "texte": "Compte les parts d'Anita. Combien y en a-t-il ?" },
+    { "niveau": 4, "texte": "Exemple : une barre en 5 parts égales, 2 parts coloriées. Cela fait 2/5. À toi, avec 3 parts sur 4 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. On coupe en parts égales, puis on compte les parts prises." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Colorie 1/2 d'une galette.",
+      "etapes": [
+        { "type": "construire", "forme": "disque", "den": 2, "num": 1, "options_den": [2, 3, 4], "question_partage": "Coupe la galette en 2 parts égales.", "question_colorier": "Colorie 1 part.", "retour_partage": "Bip ! Le bas de 1/2, c'est 2. Coupe en 2 parts égales.", "retour_partage_haut": "Bip ! Le haut de 1/2 dit combien de parts on prend. Pour couper, regarde le bas : 2.", "voix_fin": "Une part sur deux parts égales." },
+        { "type": "fraction", "num": 1, "den": 2, "visuel": { "t": "disque", "den": 2, "num": 1, "alt": "Une galette de 2 parts dont 1 est coloriée" } }
+      ],
+      "fin": "1/2, c'est une part sur deux parts égales."
+    },
+    {
+      "enonce": "Une barre est partagée en 5 parts égales. Colorie 2 parts.",
+      "etapes": [
+        { "type": "construire", "forme": "barre", "den": 5, "num": 2, "options_den": [3, 4, 5, 6], "question_partage": "Partage la barre en 5 parts égales.", "question_colorier": "Colorie 2 parts.", "retour_partage": "Bip ! La barre doit être partagée en 5 parts égales.", "retour_partage_haut": "Bip ! Le 2, ce sont les parts à colorier. Pour partager, il faut 5 parts égales.", "voix_fin": "Deux parts sur cinq parts égales." },
+        { "type": "fraction", "num": 2, "den": 5, "visuel": { "t": "barre", "den": 5, "num": 2, "alt": "Une barre de 5 parts dont 2 sont coloriées" } }
+      ],
+      "fin": "2/5, c'est deux parts sur cinq parts égales."
+    },
+    {
+      "enonce": "Reviens à la galette d'Anita : 3 parts sur 4.",
+      "etapes": [
+        { "type": "construire", "forme": "disque", "den": 4, "num": 3, "options_den": [3, 4, 6, 8], "question_partage": "Coupe la galette en 4 parts égales.", "question_colorier": "Colorie 3 parts.", "retour_partage": "Bip ! Il faut 4 parts égales.", "retour_partage_haut": "Bip ! Le 3, ce sont les parts coloriées. Pour couper, il faut 4 parts égales.", "voix_fin": "Trois parts sur quatre parts égales." },
+        { "type": "fraction", "num": 3, "den": 4, "visuel": { "t": "disque", "den": 4, "num": 3, "alt": "Une galette de 4 parts dont 3 sont coloriées" } }
+      ],
+      "fin": "3/4, c'est trois parts sur quatre parts égales."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Dans une fraction, que dit le nombre du bas ?", "bonne": "En combien de parts égales on partage",
+      "mauvaises": [
+        { "t": "Combien de parts on prend", "e": "E2", "retour": "Bip ! Combien de parts on prend, c'est le nombre du haut. Le bas dit en combien de parts égales on partage." },
+        { "t": "Combien d'objets on a", "e": "E1", "retour": "Bip ! Une fraction parle de parts, pas d'objets. Le bas dit en combien de parts égales on partage." },
+        { "t": "La taille d'un morceau", "e": "E6", "retour": "Bip ! Le nombre du bas compte des parts. Il ne mesure pas un morceau. Il dit en combien de parts égales on partage." } ] },
+    { "id": "A2", "niveau": "A", "question": "Quelle galette est coupée en parts égales ?", "bonne": "", "bonne_visuel": { "t": "disque", "den": 3, "alt": "Une galette en 3 parts égales" },
+      "mauvaises": [
+        { "t": "", "visuel": { "t": "disque", "den": 3, "coupes": [0.2, 0.55], "alt": "Une galette en 3 parts inégales" }, "e": "E3", "retour": "Bip ! Ces 3 parts n'ont pas la même taille. Il faut des parts égales." },
+        { "t": "", "visuel": { "t": "disque", "den": 2, "coupes": [0.3], "alt": "Une galette en 2 parts inégales" }, "e": "E3", "retour": "Bip ! Un morceau est plus petit que l'autre. Il faut des parts égales." },
+        { "t": "", "visuel": { "t": "disque", "den": 4, "coupes": [0.15, 0.4, 0.9], "alt": "Une galette en 4 parts inégales" }, "e": "E3", "retour": "Bip ! Il y a 4 parts, mais elles n'ont pas la même taille. Il faut des parts égales." } ] },
+    { "id": "B1", "niveau": "B", "question": "Quelle fraction de la barre est coloriée ?", "visuel": { "t": "barre", "den": 5, "num": 2, "alt": "Une barre de 5 parts dont 2 sont coloriées" }, "bonne": "2/5",
+      "mauvaises": [
+        { "t": "5/2", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le haut compte les parts coloriées : 2. Le bas compte toutes les parts : 5." },
+        { "t": "2/3", "e": "E1", "retour": "Bip ! Le bas compte toutes les parts du tout, coloriées ou non : 5 parts." },
+        { "t": "3/5", "e": "E5", "retour": "Bip ! 3, ce sont les parts non coloriées. Le haut compte les parts coloriées : 2." } ] },
+    { "id": "B2", "niveau": "B", "question": "Quelle fraction du disque est coloriée ?", "visuel": { "t": "disque", "den": 6, "num": 1, "alt": "Un disque de 6 parts dont 1 est coloriée" }, "bonne": "1/6",
+      "mauvaises": [
+        { "t": "6/1", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le haut compte les parts coloriées : 1. Le bas compte toutes les parts : 6." },
+        { "t": "1/5", "e": "E1", "retour": "Bip ! Le bas compte toutes les parts du disque, coloriée ou non : 6 parts." },
+        { "t": "5/6", "e": "E5", "retour": "Bip ! 5, ce sont les parts non coloriées. Le haut compte les parts coloriées : 1." } ] },
+    { "id": "C1", "niveau": "C", "question": "Une tablette est coupée en 8 parts égales. Kola en mange 3. Quelle fraction de la tablette a-t-il mangée ?", "bonne": "3/8",
+      "mauvaises": [
+        { "t": "3/5", "e": "E1", "retour": "Bip ! Le bas compte toutes les parts de la tablette : 8, pas 5." },
+        { "t": "8/3", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le haut, ce sont les parts mangées : 3." },
+        { "t": "5/8", "e": "E9", "retour": "Bip ! 5/8, c'est ce qui reste. Que demande la question ? Ce que Kola a mangé." } ] },
+    { "id": "C2", "niveau": "C", "question": "Mamie Sègla coupe un pain en 10 parts égales. Elle en vend 7. Quelle fraction du pain a-t-elle vendue ?", "bonne": "7/10",
+      "mauvaises": [
+        { "t": "10/7", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le bas, c'est le nombre de parts du pain : 10." },
+        { "t": "3/10", "e": "E9", "retour": "Bip ! 3/10, c'est ce qui reste. Que demande la question ? Ce qu'elle a vendu." },
+        { "t": "7/3", "e": "E1", "retour": "Bip ! Le bas compte toutes les parts du pain : 10, pas 3." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola coupe une galette en 3 parts : une grande, une moyenne, une petite. Il dit : « J'ai 1/3 de la galette ! » A-t-il raison ?", "bonne": "Non, les 3 parts ne sont pas égales",
+      "mauvaises": [
+        { "t": "Oui, il y a 3 parts", "e": "E3", "retour": "Bip ! Avoir 3 parts ne suffit pas. Elles doivent être égales pour parler de tiers." },
+        { "t": "Oui, il en a 1 sur 3", "e": "E3", "retour": "Bip ! 1 part sur 3, c'est vrai seulement si les 3 parts sont égales. Ici, elles ne le sont pas." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : regarde la taille des parts. Elles ne sont pas égales." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita colorie 3 parts d'une barre de 4 parts égales. Elle écrit 4/3. Qu'a-t-elle mélangé ?", "bonne": "Le haut et le bas : c'est 3/4",
+      "mauvaises": [
+        { "t": "Rien, c'est juste", "e": "E1", "retour": "Bip ! Le haut compte les parts coloriées : 3. Le bas compte toutes les parts : 4. Cela fait 3/4." },
+        { "t": "Les parts ne sont pas égales", "e": "E3", "retour": "Bip ! La barre est bien en 4 parts égales. Anita a surtout mélangé le haut et le bas." },
+        { "t": "Elle a oublié de colorier", "e": "E5", "retour": "Bip ! Elle a bien colorié 3 parts. Elle a mélangé le haut et le bas." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla partage son champ en 6 parts égales. Elle plante du maïs sur 5 parts. Quelle fraction du champ reste vide ?",
+    "reponse": "1/6",
+    "visuel": { "t": "barre", "den": 6, "num": 5, "alt": "Un champ de 6 parts dont 5 sont plantées" },
+    "mauvaises": [
+      { "valeur": "5/6", "e": "E9", "retour": "Bip ! 5/6, c'est la partie plantée. Que demande la question ? La partie vide." },
+      { "valeur": "1/5", "e": "E1", "retour": "Bip ! Le bas dit le nombre de parts du champ entier : 6, pas 5." },
+      { "valeur": "6/1", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le bas, ce sont les 6 parts égales du champ." }
+    ],
+    "indice": "Combien de parts restent vides ? Et combien de parts y a-t-il au total ?"
+  },
+
+  "video": {
+    "titre": "Comprendre une fraction",
+    "duree": 175,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, comprendre une fraction." },
+          { "t": 4, "texte": "Anita et Kola ont une galette." },
+          { "t": 8, "texte": "Ils veulent la partager." } ],
+        "etapes": [ { "t": 4.2, "a": "disque", "id": "g1", "cx": 180, "cy": 100, "r": 66, "den": 1, "num": 1, "couleur": "#e0a24a" } ] },
+      { "debut": 14, "fin": 40, "parties": [
+          { "t": 0, "texte": "Kola coupe vite. Il fait un grand morceau et un petit morceau." },
+          { "t": 9, "texte": "Regarde. Les parts ne sont pas égales." },
+          { "t": 15, "texte": "Ce n'est pas juste !" } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.6, "a": "disque", "id": "g2", "cx": 180, "cy": 100, "r": 66, "den": 2, "coupes": [0.75], "choisies": [0], "couleur": "#e0a24a" }, { "t": 15.5, "a": "croix", "x1": 120, "y1": 44, "x2": 240, "y2": 156 } ] },
+      { "debut": 40, "fin": 75, "parties": [
+          { "t": 0, "texte": "Pour partager juste, on coupe en parts égales." },
+          { "t": 9, "texte": "Ici, 4 parts égales." },
+          { "t": 16, "texte": "Chaque part a la même taille." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 2, "a": "disque", "id": "g3", "cx": 180, "cy": 100, "r": 66, "den": 4, "num": 0 },
+          { "t": 16.5, "a": "colorier", "id": "g3", "parts": [0], "couleur": "#6fe3d8" }, { "t": 18, "a": "colorier", "id": "g3", "parts": [1], "couleur": "#6fe3d8" },
+          { "t": 19.5, "a": "colorier", "id": "g3", "parts": [2], "couleur": "#6fe3d8" }, { "t": 21, "a": "colorier", "id": "g3", "parts": [3], "couleur": "#6fe3d8" } ] },
+      { "debut": 75, "fin": 110, "parties": [
+          { "t": 0, "texte": "Anita mange 3 parts." },
+          { "t": 5, "texte": "Je colorie 3 parts." },
+          { "t": 12, "texte": "Anita mange 3 parts sur 4 parts égales." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "disque", "id": "g4", "cx": 100, "cy": 100, "r": 60, "den": 4, "num": 0 },
+          { "t": 5.6, "a": "colorier", "id": "g4", "parts": [0] }, { "t": 7.2, "a": "colorier", "id": "g4", "parts": [1] }, { "t": 8.8, "a": "colorier", "id": "g4", "parts": [2] },
+          { "t": 13, "a": "fraction", "id": "f4", "num": 3, "den": 4, "x": 270, "y": 92, "taille": 62 } ] },
+      { "debut": 110, "fin": 135, "parties": [
+          { "t": 0, "texte": "Le nombre du bas dit en combien de parts égales on partage." },
+          { "t": 8, "texte": "Le nombre du haut dit combien de parts on prend." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "fraction", "id": "f5", "num": 3, "den": 4, "x": 140, "y": 86, "taille": 74, "couleurHaut": "#ffe066", "couleurBas": "#6fe3d8" },
+          { "t": 2.5, "a": "fleche", "de": [280, 168], "vers": [200, 150], "couleur": "#6fe3d8" }, { "t": 8.5, "a": "fleche", "de": [280, 36], "vers": [200, 64], "couleur": "#ffe066" } ] },
+      { "debut": 135, "fin": 155, "parties": [
+          { "t": 0, "texte": "Pourquoi des parts égales ?" },
+          { "t": 4, "texte": "Pour que chaque part compte pareil." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "pq", "texte": "Pourquoi ?", "x": 180, "y": 46, "taille": 38, "couleur": "#ffe066" },
+          { "t": 4.5, "a": "disque", "id": "g6", "cx": 180, "cy": 128, "r": 52, "den": 4, "num": 4 } ] },
+      { "debut": 155, "fin": 175, "parties": [
+          { "t": 0, "texte": "À toi ! Une barre est partagée en 5 parts égales." },
+          { "t": 5, "texte": "Colorie 2 parts. Mets la vidéo en pause." },
+          { "t": 11, "texte": "Réponse : 2/5." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "barre", "id": "b7", "x": 40, "y": 70, "w": 280, "h": 54, "den": 5, "num": 0 },
+          { "t": 11.4, "a": "colorier", "id": "b7", "parts": [0, 1] }, { "t": 13, "a": "ecrire", "id": "r7", "texte": "2/5", "x": 180, "y": 176, "taille": 46, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Le partage de la galette",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "cour", "personnages": [ { "qui": "Anita", "x": 36, "y": 128, "w": 56 }, { "qui": "Kola", "x": 120, "y": 124, "w": 60 } ], "objets": [ { "t": "galette", "cx": 250, "cy": 186, "r": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Je coupe ! Un gros morceau pour moi !" }, { "qui": "Anita", "texte": "Pas juste !" } ], "legende": "Dans la cour de l'école. Une galette." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "cour", "personnages": [ { "qui": "Anita", "x": 24, "y": 128, "w": 54 }, { "qui": "Kola", "x": 96, "y": 128, "w": 54 }, { "qui": "Mathéo", "x": 168, "y": 112, "w": 50, "humeur": "surpris" } ], "objets": [ { "t": "disque", "cx": 296, "cy": 176, "r": 40, "den": 2, "coupes": [0.75], "choisies": [0] } ], "devant": true },
+        "bulles": [ { "qui": "Mathéo", "texte": "Bip ? Un morceau est plus petit.", "humeur": "surpris" }, { "qui": "Anita", "texte": "Les parts doivent être égales !" } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Kola", "x": 150, "y": 100, "w": 70 }, { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "disque", "cx": 288, "cy": 112, "r": 62, "den": 4, "num": 0 } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "On coupe en 4 parts égales." }, { "qui": "Kola", "texte": "Quatre parts égales !" } ], "legende": "4 parts égales." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "cour", "personnages": [ { "qui": "Anita", "x": 14, "y": 124, "w": 62 }, { "qui": "Mathéo", "x": 292, "y": 132, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "disque", "cx": 190, "cy": 150, "r": 56, "den": 4, "num": 3 } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "J'en mange 3 parts." }, { "qui": "Mathéo", "texte": "Trois parts sur quatre !", "humeur": "joie" } ], "legende": "3 parts sur 4 parts égales." },
+      { "n": 5, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 96, "w": 74 }, { "qui": "Kola", "x": 282, "y": 98, "w": 72 } ], "objets": [ { "t": "texte", "texte": "3", "x": 180, "y": 100, "taille": 62, "couleur": "#c1440e" }, { "t": "texte", "texte": "4", "x": 180, "y": 190, "taille": 62, "couleur": "#0e7f74" }, { "t": "ligne", "x1": 150, "y1": 118, "x2": 210, "y2": 118 } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Le 4, en bas, dit en combien de parts égales on coupe." }, { "qui": "Kola", "texte": "Et le 3 dit combien on en prend !" } ] },
+      { "n": 6, "plan": "Large", "scene": { "fond": "ecole", "personnages": [ { "qui": "Maître Léo", "x": 150, "y": 56, "w": 64 }, { "qui": "Anita", "x": 40, "y": 130, "w": 52 }, { "qui": "Kola", "x": 100, "y": 130, "w": 52 }, { "qui": "Mathéo", "x": 262, "y": 124, "w": 50, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 236, "y": 140, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Bravo ! Une fraction compte des parts égales." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "3/4 : 3 parts sur 4 parts égales." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Une fraction décrit une ou plusieurs parts égales d'un même tout.",
+  "carte": "3/4 : 4 parts égales, 3 parts prises.",
+  "pourquoi": "Pourquoi des parts égales ? Pour que chaque part compte pareil.",
+  "fiche": { "titre": "N17 · Comprendre une fraction", "piege": "Des parts de tailles différentes ne donnent pas une fraction. Les parts doivent être égales." },
+  "controles": [ { "expr": "6-5", "attendu": 1 }, { "expr": "8-3", "attendu": 5 }, { "expr": "10-7", "attendu": 3 } ]
+}

@@ -1,0 +1,237 @@
+{
+  "id": "N18",
+  "version": "0.1",
+  "titre": "Représenter une fraction",
+  "domaine": "Fractions",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Pour représenter une fraction, je partage d'abord le tout en parts égales, puis je prends le nombre de parts demandé.",
+  "erreurs_ciblees": ["E2 : confondre numérateur et dénominateur", "E3 : oublier que les parts doivent être égales", "E1 : colorier sans partager d'abord"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 },
+      { "qui": "Mathéo", "x": 40, "y": 100, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "barre", "x": 70, "y": 170, "w": 230, "h": 30, "den": 1, "num": 1, "couleur": "#c1440e" } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au marché, Mamie Sègla déroule un long pagne." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est accrochée dans le tissu !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "Je te le rends si tu me montres 5/8 de ce pagne." },
+    { "qui": "Mamie Sègla", "texte": "Dessine-moi un modèle, avec 5/8 en rouge." },
+    { "qui": "Mathéo", "texte": "Je dessine en étoiles, pas en pagnes ! Aide-moi !" },
+    { "qui": "Narrateur", "texte": "Comment dessiner 5/8 d'un pagne ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Mamie Sègla veut un modèle de 5/8 de son pagne. Dessine cette fraction.",
+    "reponse": "5/8",
+    "reussite": "Bip bip ! 5/8 du pagne ! Huit parts égales, cinq parts coloriées.",
+    "etapes": [
+      {
+        "type": "construire",
+        "forme": "barre",
+        "den": 8,
+        "num": 5,
+        "options_den": [5, 6, 8, 10],
+        "intro": "Regarde 5/8. Le pagne est une barre.",
+        "question_partage": "Partage le pagne en parts égales. Regarde le nombre du bas de 5/8.",
+        "retour_partage_haut": "Bip ! Le 5 dit combien de parts on colorie. Pour partager le pagne, regarde le bas : 8.",
+        "retour_partage": "Bip ! Regarde le bas de 5/8 : c'est 8. Partage le pagne en 8 parts égales.",
+        "question_colorier": "Maintenant, regarde le haut de 5/8. Colorie ces parts.",
+        "retour_trop": "Bip ! Tu as colorié trop de parts. Le haut de 5/8 dit combien de parts on colorie : 5.",
+        "retour_peu": "Bip ! Il manque des parts coloriées. Le haut de 5/8 dit combien de parts on colorie : 5.",
+        "voix_fin": "Cinq parts sur huit parts égales."
+      },
+      {
+        "type": "choix",
+        "intro": "Mamie veut vérifier avec un autre modèle.",
+        "question": "Quelle barre représente 3/5 ?",
+        "options": [
+          { "visuel": { "t": "barre", "den": 5, "num": 3, "alt": "Une barre de 5 parts dont 3 sont coloriées" }, "ok": true },
+          { "visuel": { "t": "barre", "den": 5, "num": 2, "alt": "Une barre de 5 parts dont 2 sont coloriées" }, "e": "E5", "retour": "Bip ! Ici, 2 parts sur 5 sont coloriées. Pour 3/5, il faut colorier 3 parts." },
+          { "visuel": { "t": "barre", "den": 3, "num": 3, "alt": "Une barre de 3 parts dont 3 sont coloriées" }, "e": "E2", "retour": "Bip ! Ici, la barre est partagée en 3 parts. Pour 3/5, le bas dit 5 parts égales." },
+          { "visuel": { "t": "barre", "den": 8, "num": 3, "alt": "Une barre de 8 parts dont 3 sont coloriées" }, "e": "E1", "retour": "Bip ! Ici, la barre a 8 parts. Pour 3/5, le bas dit 5 parts égales." }
+        ]
+      },
+      {
+        "type": "construire",
+        "forme": "disque",
+        "den": 6,
+        "num": 2,
+        "options_den": [2, 4, 6, 8],
+        "intro": "Mamie a aussi une galette. Dessine 2/6 de cette galette.",
+        "question_partage": "Partage la galette en parts égales. Regarde le bas de 2/6.",
+        "retour_partage_haut": "Bip ! Le 2 dit combien de parts on colorie. Pour partager, regarde le bas : 6.",
+        "retour_partage": "Bip ! Regarde le bas de 2/6 : c'est 6. Partage la galette en 6 parts égales.",
+        "question_colorier": "Regarde le haut de 2/6. Colorie ces parts.",
+        "retour_trop": "Bip ! Tu as colorié trop de parts. Le haut de 2/6 dit combien de parts on colorie : 2.",
+        "retour_peu": "Bip ! Il manque des parts coloriées. Le haut de 2/6 dit combien de parts on colorie : 2.",
+        "voix_fin": "Deux parts sur six parts égales."
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Regarde le nombre du bas de la fraction. Que te dit-il ?" },
+    { "niveau": 2, "texte": "Le bas dit en combien de parts égales on partage. Partage d'abord." },
+    { "niveau": 3, "texte": "Le haut dit combien de parts on colorie. Compte-les une à une." },
+    { "niveau": 4, "texte": "Exemple : 2/3 d'une barre. Je partage en 3 parts égales, puis je colorie 2 parts. À toi, avec 5/8 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je partage d'abord, puis je colorie." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Dessine 1/3 d'une barre.",
+      "etapes": [
+        { "type": "construire", "forme": "barre", "den": 3, "num": 1, "options_den": [2, 3, 4, 6], "question_partage": "Partage la barre en parts égales. Regarde le bas de 1/3.", "retour_partage": "Bip ! Le bas de 1/3, c'est 3. Partage en 3 parts égales.", "retour_partage_haut": "Bip ! Le 1 dit combien de parts on colorie. Pour partager, regarde le bas : 3.", "question_colorier": "Colorie le nombre de parts du haut.", "voix_fin": "Une part sur trois parts égales." }
+      ],
+      "fin": "1/3, c'est une part sur trois parts égales."
+    },
+    {
+      "enonce": "Dessine 3/4 d'une galette.",
+      "etapes": [
+        { "type": "construire", "forme": "disque", "den": 4, "num": 3, "options_den": [3, 4, 6, 8], "question_partage": "Partage la galette en parts égales. Regarde le bas de 3/4.", "retour_partage": "Bip ! Le bas de 3/4, c'est 4. Partage en 4 parts égales.", "retour_partage_haut": "Bip ! Le 3 dit combien de parts on colorie. Pour partager, regarde le bas : 4.", "question_colorier": "Colorie le nombre de parts du haut.", "voix_fin": "Trois parts sur quatre parts égales." }
+      ],
+      "fin": "3/4, c'est trois parts sur quatre parts égales."
+    },
+    {
+      "enonce": "Reviens au pagne : dessine 5/8.",
+      "etapes": [
+        { "type": "construire", "forme": "barre", "den": 8, "num": 5, "options_den": [5, 6, 8, 10], "question_partage": "Partage le pagne en parts égales. Regarde le bas de 5/8.", "retour_partage": "Bip ! Le bas de 5/8, c'est 8. Partage en 8 parts égales.", "retour_partage_haut": "Bip ! Le 5 dit combien de parts on colorie. Pour partager, regarde le bas : 8.", "question_colorier": "Colorie le nombre de parts du haut.", "voix_fin": "Cinq parts sur huit parts égales." }
+      ],
+      "fin": "5/8, c'est cinq parts sur huit parts égales."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Pour représenter 3/5, en combien de parts égales partage-t-on d'abord ?", "bonne": "5",
+      "mauvaises": [
+        { "t": "3", "e": "E2", "retour": "Bip ! Le 3 dit combien de parts on colorie. On partage avec le nombre du bas : 5." },
+        { "t": "8", "e": "E1", "retour": "Bip ! On n'additionne pas 3 et 5. On partage avec le nombre du bas : 5." },
+        { "t": "2", "e": "E1", "retour": "Bip ! On ne soustrait pas. On partage avec le nombre du bas : 5." } ] },
+    { "id": "A2", "niveau": "A", "question": "Quelle barre représente 1/2 ?", "bonne": "", "bonne_visuel": { "t": "barre", "den": 2, "num": 1, "alt": "Une barre de 2 parts dont 1 est coloriée" },
+      "mauvaises": [
+        { "t": "", "visuel": { "t": "barre", "den": 3, "num": 1, "alt": "Une barre de 3 parts dont 1 est coloriée" }, "e": "E1", "retour": "Bip ! Ici, la barre est partagée en 3 parts. Pour 1/2, il faut 2 parts égales." },
+        { "t": "", "visuel": { "t": "barre", "den": 2, "num": 2, "alt": "Une barre de 2 parts dont 2 sont coloriées" }, "e": "E5", "retour": "Bip ! Ici, les 2 parts sont coloriées. 1/2 veut dire 1 part sur 2." },
+        { "t": "", "visuel": { "t": "barre", "den": 5, "num": 1, "alt": "Une barre de 5 parts dont 1 est coloriée" }, "e": "E1", "retour": "Bip ! Ici, la barre est partagée en 5 parts. Pour 1/2, il faut 2 parts égales." } ] },
+    { "id": "B1", "niveau": "B", "question": "Quel disque représente 3/4 ?", "bonne": "", "bonne_visuel": { "t": "disque", "den": 4, "num": 3, "alt": "Un disque de 4 parts dont 3 sont coloriées" },
+      "mauvaises": [
+        { "t": "", "visuel": { "t": "disque", "den": 4, "num": 1, "alt": "Un disque de 4 parts dont 1 est coloriée" }, "e": "E5", "retour": "Bip ! Ici, 1 part sur 4 est coloriée. Pour 3/4, il faut colorier 3 parts." },
+        { "t": "", "visuel": { "t": "disque", "den": 3, "num": 3, "alt": "Un disque de 3 parts dont 3 sont coloriées" }, "e": "E2", "retour": "Bip ! Ici, le disque est partagé en 3 parts. Pour 3/4, le bas dit 4 parts égales." },
+        { "t": "", "visuel": { "t": "disque", "den": 6, "num": 3, "alt": "Un disque de 6 parts dont 3 sont coloriées" }, "e": "E1", "retour": "Bip ! Ici, le disque a 6 parts. Pour 3/4, le bas dit 4 parts égales." } ] },
+    { "id": "B2", "niveau": "B", "question": "Quelle fraction est représentée ?", "visuel": { "t": "barre", "den": 6, "num": 5, "alt": "Une barre de 6 parts dont 5 sont coloriées" }, "bonne": "5/6",
+      "mauvaises": [
+        { "t": "6/5", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le haut compte les parts coloriées : 5. Le bas compte toutes les parts : 6." },
+        { "t": "1/6", "e": "E5", "retour": "Bip ! 1, c'est la part non coloriée. Le haut compte les parts coloriées : 5." },
+        { "t": "5/7", "e": "E1", "retour": "Bip ! Compte bien toutes les parts de la barre : il y en a 6, pas 7." } ] },
+    { "id": "C1", "niveau": "C", "question": "Mamie Sègla coupe un pagne en 6 parts égales. Elle en colorie 2. Quelle fraction est coloriée ?", "bonne": "2/6",
+      "mauvaises": [
+        { "t": "6/2", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Le haut compte les parts coloriées : 2." },
+        { "t": "2/4", "e": "E1", "retour": "Bip ! Le bas compte toutes les parts du pagne : 6, pas 4." },
+        { "t": "4/6", "e": "E9", "retour": "Bip ! 4/6, ce sont les parts non coloriées. Que demande la question ? Les parts coloriées." } ] },
+    { "id": "C2", "niveau": "C", "question": "Un champ est partagé en 8 parts égales. On plante du maïs sur 3 parts. Quelle barre représente le maïs ?", "bonne": "", "bonne_visuel": { "t": "barre", "den": 8, "num": 3, "alt": "Une barre de 8 parts dont 3 sont coloriées" },
+      "mauvaises": [
+        { "t": "", "visuel": { "t": "barre", "den": 8, "num": 5, "alt": "Une barre de 8 parts dont 5 sont coloriées" }, "e": "E9", "retour": "Bip ! Ici, 5 parts sont coloriées. Le maïs est sur 3 parts." },
+        { "t": "", "visuel": { "t": "barre", "den": 3, "num": 3, "alt": "Une barre de 3 parts dont 3 sont coloriées" }, "e": "E2", "retour": "Bip ! Ici, la barre a 3 parts. Le champ est partagé en 8 parts égales." },
+        { "t": "", "visuel": { "t": "barre", "den": 5, "num": 3, "alt": "Une barre de 5 parts dont 3 sont coloriées" }, "e": "E1", "retour": "Bip ! Ici, la barre a 5 parts. Le champ est partagé en 8 parts égales." } ] },
+    { "id": "D1", "niveau": "D", "question": "Pour dessiner 3/5, Kola partage sa barre en 3 parts égales. Que doit-il changer ?", "bonne": "Partager en 5 parts égales, puis colorier 3 parts",
+      "mauvaises": [
+        { "t": "Rien, c'est juste", "e": "E2", "retour": "Bip ! Pour 3/5, on partage avec le bas : 5 parts égales. Ensuite, on colorie 3 parts." },
+        { "t": "Colorier 5 parts", "e": "E2", "retour": "Bip ! Il a mélangé le haut et le bas. On partage en 5, puis on colorie 3 parts." },
+        { "t": "Partager en 8 parts égales", "e": "E1", "retour": "Bip ! On n'additionne pas 3 et 5. On partage en 5 parts égales, puis on colorie 3 parts." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita dit : « Pour dessiner 2/7, je colorie 2 parts sur une barre de 9 parts égales. » A-t-elle raison ?", "bonne": "Non, la barre doit avoir 7 parts égales",
+      "mauvaises": [
+        { "t": "Oui, elle colorie bien 2 parts", "e": "E5", "retour": "Bip ! Elle colorie 2 parts, c'est bien. Mais la barre doit avoir 7 parts égales, pas 9." },
+        { "t": "Oui, 9 = 2 + 7", "e": "E1", "retour": "Bip ! On n'additionne pas 2 et 7. Le bas de 2/7 dit : 7 parts égales." },
+        { "t": "Non, il faut colorier 7 parts", "e": "E2", "retour": "Bip ! Elle a mélangé le haut et le bas. La barre a 7 parts égales, et on colorie 2 parts." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla partage un pagne en 5 parts égales. Elle en colorie 3 en rouge et 1 en jaune. Quelle fraction du pagne n'est pas coloriée ?",
+    "reponse": "1/5",
+    "mauvaises": [
+      { "valeur": "3/5", "e": "E9", "retour": "Bip ! 3/5, ce sont les parts rouges. Que demande la question ? Les parts qui ne sont pas coloriées." },
+      { "valeur": "4/5", "e": "E9", "retour": "Bip ! 4/5, ce sont toutes les parts coloriées. Que demande la question ? Celles qui ne sont pas coloriées." },
+      { "valeur": "1/4", "e": "E1", "retour": "Bip ! Le bas dit le nombre de parts du pagne entier : 5, pas 4." }
+    ],
+    "indice": "Combien de parts sont coloriées ? Combien en reste-t-il sur 5 ?"
+  },
+
+  "video": {
+    "titre": "Représenter une fraction",
+    "duree": 165,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, représenter une fraction." },
+          { "t": 5, "texte": "Mamie Sègla veut montrer 5/8 d'un pagne." } ],
+        "etapes": [ { "t": 6, "a": "fraction", "id": "f1", "num": 5, "den": 8, "x": 180, "y": 84, "taille": 70 } ] },
+      { "debut": 14, "fin": 40, "parties": [
+          { "t": 0, "texte": "Regarde le nombre du bas." },
+          { "t": 4, "texte": "Il dit en combien de parts égales on partage." },
+          { "t": 11, "texte": "Ici, huit parts égales." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "fraction", "id": "f2", "num": 5, "den": 8, "x": 110, "y": 84, "taille": 66, "couleurBas": "#6fe3d8" }, { "t": 4.6, "a": "fleche", "de": [280, 150], "vers": [170, 150], "couleur": "#6fe3d8" } ] },
+      { "debut": 40, "fin": 70, "parties": [
+          { "t": 0, "texte": "D'abord, je partage le pagne en 8 parts égales." },
+          { "t": 9, "texte": "Chaque part a la même taille." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.6, "a": "barre", "id": "b3", "x": 30, "y": 76, "w": 300, "h": 54, "den": 8, "num": 0 },
+          { "t": 10, "a": "colorier", "id": "b3", "parts": [0], "couleur": "#6fe3d8" }, { "t": 11.5, "a": "colorier", "id": "b3", "parts": [1], "couleur": "#6fe3d8" } ] },
+      { "debut": 70, "fin": 100, "parties": [
+          { "t": 0, "texte": "Maintenant, regarde le nombre du haut." },
+          { "t": 4, "texte": "Il dit combien de parts on colorie. Ici, 5." },
+          { "t": 11, "texte": "Je colorie 5 parts." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "fraction", "id": "f4", "num": 5, "den": 8, "x": 70, "y": 56, "taille": 52, "couleurHaut": "#ffe066" },
+          { "t": 1.4, "a": "barre", "id": "b4", "x": 30, "y": 120, "w": 300, "h": 54, "den": 8, "num": 0 },
+          { "t": 12, "a": "colorier", "id": "b4", "parts": [0] }, { "t": 13.5, "a": "colorier", "id": "b4", "parts": [1] }, { "t": 15, "a": "colorier", "id": "b4", "parts": [2] },
+          { "t": 16.5, "a": "colorier", "id": "b4", "parts": [3] }, { "t": 18, "a": "colorier", "id": "b4", "parts": [4] } ] },
+      { "debut": 100, "fin": 125, "parties": [
+          { "t": 0, "texte": "J'ai partagé en 8 parts égales." },
+          { "t": 4, "texte": "J'ai colorié 5 parts. Voilà 5/8." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "barre", "id": "b5", "x": 30, "y": 50, "w": 300, "h": 54, "den": 8, "num": 5 }, { "t": 4.6, "a": "fraction", "id": "f5", "num": 5, "den": 8, "x": 180, "y": 130, "taille": 46 } ] },
+      { "debut": 125, "fin": 145, "parties": [
+          { "t": 0, "texte": "Je peux aussi dessiner un disque." },
+          { "t": 5, "texte": "Le chemin est le même : je partage, puis je colorie." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "disque", "id": "d6", "cx": 180, "cy": 100, "r": 66, "den": 8, "num": 0 }, { "t": 6, "a": "colorier", "id": "d6", "parts": [0, 1, 2, 3, 4] } ] },
+      { "debut": 145, "fin": 165, "parties": [
+          { "t": 0, "texte": "À toi ! Dessine 2/3." },
+          { "t": 3, "texte": "Mets la vidéo en pause." },
+          { "t": 9, "texte": "Réponse : trois parts égales, deux parts coloriées." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "fraction", "id": "f7", "num": 2, "den": 3, "x": 180, "y": 76, "taille": 56 },
+          { "t": 9.4, "a": "barre", "id": "b7", "x": 50, "y": 150, "w": 260, "h": 38, "den": 3, "num": 2 } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Le pagne de Mamie Sègla",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 250, "y": 86, "w": 66 }, { "qui": "Mathéo", "x": 60, "y": 104, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "barre", "x": 40, "y": 176, "w": 260, "h": 30, "den": 1, "num": 1, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Montre-moi 5/8 de ce pagne, et je te rends ton étoile." }, { "qui": "Mathéo", "texte": "Bip ! 5/8 ? Je dessine comment ?", "humeur": "surpris" } ], "legende": "Au marché. Un long pagne." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 110, "w": 70 }, { "qui": "Anita", "x": 286, "y": 116, "w": 64 } ], "objets": [ { "t": "barre", "x": 96, "y": 150, "w": 180, "h": 36, "den": 5, "num": 5 } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Facile ! Je partage en 5 et je colorie 5 !" }, { "qui": "Anita", "texte": "Regarde le bas : c'est 8 !" } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 6, "y": 40, "w": 140 }, { "qui": "Kola", "x": 164, "y": 118, "w": 62 } ], "objets": [ { "t": "texte", "texte": "5", "x": 286, "y": 100, "taille": 56, "couleur": "#c1440e" }, { "t": "ligne", "x1": 258, "y1": 114, "x2": 314, "y2": 114 }, { "t": "texte", "texte": "8", "x": 286, "y": 176, "taille": 56, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Le 8 dit en combien de parts égales on partage." }, { "qui": "Kola", "texte": "Huit parts égales !" } ], "legende": "On partage en 8 parts égales." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Anita", "x": 8, "y": 118, "w": 60 }, { "qui": "Mathéo", "x": 298, "y": 122, "w": 52, "humeur": "content" } ], "objets": [ { "t": "barre", "x": 40, "y": 70, "w": 280, "h": 44, "den": 8, "num": 0 } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Voilà 8 parts égales." }, { "qui": "Mathéo", "texte": "Bip ! Elles sont toutes pareilles !", "humeur": "content" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Anita", "x": 8, "y": 118, "w": 60 }, { "qui": "Kola", "x": 296, "y": 120, "w": 56 } ], "objets": [ { "t": "barre", "x": 40, "y": 70, "w": 280, "h": 44, "den": 8, "num": 5 } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Le 5 dit combien on en colorie." }, { "qui": "Kola", "texte": "Un, deux, trois, quatre, cinq !" } ], "legende": "5 parts coloriées sur 8." },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 250, "y": 86, "w": 66 }, { "qui": "Mathéo", "x": 60, "y": 104, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 118, "y": 124, "w": 34 }, { "t": "barre", "x": 40, "y": 176, "w": 260, "h": 30, "den": 8, "num": 5, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! Tu as représenté 5/8." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "5/8 : 8 parts égales, 5 parts coloriées." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Je partage le tout en parts égales, puis je colorie les parts demandées.",
+  "carte": "5/8 : 8 parts égales, 5 parts coloriées.",
+  "pourquoi": "Pourquoi partager d'abord ? Pour que le bas donne la taille de chaque part.",
+  "fiche": { "titre": "N18 · Représenter une fraction", "piege": "Mélanger le haut et le bas : pour 5/8, on partage en 8 parts égales, puis on colorie 5 parts." },
+  "controles": [ { "expr": "5-3-1", "attendu": 1 }, { "expr": "5+3", "attendu": 8 } ]
+}

@@ -1,0 +1,219 @@
+{
+  "id": "N63",
+  "version": "0.1",
+  "titre": "Identifier ce qu'on cherche",
+  "domaine": "Résolution de problèmes",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "La question indique exactement ce que je dois trouver.",
+  "erreurs_ciblees": ["E9 : répondre à une étape intermédiaire au lieu de la question", "E5 : choisir l'opération trop vite", "E1 : prendre toutes les données sans trier"],
+
+  "mission_scene": {
+    "fond": "cour",
+    "personnages": [
+      { "qui": "Maître Léo", "x": 250, "y": 58, "w": 58 },
+      { "qui": "Kola", "x": 40, "y": 126, "w": 54 },
+      { "qui": "Mathéo", "x": 150, "y": 98, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "objets", "genre": "bille", "n": 12, "x": 40, "y": 190, "colonnes": 12, "pas": 24, "taille": 20 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Dans la cour de l'école, Kola joue aux billes." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est dans le sac de billes !", "humeur": "surpris" },
+    { "qui": "Kola", "texte": "J'avais 24 billes. J'en ai gagné 9, puis j'en ai donné 5 à Anita." },
+    { "qui": "Maître Léo", "texte": "Je te rends l'étoile si tu dis ce qu'on cherche." },
+    { "qui": "Kola", "texte": "Facile ! Je calcule 24 plus 9 !" },
+    { "qui": "Narrateur", "texte": "Que demande vraiment la question ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Kola avait 24 billes. Il en gagne 9, puis il en donne 5 à Anita. Combien de billes a-t-il maintenant ?",
+    "reponse": "28",
+    "reussite": "Bip bip ! Kola a 28 billes maintenant. On a répondu à la vraie question.",
+    "etapes": [
+      {
+        "type": "choix",
+        "intro": "Lisons bien la question, à la fin de l'énoncé.",
+        "question": "Que cherche-t-on ?",
+        "options": [
+          { "t": "Le nombre de billes de Kola maintenant", "ok": true },
+          { "t": "Le nombre de billes gagnées", "e": "E9", "retour": "Bip ! On le connaît déjà : 9. La question demande ce que Kola a maintenant." },
+          { "t": "Le nombre de billes données", "e": "E9", "retour": "Bip ! On le connaît déjà : 5. La question demande ce que Kola a maintenant." },
+          { "t": "Le nombre de billes au départ", "e": "E9", "retour": "Bip ! On le connaît déjà : 24. La question demande ce que Kola a maintenant." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "Avançons étape par étape. D'abord, Kola gagne 9 billes.",
+        "question": "Combien de billes a-t-il après en avoir gagné 9 ?",
+        "reponse": 33,
+        "erreurs": [
+          { "reponses": [15], "type": "E5", "texte": "Bip ! 15 vient de 24 − 9. Kola gagne des billes : on ajoute." },
+          { "reponses": [9], "type": "E9", "texte": "Bip ! 9, ce sont les billes gagnées. On cherche combien il en a après les avoir gagnées." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "Maintenant, il en donne 5 à Anita. Relisons la question : il y a encore une étape.",
+        "question": "Combien de billes a-t-il maintenant ?",
+        "reponse": 28,
+        "erreurs": [
+          { "reponses": [33], "type": "E9", "texte": "Bip ! 33, c'est avant de donner 5 billes à Anita. La question demande ce qu'il a maintenant." },
+          { "reponses": [38], "type": "E5", "texte": "Bip ! 38 vient de 33 + 5. Kola donne des billes : on enlève." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Relis la dernière phrase de l'énoncé. Que demande-t-elle ?" },
+    { "niveau": 2, "texte": "Y a-t-il une seule étape, ou plusieurs ? Que se passe-t-il d'abord, puis ensuite ?" },
+    { "niveau": 3, "texte": "D'abord Kola gagne 9 billes. Ensuite, il en donne 5. On cherche ce qu'il a à la fin." },
+    { "niveau": 4, "texte": "Exemple : 10 billes, j'en gagne 2 puis j'en perds 1. 10 + 2 = 12, puis 12 − 1 = 11. À toi !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je suis chaque étape jusqu'à la question." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Anita a 10 billes. Elle en gagne 2, puis elle en perd 1.",
+      "etapes": [
+        { "type": "nombre", "question": "Combien de billes a-t-elle après en avoir gagné 2 ?", "reponse": 12, "erreurs": [ { "reponses": [8], "type": "E5", "texte": "Bip ! 8 vient de 10 − 2. Anita gagne des billes : on ajoute." } ] },
+        { "type": "nombre", "question": "Combien de billes a-t-elle à la fin ?", "reponse": 11, "erreurs": [ { "reponses": [12], "type": "E9", "texte": "Bip ! 12, c'est avant de perdre 1 bille. La question demande la fin." } ] }
+      ],
+      "fin": "10 + 2 = 12, puis 12 − 1 = 11."
+    },
+    {
+      "enonce": "Mamie a 20 beignets. Elle en vend 8, puis elle en prépare 5.",
+      "etapes": [
+        { "type": "nombre", "question": "Combien de beignets lui reste-t-il après la vente ?", "reponse": 12, "erreurs": [ { "reponses": [28], "type": "E5", "texte": "Bip ! 28 vient de 20 + 8. Elle vend : on enlève." } ] },
+        { "type": "nombre", "question": "Combien de beignets a-t-elle à la fin ?", "reponse": 17, "erreurs": [ { "reponses": [12], "type": "E9", "texte": "Bip ! 12, c'est avant de préparer 5 beignets. La question demande la fin." } ] }
+      ],
+      "fin": "20 − 8 = 12, puis 12 + 5 = 17."
+    },
+    {
+      "enonce": "Reviens à Kola : 24 billes, +9, −5.",
+      "etapes": [ { "type": "nombre", "question": "Combien de billes a Kola à la fin ?", "reponse": 28, "erreurs": [ { "reponses": [33], "type": "E9", "texte": "Bip ! 33, c'est avant de donner 5 billes. La question demande la fin." } ] } ],
+      "fin": "24 + 9 − 5 = 28."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Que dit la question d'un problème ?", "bonne": "Ce qu'on doit trouver",
+      "mauvaises": [
+        { "t": "Les nombres à additionner", "e": "E1", "retour": "Bip ! Les nombres sont dans l'énoncé. La question dit ce qu'on cherche." },
+        { "t": "Le résultat déjà calculé", "e": "E9", "retour": "Bip ! Le résultat, c'est justement ce qu'on cherche. La question le demande." },
+        { "t": "La plus grande donnée", "e": "E1", "retour": "Bip ! La question ne dit pas quelle donnée est grande. Elle dit ce qu'on cherche." } ] },
+    { "id": "A2", "niveau": "A", "question": "Dans « Combien de billes lui reste-t-il ? », que cherche-t-on ?", "bonne": "Le nombre de billes à la fin",
+      "mauvaises": [
+        { "t": "Le nombre de billes au début", "e": "E9", "retour": "Bip ! Le début est donné dans l'énoncé. On cherche ce qui reste à la fin." },
+        { "t": "Le nombre de billes perdues", "e": "E9", "retour": "Bip ! Les billes perdues sont connues. On cherche ce qui reste." },
+        { "t": "Le prix des billes", "e": "E1", "retour": "Bip ! Le prix n'est pas demandé. On cherche le nombre de billes qui reste." } ] },
+    { "id": "B1", "niveau": "B", "question": "Mamie a 40 beignets et en vend 15. Que demande la question « Combien de beignets lui reste-t-il ? »", "bonne": "Ce qui reste après la vente",
+      "mauvaises": [
+        { "t": "Ce qu'elle a vendu", "e": "E9", "retour": "Bip ! Elle a vendu 15 : c'est déjà dit. On cherche ce qui reste." },
+        { "t": "Ce qu'elle avait au départ", "e": "E9", "retour": "Bip ! Elle avait 40 : c'est déjà dit. On cherche ce qui reste." },
+        { "t": "Le prix des beignets", "e": "E1", "retour": "Bip ! Le prix n'est pas demandé. On cherche le nombre de beignets qui reste." } ] },
+    { "id": "B2", "niveau": "B", "question": "Kola avait 24 billes et en a gagné 9. Quelle question amène le calcul 24 + 9 ?", "bonne": "Combien de billes a-t-il maintenant ?",
+      "mauvaises": [
+        { "t": "Combien de billes a-t-il perdues ?", "e": "E8", "retour": "Bip ! Il n'a pas perdu de billes. 24 + 9 cherche ce qu'il a après en avoir gagné." },
+        { "t": "Combien de billes a-t-il en moins ?", "e": "E8", "retour": "Bip ! Il en a gagné, donc il en a plus. 24 + 9 cherche le total." },
+        { "t": "Combien de billes avait-il avant ?", "e": "E9", "retour": "Bip ! On le sait déjà : 24. 24 + 9 cherche ce qu'il a après." } ] },
+    { "id": "C1", "niveau": "C", "question": "Un car a 45 passagers. 12 descendent, puis 8 montent. Combien de passagers y a-t-il maintenant ?", "bonne": "41",
+      "mauvaises": [
+        { "t": "33", "e": "E9", "retour": "Bip ! 33, c'est après la descente, mais 8 passagers montent encore. La question demande maintenant." },
+        { "t": "65", "e": "E5", "retour": "Bip ! 65 vient de 45 + 12 + 8. Des passagers descendent : on enlève 12 puis on ajoute 8." },
+        { "t": "37", "e": "E5", "retour": "Bip ! 37 vient de 45 − 12 − 8. Les 8 passagers montent : on les ajoute." } ] },
+    { "id": "C2", "niveau": "C", "question": "Mamie a 60 mangues. Elle en vend 24, puis elle en reçoit 10. Combien de mangues a-t-elle à la fin ?", "bonne": "46",
+      "mauvaises": [
+        { "t": "36", "e": "E9", "retour": "Bip ! 36, c'est après la vente. Elle reçoit encore 10 mangues : la question demande la fin." },
+        { "t": "74", "e": "E5", "retour": "Bip ! 74 vient de 60 + 24 − 10. Elle vend : on enlève 24, puis on ajoute 10." },
+        { "t": "26", "e": "E5", "retour": "Bip ! 26 vient de 60 − 24 − 10. Elle reçoit 10 mangues : on les ajoute." } ] },
+    { "id": "D1", "niveau": "D", "question": "Anita dit : « Je calcule d'abord, je lirai la question après. » A-t-elle raison ?", "bonne": "Non, il faut d'abord savoir ce qu'on cherche",
+      "mauvaises": [
+        { "t": "Oui, le calcul est le plus important", "e": "E5", "retour": "Bip ! Sans la question, on ne sait pas quel calcul faire ni où s'arrêter." },
+        { "t": "Oui, la question est toujours évidente", "e": "E5", "retour": "Bip ! Parfois on s'arrête trop tôt. La question dit exactement ce qu'on cherche." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : on lit la question avant de calculer." } ] },
+    { "id": "D2", "niveau": "D", "question": "Pourquoi reformuler la question avec ses propres mots ?", "bonne": "Pour être sûr de savoir ce qu'on cherche",
+      "mauvaises": [
+        { "t": "Pour ajouter des nombres", "e": "E1", "retour": "Bip ! On n'ajoute rien. On vérifie qu'on a compris la question." },
+        { "t": "Pour changer l'énoncé", "e": "E7", "retour": "Bip ! L'énoncé ne change pas. On dit la question autrement pour la comprendre." },
+        { "t": "Ce n'est pas utile", "e": "E1", "retour": "Bip ! C'est utile : on évite de répondre à une étape au lieu de la vraie question." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla avait 50 galettes. Elle en vend 18 le matin, puis elle en prépare 12 de plus. Combien de galettes a-t-elle à la fin de la journée ?",
+    "reponse": "44 galettes",
+    "mauvaises": [
+      { "valeur": "32 galettes", "e": "E9", "retour": "Bip ! 32, c'est après la vente du matin. Elle prépare encore 12 galettes : la question demande la fin de la journée." },
+      { "valeur": "56 galettes", "e": "E5", "retour": "Bip ! 56 vient de 50 + 18 − 12. Elle vend 18 : on enlève, puis on ajoute 12." },
+      { "valeur": "20 galettes", "e": "E5", "retour": "Bip ! 20 vient de 50 − 18 − 12. Elle prépare 12 galettes : on les ajoute." }
+    ],
+    "indice": "Suis les étapes : d'abord la vente, puis la préparation. Que demande la dernière phrase ?"
+  },
+
+  "video": {
+    "titre": "Identifier ce qu'on cherche",
+    "duree": 150,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, identifier ce qu'on cherche." },
+          { "t": 5, "texte": "Kola avait 24 billes. Il en gagne 9, puis il en donne 5." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "p1", "texte": "24  +9  −5", "x": 180, "y": 110, "taille": 56 } ] },
+      { "debut": 14, "fin": 45, "parties": [
+          { "t": 0, "texte": "La question est à la fin de l'énoncé." },
+          { "t": 6, "texte": "Elle dit : combien de billes a-t-il maintenant ?" },
+          { "t": 15, "texte": "Il faut donc aller jusqu'à la fin de l'histoire." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 6.5, "a": "ecrire", "id": "q2", "texte": "Combien maintenant ?", "x": 180, "y": 100, "taille": 40, "couleur": "#ffe066" } ] },
+      { "debut": 45, "fin": 80, "parties": [
+          { "t": 0, "texte": "Première étape : Kola gagne 9 billes." },
+          { "t": 8, "texte": "24 plus 9 égale 33." },
+          { "t": 16, "texte": "Mais 33, ce n'est pas la réponse. L'histoire continue." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 8.5, "a": "ecrire", "id": "e3a", "texte": "24 + 9 = 33", "x": 180, "y": 90, "taille": 50 }, { "t": 16.5, "a": "ecrire", "id": "e3b", "texte": "pas fini !", "x": 180, "y": 160, "taille": 40, "couleur": "#ff8f6b" } ] },
+      { "debut": 80, "fin": 110, "parties": [
+          { "t": 0, "texte": "Deuxième étape : il donne 5 billes à Anita." },
+          { "t": 8, "texte": "33 moins 5 égale 28." },
+          { "t": 16, "texte": "Kola a 28 billes maintenant." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 8.5, "a": "ecrire", "id": "f4", "texte": "33 − 5 = 28", "x": 180, "y": 110, "taille": 56, "couleur": "#6fe3d8" } ] },
+      { "debut": 110, "fin": 130, "parties": [
+          { "t": 0, "texte": "Avant de répondre, je relis la question." },
+          { "t": 6, "texte": "Elle demande ce que Kola a maintenant. La réponse est 28." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "r5", "texte": "Réponse : 28 billes", "x": 180, "y": 110, "taille": 44, "couleur": "#6fe3d8" } ] },
+      { "debut": 130, "fin": 150, "parties": [
+          { "t": 0, "texte": "À toi ! Anita a 10 billes. Elle en gagne 2, puis en perd 1." },
+          { "t": 7, "texte": "Mets la vidéo en pause. Réponse : 11." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "t6", "texte": "10  +2  −1", "x": 180, "y": 90, "taille": 54, "couleur": "#ffe066" }, { "t": 12, "a": "ecrire", "id": "r6", "texte": "11", "x": 180, "y": 170, "taille": 54, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Les billes de Kola",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "cour", "personnages": [ { "qui": "Kola", "x": 40, "y": 126, "w": 54 }, { "qui": "Maître Léo", "x": 250, "y": 58, "w": 58 }, { "qui": "Mathéo", "x": 150, "y": 98, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "objets", "genre": "bille", "n": 12, "x": 40, "y": 190, "colonnes": 12, "pas": 24, "taille": 20 } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "J'avais 24 billes. J'en ai gagné 9, puis j'en ai donné 5." }, { "qui": "Maître Léo", "texte": "Que demande la question ?" } ], "legende": "Dans la cour." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 112, "w": 66 } ], "objets": [ { "t": "texte", "texte": "24 + 9 = 33", "x": 236, "y": 110, "taille": 36, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "24 plus 9, 33 ! J'ai fini !" }, { "qui": "Anita", "texte": "Pas encore, Kola. Relisons." } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "texte", "texte": "Combien de billes", "x": 256, "y": 90, "taille": 22, "couleur": "#c1440e" }, { "t": "texte", "texte": "MAINTENANT ?", "x": 256, "y": 140, "taille": 34, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "La question dit maintenant." }, { "qui": "Kola", "texte": "Donc il faut aller jusqu'au bout !" } ], "legende": "On cherche la fin de l'histoire." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "content" } ], "objets": [ { "t": "texte", "texte": "33 − 5 = 28", "x": 150, "y": 110, "taille": 46, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Ensuite, il donne 5 billes : 33 moins 5." }, { "qui": "Mathéo", "texte": "Bip ! 28 !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "Réponse : 28", "x": 180, "y": 120, "taille": 46, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Kola a 28 billes maintenant !" }, { "qui": "Anita", "texte": "Oui, on a répondu à la question." } ], "legende": "24 + 9 − 5 = 28." },
+      { "n": 6, "plan": "Large", "scene": { "fond": "cour", "personnages": [ { "qui": "Maître Léo", "x": 250, "y": 58, "w": 58 }, { "qui": "Kola", "x": 40, "y": 126, "w": 54 }, { "qui": "Mathéo", "x": 150, "y": 98, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 206, "y": 140, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Bravo ! Tu as trouvé ce qu'on cherchait." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Je lis la question, je dis ce que je cherche, je suis les étapes jusqu'au bout." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "La question indique exactement ce que je dois trouver. Je vais jusqu'au bout de l'histoire avant de répondre.",
+  "carte": "24 + 9 = 33, puis 33 − 5 = 28 : la question demande ce que Kola a maintenant.",
+  "pourquoi": "Pourquoi relire la question à la fin ? Pour ne pas s'arrêter à une étape.",
+  "fiche": { "titre": "N63 · Identifier ce qu'on cherche", "piege": "S'arrêter à une étape : 33 n'est pas la réponse, car Kola donne encore 5 billes." },
+  "controles": [ { "expr": "24+9", "attendu": 33 }, { "expr": "24+9-5", "attendu": 28 }, { "expr": "10+2-1", "attendu": 11 }, { "expr": "20-8+5", "attendu": 17 }, { "expr": "45-12+8", "attendu": 41 }, { "expr": "60-24+10", "attendu": 46 }, { "expr": "50-18+12", "attendu": 44 } ]
+}

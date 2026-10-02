@@ -1,0 +1,217 @@
+{
+  "id": "N10",
+  "version": "0.1",
+  "titre": "Multiplier des entiers",
+  "domaine": "Calcul",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4). La multiplication posée est guidée par un chiffre (le multiplicateur à deux chiffres se décompose).",
+  "idee_cle": "Multiplier revient souvent à répéter plusieurs fois la même quantité.",
+  "erreurs_ciblees": ["E8 : choisir la mauvaise opération", "E5 : oublier la retenue", "E1 : mal aligner les colonnes"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 },
+      { "qui": "Kola", "x": 150, "y": 122, "w": 52 },
+      { "qui": "Mathéo", "x": 44, "y": 98, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "objets", "genre": "sac", "n": 18, "x": 40, "y": 148, "colonnes": 9, "pas": 25, "taille": 22 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "À l'entrepôt du marché, Mamie Sègla compte ses sacs d'arachides." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est sous la pile de sacs !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "Il y a 6 rangées de 47 sacs." },
+    { "qui": "Mamie Sègla", "texte": "Dis-moi combien de sacs j'ai, et je te rends l'étoile." },
+    { "qui": "Kola", "texte": "Je les compte un par un !" },
+    { "qui": "Narrateur", "texte": "Comment compter vite 6 rangées de 47 sacs ?" }
+  ],
+
+  "defi": {
+    "type": "etapes3d", "scene3d": "marche",
+    "enonce": "Mamie Sègla a 6 rangées de 47 sacs. Combien de sacs a-t-elle en tout ?",
+    "reponse": "282",
+    "reussite": "Bip bip ! 282 sacs ! On a posé, calculé et vérifié.",
+    "etapes": [
+      {
+        "type": "choix",
+        "intro": "D'abord, choisissons la bonne opération.",
+        "question": "Quelle opération donne le nombre total de sacs ?",
+        "options": [
+          { "t": "6 × 47", "ok": true },
+          { "t": "6 + 47", "e": "E8", "retour": "Bip ! 6 + 47 ajoute deux nombres différents. Ici, on répète 47 sacs, 6 fois : c'est une multiplication." },
+          { "t": "47 − 6", "e": "E8", "retour": "Bip ! Enlever 6 à 47 ne donne pas le total des rangées. On répète 47 sacs, 6 fois." },
+          { "t": "47 ÷ 6", "e": "E8", "retour": "Bip ! Diviser partage un total. Ici, on cherche le total : on répète 47 sacs, 6 fois." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "Estimons avant de calculer : 47 est proche de 50.",
+        "question": "Combien font 6 × 50 ? C'est une estimation.",
+        "reponse": 300,
+        "erreurs": [
+          { "reponses": [56], "type": "E8", "texte": "Bip ! 6 + 50 donne 56. Ici, on multiplie : 6 × 50." },
+          { "reponses": [30], "type": "E3", "texte": "Bip ! Ce sont 5 dizaines : 6 fois 5 dizaines font 30 dizaines, soit 300." }
+        ]
+      },
+      { "type": "pose", "a": 47, "b": 6 },
+      {
+        "type": "choix",
+        "intro": "Vérifions le résultat.",
+        "question": "Le résultat 282 est-il proche de l'estimation 300 ?",
+        "options": [
+          { "t": "Oui, 282 est proche de 300", "ok": true },
+          { "t": "Non, il est beaucoup trop loin", "e": "E7", "retour": "Bip ! 282 est tout près de 300. Le calcul est cohérent avec l'estimation." },
+          { "t": "On ne peut pas comparer", "e": "E7", "retour": "Bip ! On peut comparer : 300 − 282 = 18, c'est un petit écart." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Il y a 6 rangées, et chaque rangée a le même nombre de sacs. Quelle opération faut-il ?" },
+    { "niveau": 2, "texte": "On répète 47 sacs, 6 fois. On multiplie 47 par 6." },
+    { "niveau": 3, "texte": "Commence par les unités : 7 × 6. N'oublie pas la retenue." },
+    { "niveau": 4, "texte": "Exemple : 23 × 3. 3 × 3 = 9, puis 2 × 3 = 6. Cela fait 69. À toi, avec 47 × 6 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je pose l'opération et je calcule colonne par colonne." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Pose 23 × 3.",
+      "etapes": [ { "type": "pose", "a": 23, "b": 3 } ],
+      "fin": "23 × 3 = 69. Pas de retenue ici."
+    },
+    {
+      "enonce": "Pose 35 × 4 (avec une retenue).",
+      "etapes": [ { "type": "pose", "a": 35, "b": 4 } ],
+      "fin": "35 × 4 = 140. On a bien gardé la retenue."
+    },
+    {
+      "enonce": "Reviens aux sacs : pose 47 × 6.",
+      "etapes": [ { "type": "pose", "a": 47, "b": 6 } ],
+      "fin": "47 × 6 = 282."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Que veut dire 4 × 25 ?", "bonne": "Répéter 25 quatre fois",
+      "mauvaises": [
+        { "t": "Ajouter 4 et 25", "e": "E8", "retour": "Bip ! Ajouter 4 et 25 fait 29. Multiplier, c'est répéter : 25 + 25 + 25 + 25." },
+        { "t": "Partager 25 en 4", "e": "E8", "retour": "Bip ! Partager, c'est diviser. Multiplier, c'est répéter 25 quatre fois." },
+        { "t": "Enlever 4 à 25", "e": "E8", "retour": "Bip ! Enlever, c'est soustraire. Multiplier, c'est répéter 25 quatre fois." } ] },
+    { "id": "A2", "niveau": "A", "question": "Quel calcul donne le même résultat que 3 × 8 ?", "bonne": "8 + 8 + 8",
+      "mauvaises": [
+        { "t": "3 + 8", "e": "E8", "retour": "Bip ! 3 + 8 n'est pas 3 fois 8. 3 × 8, c'est 8 répété 3 fois." },
+        { "t": "8 + 8", "e": "E5", "retour": "Bip ! Il manque un 8. 3 × 8, c'est 8 + 8 + 8." },
+        { "t": "8 + 3", "e": "E8", "retour": "Bip ! 8 + 3 n'est pas 3 fois 8. 3 × 8, c'est 8 répété 3 fois." } ] },
+    { "id": "B1", "niveau": "B", "question": "Combien font 23 × 3 ?", "bonne": "69",
+      "mauvaises": [
+        { "t": "26", "e": "E8", "retour": "Bip ! 26 vient de 23 + 3. Ici, on multiplie : 3 × 3 = 9, puis 2 × 3 = 6." },
+        { "t": "66", "e": "E3", "retour": "Bip ! Ta méthode est bonne. Vérifie 3 × 3 : cela fait 9, pas 6." },
+        { "t": "609", "e": "E1", "retour": "Bip ! Les chiffres s'écrivent dans les bonnes colonnes. 3 × 3 = 9 aux unités, 2 × 3 = 6 aux dizaines : 69." } ] },
+    { "id": "B2", "niveau": "B", "question": "Combien font 47 × 5 ?", "bonne": "235",
+      "mauvaises": [
+        { "t": "205", "e": "E5", "retour": "Bip ! Tu as oublié la retenue de 3. 4 × 5 = 20, plus 3 = 23. Le résultat est 235." },
+        { "t": "52", "e": "E8", "retour": "Bip ! 52 vient de 47 + 5. Ici, on multiplie : 47 répété 5 fois." },
+        { "t": "2035", "e": "E1", "retour": "Bip ! On écrit un chiffre par colonne et on garde la retenue. 7 × 5 = 35 : j'écris 5 et je retiens 3." } ] },
+    { "id": "C1", "niveau": "C", "question": "Un panier contient 12 mangues. Mamie a 8 paniers. Combien de mangues a-t-elle ?", "bonne": "96",
+      "mauvaises": [
+        { "t": "20", "e": "E8", "retour": "Bip ! 12 + 8 = 20 ajoute deux nombres différents. Ici, on répète 12 mangues, 8 fois." },
+        { "t": "4", "e": "E8", "retour": "Bip ! 12 − 8 enlève au lieu de répéter. On répète 12 mangues, 8 fois." },
+        { "t": "12", "e": "E9", "retour": "Bip ! 12, c'est un seul panier. Mamie a 8 paniers." } ] },
+    { "id": "C2", "niveau": "C", "question": "Une charrette porte 25 sacs. Kola fait 4 voyages. Combien de sacs a-t-il portés ?", "bonne": "100",
+      "mauvaises": [
+        { "t": "29", "e": "E8", "retour": "Bip ! 25 + 4 = 29 ajoute deux nombres différents. On répète 25 sacs, 4 fois." },
+        { "t": "21", "e": "E8", "retour": "Bip ! 25 − 4 enlève au lieu de répéter. On répète 25 sacs, 4 fois." },
+        { "t": "25", "e": "E9", "retour": "Bip ! 25, c'est un seul voyage. Kola en fait 4 : 25 × 4." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola dit : « 6 × 47, c'est 6 + 47 = 53. » A-t-il raison ?", "bonne": "Non, 6 × 47 veut dire 47 répété 6 fois : 282",
+      "mauvaises": [
+        { "t": "Oui, multiplier, c'est additionner", "e": "E8", "retour": "Bip ! Multiplier, c'est répéter le même nombre : 47 + 47 + 47 + 47 + 47 + 47." },
+        { "t": "Non, c'est 47 − 6 = 41", "e": "E8", "retour": "Bip ! On n'enlève pas 6. On répète 47, six fois." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : estime 6 × 50 = 300. 53 est beaucoup trop petit." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita trouve 47 × 6 = 242. Elle estime 6 × 50 = 300. Que doit-elle faire ?", "bonne": "Vérifier son calcul : 242 est trop loin de 300",
+      "mauvaises": [
+        { "t": "Rien, 242 est proche de 300", "e": "E5", "retour": "Bip ! L'écart est de 58, c'est trop grand. 47 est tout près de 50 : le résultat doit être tout près de 300." },
+        { "t": "Changer l'estimation", "e": "E7", "retour": "Bip ! L'estimation est bonne : 6 × 50 = 300. C'est le calcul qu'il faut vérifier." },
+        { "t": "Ajouter 6 au résultat", "e": "E8", "retour": "Bip ! On n'ajoute pas au hasard. Il faut refaire le calcul colonne par colonne." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla remplit 9 paniers de 34 mangues. Combien de mangues a-t-elle en tout ?",
+    "reponse": "306",
+    "mauvaises": [
+      { "valeur": "276", "e": "E5", "retour": "Bip ! Tu as oublié la retenue. 4 × 9 = 36 : j'écris 6 et je retiens 3. Puis 3 × 9 = 27, plus 3 = 30." },
+      { "valeur": "43", "e": "E8", "retour": "Bip ! 43 vient de 34 + 9. Ici, on répète 34 mangues, 9 fois." },
+      { "valeur": "296", "e": "E3", "retour": "Bip ! Ta méthode est bonne. Vérifie 3 × 9 + 3 : cela fait 30, pas 29." }
+    ],
+    "indice": "Pose 34 × 9. Commence par les unités : 4 × 9."
+  },
+
+  "video": {
+    "titre": "Multiplier des entiers",
+    "duree": 165,
+    "segments": [
+      { "debut": 0, "fin": 15, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, multiplier des entiers." },
+          { "t": 5, "texte": "Mamie Sègla a 6 rangées de 47 sacs." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "p1", "texte": "6 rangées de 47 sacs", "x": 180, "y": 110, "taille": 38 } ] },
+      { "debut": 15, "fin": 45, "parties": [
+          { "t": 0, "texte": "Multiplier, c'est répéter plusieurs fois la même quantité." },
+          { "t": 8, "texte": "6 fois 47, c'est 47 plus 47 plus 47, six fois." },
+          { "t": 18, "texte": "C'est long ! Une multiplication est plus rapide." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 8.5, "a": "ecrire", "id": "m2a", "texte": "47+47+47+47+47+47", "x": 180, "y": 70, "taille": 28 }, { "t": 19, "a": "ecrire", "id": "m2b", "texte": "6 × 47", "x": 180, "y": 144, "taille": 56, "couleur": "#6fe3d8" } ] },
+      { "debut": 45, "fin": 70, "parties": [
+          { "t": 0, "texte": "D'abord, j'estime. 47 est proche de 50." },
+          { "t": 8, "texte": "6 fois 50 égale 300." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "e3a", "texte": "47 ≈ 50", "x": 180, "y": 70, "taille": 46 }, { "t": 8.5, "a": "ecrire", "id": "e3b", "texte": "6 × 50 = 300", "x": 180, "y": 140, "taille": 46, "couleur": "#ffe066" } ] },
+      { "debut": 70, "fin": 125, "parties": [
+          { "t": 0, "texte": "Maintenant, je pose l'opération. Je commence par les unités." },
+          { "t": 9, "texte": "7 fois 6 égale 42. J'écris 2 et je retiens 4." },
+          { "t": 24, "texte": "Puis 4 fois 6 égale 24, plus 4 égale 28." },
+          { "t": 38, "texte": "J'écris 28. Le résultat est 282." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "pose", "id": "q1", "n1": 47, "n2": 6, "resultat": [], "retenues": {}, "actif": 0 },
+          { "t": 10, "a": "supprimer", "id": "q1" }, { "t": 10.1, "a": "pose", "id": "q2", "n1": 47, "n2": 6, "resultat": [2], "retenues": { "1": 4 }, "actif": 1 },
+          { "t": 25, "a": "supprimer", "id": "q2" }, { "t": 25.1, "a": "pose", "id": "q3", "n1": 47, "n2": 6, "resultat": [2, 8, 2], "retenues": { "1": 4 }, "actif": 2 } ] },
+      { "debut": 125, "fin": 145, "parties": [
+          { "t": 0, "texte": "Je vérifie. 282 est proche de 300." },
+          { "t": 6, "texte": "Mon résultat est cohérent." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "v5a", "texte": "282 ≈ 300", "x": 180, "y": 100, "taille": 56, "couleur": "#6fe3d8" } ] },
+      { "debut": 145, "fin": 165, "parties": [
+          { "t": 0, "texte": "À toi ! Calcule 23 fois 3." },
+          { "t": 4, "texte": "Mets la vidéo en pause." },
+          { "t": 9, "texte": "Réponse : 69." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "t6", "texte": "23 × 3 = ?", "x": 180, "y": 100, "taille": 54, "couleur": "#ffe066" }, { "t": 9.4, "a": "ecrire", "id": "r6", "texte": "69", "x": 180, "y": 170, "taille": 54, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Les sacs de l'entrepôt",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Mathéo", "x": 44, "y": 98, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "objets", "genre": "sac", "n": 18, "x": 40, "y": 148, "colonnes": 9, "pas": 25, "taille": 22 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "6 rangées de 47 sacs. Combien en tout ?" }, { "qui": "Mathéo", "texte": "Bip ! Il y en a beaucoup !", "humeur": "surpris" } ], "legende": "À l'entrepôt." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 112, "w": 66 } ], "objets": [ { "t": "texte", "texte": "47+47+47+47+47+47", "x": 230, "y": 100, "taille": 20, "couleur": "#c1440e" }, { "t": "texte", "texte": "…", "x": 230, "y": 140, "taille": 36, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "J'additionne : 47 plus 47 plus 47…" }, { "qui": "Anita", "texte": "C'est long, Kola. Multiplions !" } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "texte", "texte": "6 × 47", "x": 256, "y": 100, "taille": 50, "couleur": "#c1440e" }, { "t": "texte", "texte": "≈ 6 × 50", "x": 256, "y": 160, "taille": 34, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "D'abord j'estime : 47 est proche de 50." }, { "qui": "Kola", "texte": "6 fois 50, 300 !" } ], "legende": "Estimation : environ 300." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "content" } ], "objets": [ { "t": "texte", "texte": "7 × 6 = 42", "x": 150, "y": 80, "taille": 44, "couleur": "#c1440e" }, { "t": "texte", "texte": "j'écris 2, je retiens 4", "x": 150, "y": 134, "taille": 24, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "7 fois 6 égale 42. J'écris 2 et je retiens 4." }, { "qui": "Mathéo", "texte": "Bip ! Je retiens 4 !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "4 × 6 = 24", "x": 180, "y": 80, "taille": 40, "couleur": "#c1440e" }, { "t": "texte", "texte": "24 + 4 = 28", "x": 180, "y": 134, "taille": 40, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "4 fois 6, 24. Plus la retenue 4, 28 !" }, { "qui": "Anita", "texte": "Le résultat est 282." } ], "legende": "47 × 6 = 282." },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Mathéo", "x": 44, "y": 98, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 118, "y": 124, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! J'ai 282 sacs." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Je choisis l'opération, j'estime, je pose, je calcule et je vérifie." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Multiplier revient souvent à répéter plusieurs fois la même quantité. Je pose, je calcule colonne par colonne et je vérifie.",
+  "carte": "47 × 6 = 282 : 7 × 6 = 42, j'écris 2 et je retiens 4 ; 4 × 6 = 24, plus 4 = 28.",
+  "pourquoi": "Pourquoi estimer d'abord ? Pour savoir si le résultat est possible.",
+  "fiche": { "titre": "N10 · Multiplier des entiers", "piege": "Oublier la retenue : 47 × 5 ne fait pas 205, mais 235." },
+  "controles": [ { "expr": "47*6", "attendu": 282 }, { "expr": "6*50", "attendu": 300 }, { "expr": "23*3", "attendu": 69 }, { "expr": "47*5", "attendu": 235 }, { "expr": "12*8", "attendu": 96 }, { "expr": "25*4", "attendu": 100 }, { "expr": "34*9", "attendu": 306 }, { "expr": "35*4", "attendu": 140 }, { "expr": "300-282", "attendu": 18 } ]
+}

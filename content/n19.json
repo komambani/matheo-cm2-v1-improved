@@ -1,0 +1,229 @@
+{
+  "id": "N19",
+  "version": "0.1",
+  "titre": "Lire et écrire une fraction",
+  "domaine": "Fractions",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4). Le vocabulaire (demi, tiers, quart, cinquième, dixième) est à faire valider.",
+  "idee_cle": "Le nombre du haut dit combien de parts sont prises ; celui du bas dit en combien de parts égales le tout est partagé.",
+  "erreurs_ciblees": ["E2 : confondre numérateur et dénominateur", "E6 : lire une fraction avec les mauvais mots (« trois quatre »)", "E1 : écrire sans donner de sens à la fraction"],
+
+  "mission_scene": {
+    "fond": "classe",
+    "personnages": [
+      { "qui": "Maître Léo", "x": 24, "y": 70, "w": 70 },
+      { "qui": "Anita", "x": 206, "y": 128, "w": 56 },
+      { "qui": "Kola", "x": 276, "y": 128, "w": 56 },
+      { "qui": "Mathéo", "x": 128, "y": 112, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "texte", "texte": "3/4", "x": 210, "y": 100, "taille": 44, "couleur": "#fff" } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Dans la classe, Maître Léo tient une petite boîte." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est dans la boîte !", "humeur": "surpris" },
+    { "qui": "Maître Léo", "texte": "Elle s'ouvre avec trois cartes qui disent la même chose." },
+    { "qui": "Anita", "texte": "Une carte avec un dessin, une avec des mots, une avec des chiffres." },
+    { "qui": "Kola", "texte": "Facile ! Moi, je lis « trois quatre » !" },
+    { "qui": "Narrateur", "texte": "Comment lire et écrire une fraction ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Maître Léo montre le dessin de 3/4. Trouve la lecture, l'écriture, puis écris une autre fraction.",
+    "reponse": "3/4",
+    "reussite": "Bip bip ! La boîte s'ouvre ! Trois quarts, 3/4 et le dessin disent la même chose.",
+    "etapes": [
+      {
+        "type": "choix",
+        "intro": "Première carte : les mots.",
+        "question": "Comment lit-on 3/4 ?",
+        "options": [
+          { "t": "trois quarts", "ok": true },
+          { "t": "trois quatre", "e": "E6", "retour": "Bip ! On ne dit pas « trois quatre ». Le bas se lit avec un mot spécial : quarts." },
+          { "t": "quatre tiers", "e": "E2", "retour": "Bip ! Tu as lu le bas en premier. On lit d'abord le haut : trois." },
+          { "t": "trois demis", "e": "E6", "retour": "Bip ! Les demis, c'est pour le bas 2. Ici, le bas est 4 : on dit quarts." }
+        ]
+      },
+      {
+        "type": "choix",
+        "intro": "Deuxième carte : les chiffres.",
+        "question": "Quelle écriture correspond au dessin ?",
+        "visuel": { "t": "disque", "den": 4, "num": 3, "alt": "Un disque de 4 parts dont 3 sont coloriées" },
+        "options": [
+          { "t": "3/4", "ok": true },
+          { "t": "4/3", "e": "E2", "retour": "Bip ! Le haut compte les parts coloriées : 3. Le bas compte toutes les parts : 4." },
+          { "t": "3/7", "e": "E1", "retour": "Bip ! On n'additionne pas les nombres. Le bas compte toutes les parts du disque : 4." },
+          { "t": "1/4", "e": "E5", "retour": "Bip ! 1, c'est la part non coloriée. Le haut compte les parts coloriées : 3." }
+        ]
+      },
+      {
+        "type": "fraction",
+        "intro": "Dernière carte. Maître Léo dit : cinq huitièmes. Écris cette fraction en chiffres.",
+        "num": 5,
+        "den": 8,
+        "question_haut": "Cinq huitièmes : quel est le nombre du haut ?",
+        "question_bas": "Huitièmes : quel est le nombre du bas ?",
+        "retour_haut": "Bip ! On lit d'abord le haut : cinq.",
+        "retour_inverse": "Bip ! Huitièmes, c'est le mot du bas. Le nombre du haut est le premier qu'on dit : cinq.",
+        "retour_bas": "Bip ! Le mot huitièmes dit en combien de parts égales on partage : 8.",
+        "retour_inverse_bas": "Bip ! Cinq, c'est le nombre du haut. Le mot huitièmes donne le nombre du bas : 8."
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "On lit d'abord le nombre du haut. Que dit-il ?" },
+    { "niveau": 2, "texte": "Le nombre du bas se lit avec un mot spécial : demis, tiers, quarts, cinquièmes." },
+    { "niveau": 3, "texte": "Pour 3/4, le haut est 3 et le bas est 4. Cela se lit trois quarts." },
+    { "niveau": 4, "texte": "Exemple : 2/5 se lit deux cinquièmes. Le haut est 2, le bas dit cinquièmes. À toi, avec 3/4 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je lis le haut, puis le bas avec son mot." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Lis la fraction 1/2.",
+      "etapes": [
+        { "type": "choix", "question": "Comment lit-on 1/2 ?", "options": [ { "t": "un demi", "ok": true }, { "t": "un deux", "e": "E6", "retour": "Bip ! Le bas 2 se lit demi. On dit un demi." }, { "t": "deux demis", "e": "E2", "retour": "Bip ! On lit d'abord le haut : un." } ] },
+        { "type": "fraction", "intro": "Maintenant, écris un demi en chiffres.", "num": 1, "den": 2, "question_haut": "Un demi : quel est le nombre du haut ?", "question_bas": "Demi : quel est le nombre du bas ?" }
+      ],
+      "fin": "Un demi s'écrit 1/2."
+    },
+    {
+      "enonce": "Lis la fraction 2/3.",
+      "etapes": [
+        { "type": "choix", "question": "Comment lit-on 2/3 ?", "options": [ { "t": "deux tiers", "ok": true }, { "t": "deux trois", "e": "E6", "retour": "Bip ! Le bas 3 se lit tiers. On dit deux tiers." }, { "t": "trois deuxièmes", "e": "E2", "retour": "Bip ! On lit d'abord le haut : deux." } ] },
+        { "type": "fraction", "intro": "Maintenant, écris deux tiers en chiffres.", "num": 2, "den": 3, "question_haut": "Deux tiers : quel est le nombre du haut ?", "question_bas": "Tiers : quel est le nombre du bas ?" }
+      ],
+      "fin": "Deux tiers s'écrit 2/3."
+    },
+    {
+      "enonce": "Reviens à la boîte : trois quarts.",
+      "etapes": [
+        { "type": "fraction", "intro": "Écris trois quarts en chiffres.", "num": 3, "den": 4, "visuel": { "t": "disque", "den": 4, "num": 3, "alt": "Un disque de 4 parts dont 3 sont coloriées" }, "question_haut": "Trois quarts : quel est le nombre du haut ?", "question_bas": "Quarts : quel est le nombre du bas ?" }
+      ],
+      "fin": "Trois quarts s'écrit 3/4."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Comment lit-on 1/2 ?", "bonne": "un demi",
+      "mauvaises": [
+        { "t": "un deux", "e": "E6", "retour": "Bip ! Le bas 2 se lit demi. On dit un demi." },
+        { "t": "deux demis", "e": "E2", "retour": "Bip ! On lit d'abord le haut : un. Le bas 2 se lit demi." },
+        { "t": "un double", "e": "E6", "retour": "Bip ! Le mot double ne va pas ici. Le bas 2 se lit demi." } ] },
+    { "id": "A2", "niveau": "A", "question": "Comment lit-on 3/5 ?", "bonne": "trois cinquièmes",
+      "mauvaises": [
+        { "t": "trois cinq", "e": "E6", "retour": "Bip ! Le bas se lit avec un mot spécial : cinquièmes." },
+        { "t": "cinq troisièmes", "e": "E2", "retour": "Bip ! On lit d'abord le haut : trois. Le bas 5 se lit cinquièmes." },
+        { "t": "trois quarts", "e": "E1", "retour": "Bip ! Quarts, c'est pour le bas 4. Ici, le bas est 5 : cinquièmes." } ] },
+    { "id": "B1", "niveau": "B", "question": "Quelle écriture correspond à « sept dixièmes » ?", "bonne": "7/10",
+      "mauvaises": [
+        { "t": "10/7", "e": "E2", "retour": "Bip ! On dit d'abord le haut : sept. Les dixièmes sont le bas : 10." },
+        { "t": "7/7", "e": "E1", "retour": "Bip ! Dixièmes dit que le bas est 10." },
+        { "t": "17/0", "e": "E1", "retour": "Bip ! On n'écrit pas les nombres côte à côte. Sept en haut, dix en bas." } ] },
+    { "id": "B2", "niveau": "B", "question": "Comment lit-on la fraction coloriée ?", "visuel": { "t": "disque", "den": 5, "num": 2, "alt": "Un disque de 5 parts dont 2 sont coloriées" }, "bonne": "deux cinquièmes",
+      "mauvaises": [
+        { "t": "cinq deuxièmes", "e": "E2", "retour": "Bip ! Le haut compte les parts coloriées : deux. Le bas compte toutes les parts : cinq." },
+        { "t": "deux cinq", "e": "E6", "retour": "Bip ! Le bas se lit avec un mot spécial : cinquièmes." },
+        { "t": "trois cinquièmes", "e": "E5", "retour": "Bip ! Trois, ce sont les parts non coloriées. Le haut compte les parts coloriées : deux." } ] },
+    { "id": "C1", "niveau": "C", "question": "Mamie Sègla dit : « J'ai vendu un quart de mes galettes. » Quelle écriture correspond à un quart ?", "bonne": "1/4",
+      "mauvaises": [
+        { "t": "4/1", "e": "E2", "retour": "Bip ! Un quart : le haut est un, le bas est quatre." },
+        { "t": "1/2", "e": "E6", "retour": "Bip ! Un demi s'écrit 1/2. Un quart s'écrit avec 4 en bas." },
+        { "t": "14", "e": "E1", "retour": "Bip ! Une fraction a un nombre en haut et un nombre en bas." } ] },
+    { "id": "C2", "niveau": "C", "question": "Un pagne est coupé en 3 parts égales. Anita en prend 2. Comment dit-on la fraction qu'elle prend ?", "bonne": "deux tiers",
+      "mauvaises": [
+        { "t": "deux trois", "e": "E6", "retour": "Bip ! Le bas 3 se lit tiers. On dit deux tiers." },
+        { "t": "trois deuxièmes", "e": "E2", "retour": "Bip ! Anita prend 2 parts : le haut est deux. Le bas est 3 : tiers." },
+        { "t": "un tiers", "e": "E5", "retour": "Bip ! Un tiers, c'est 1 part. Anita en prend 2 : deux tiers." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola lit 3/4 « trois quatre ». A-t-il raison ?", "bonne": "Non, on dit « trois quarts »",
+      "mauvaises": [
+        { "t": "Oui, on lit les deux nombres", "e": "E6", "retour": "Bip ! Le bas se lit avec un mot spécial : quarts." },
+        { "t": "Oui, c'est plus simple", "e": "E6", "retour": "Bip ! En maths, on dit trois quarts. Le mot quarts dit que le tout a 4 parts égales." },
+        { "t": "On ne peut pas lire une fraction", "e": "E7", "retour": "Bip ! On peut la lire : trois quarts." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita écrit 4/3 pour « trois quarts ». Qu'a-t-elle mélangé ?", "bonne": "Le haut et le bas : trois quarts s'écrit 3/4",
+      "mauvaises": [
+        { "t": "Rien, c'est juste", "e": "E1", "retour": "Bip ! Trois quarts : le haut est trois, le bas est quatre. Cela s'écrit 3/4." },
+        { "t": "Les mots et les dessins", "e": "E7", "retour": "Bip ! Le dessin est bon. Elle a mélangé le haut et le bas." },
+        { "t": "Elle a oublié le trait", "e": "E5", "retour": "Bip ! Le trait est là. Elle a mélangé le haut et le bas." } ] }
+  ],
+
+  "boss": {
+    "question": "Un champ est partagé en 10 parts égales. Mamie Sègla en cultive 7. Elle dit : « Trois dixièmes sont vides. » Comment s'écrit ce qu'elle dit ?",
+    "reponse": "3/10",
+    "mauvaises": [
+      { "valeur": "10/3", "e": "E2", "retour": "Bip ! Tu as mélangé le haut et le bas. Trois dixièmes : le haut est trois, le bas est dix." },
+      { "valeur": "7/10", "e": "E9", "retour": "Bip ! 7/10, ce sont les parts cultivées. Que dit Mamie ? Trois dixièmes sont vides." },
+      { "valeur": "3/7", "e": "E1", "retour": "Bip ! Dixièmes dit que le bas est 10, pas 7." }
+    ],
+    "indice": "Que dit Mamie ? Écris d'abord le haut, puis le bas avec son mot."
+  },
+
+  "video": {
+    "titre": "Lire et écrire une fraction",
+    "duree": 150,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, lire et écrire une fraction." },
+          { "t": 5, "texte": "Une fraction se dessine, s'écrit et se lit." } ],
+        "etapes": [ { "t": 5.4, "a": "disque", "id": "g1", "cx": 180, "cy": 100, "r": 64, "den": 4, "num": 3 } ] },
+      { "debut": 14, "fin": 40, "parties": [
+          { "t": 0, "texte": "Pour écrire, je mets le nombre du haut, un trait, puis le nombre du bas." },
+          { "t": 9, "texte": "Le haut s'appelle le numérateur. Le bas s'appelle le dénominateur." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "fraction", "id": "f2", "num": 3, "den": 4, "x": 180, "y": 86, "taille": 74, "couleurHaut": "#ffe066", "couleurBas": "#6fe3d8" } ] },
+      { "debut": 40, "fin": 75, "parties": [
+          { "t": 0, "texte": "Pour lire, je dis d'abord le nombre du haut : trois." },
+          { "t": 8, "texte": "Puis je dis le bas avec un mot spécial : quarts." },
+          { "t": 16, "texte": "Trois quarts." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "fraction", "id": "f3", "num": 3, "den": 4, "x": 100, "y": 86, "taille": 70 },
+          { "t": 2.5, "a": "ecrire", "id": "t3", "texte": "trois", "x": 250, "y": 60, "taille": 40, "couleur": "#ffe066" },
+          { "t": 9, "a": "ecrire", "id": "q3", "texte": "quarts", "x": 250, "y": 150, "taille": 40, "couleur": "#6fe3d8" } ] },
+      { "debut": 75, "fin": 105, "parties": [
+          { "t": 0, "texte": "Voici les mots du bas." },
+          { "t": 4, "texte": "Un demi, un tiers, un quart, un cinquième, un dixième." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "carte", "id": "c4", "x": 40, "y": 24, "w": 280, "h": 156,
+          "lignes": [ { "t": 0.4, "texte": "2 : demis   3 : tiers", "couleur": "#2b1d4a" }, { "t": 2, "texte": "4 : quarts   5 : cinquièmes", "couleur": "#0e7f74" }, { "t": 4, "texte": "10 : dixièmes", "couleur": "#b45309" } ] } ] },
+      { "debut": 105, "fin": 130, "parties": [
+          { "t": 0, "texte": "Attention ! On ne dit pas trois quatre." },
+          { "t": 6, "texte": "On dit trois quarts." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "faux", "texte": "trois quatre", "x": 180, "y": 70, "taille": 40, "couleur": "#fff" },
+          { "t": 3, "a": "croix", "x1": 90, "y1": 36, "x2": 270, "y2": 84 }, { "t": 6.5, "a": "ecrire", "id": "vrai", "texte": "trois quarts", "x": 180, "y": 148, "taille": 44, "couleur": "#6fe3d8" } ] },
+      { "debut": 130, "fin": 150, "parties": [
+          { "t": 0, "texte": "À toi ! Comment lit-on 2/5 ?" },
+          { "t": 4, "texte": "Mets la vidéo en pause." },
+          { "t": 9, "texte": "Réponse : deux cinquièmes." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "fraction", "id": "f6", "num": 2, "den": 5, "x": 180, "y": 80, "taille": 62 }, { "t": 9.4, "a": "ecrire", "id": "r6", "texte": "deux cinquièmes", "x": 180, "y": 176, "taille": 36, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "La boîte de Maître Léo",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "classe", "personnages": [ { "qui": "Maître Léo", "x": 20, "y": 70, "w": 70 }, { "qui": "Mathéo", "x": 130, "y": 112, "w": 52, "humeur": "surpris" }, { "qui": "Anita", "x": 214, "y": 128, "w": 54 }, { "qui": "Kola", "x": 284, "y": 128, "w": 54 } ], "objets": [], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Cette boîte s'ouvre avec trois cartes qui disent la même chose." }, { "qui": "Mathéo", "texte": "Bip ! Trois cartes ?", "humeur": "surpris" } ], "legende": "Dans la classe. Une petite boîte." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "classe", "personnages": [ { "qui": "Kola", "x": 18, "y": 108, "w": 70 } ], "objets": [ { "t": "texte", "texte": "3/4", "x": 190, "y": 90, "taille": 52, "couleur": "#fff" }, { "t": "texte", "texte": "trois quatre ?", "x": 236, "y": 140, "taille": 22, "couleur": "#ffe066" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Facile ! Je lis « trois quatre » !" }, { "qui": "Anita", "texte": "Pas tout à fait, Kola." } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 }, { "qui": "Kola", "x": 168, "y": 118, "w": 62 } ], "objets": [ { "t": "texte", "texte": "3", "x": 292, "y": 96, "taille": 50, "couleur": "#c1440e" }, { "t": "ligne", "x1": 266, "y1": 110, "x2": 318, "y2": 110 }, { "t": "texte", "texte": "4", "x": 292, "y": 170, "taille": 50, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "On lit le haut : trois." }, { "qui": "Kola", "texte": "Et le bas ?" } ] },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "classe", "personnages": [ { "qui": "Maître Léo", "x": 20, "y": 70, "w": 68 }, { "qui": "Anita", "x": 276, "y": 128, "w": 56 } ], "objets": [ { "t": "texte", "texte": "4 : quarts", "x": 196, "y": 96, "taille": 40, "couleur": "#6fe3d8" } ], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Le bas se lit avec un mot spécial. Pour 4, on dit quarts." }, { "qui": "Anita", "texte": "Trois quarts !" } ], "legende": "3/4 se lit trois quarts." },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "classe", "personnages": [ { "qui": "Kola", "x": 18, "y": 120, "w": 60 }, { "qui": "Mathéo", "x": 290, "y": 124, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "disque", "cx": 190, "cy": 100, "r": 52, "den": 4, "num": 3 }, { "t": "texte", "texte": "3/4", "x": 190, "y": 196, "taille": 34, "couleur": "#fff" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Le dessin, les chiffres, les mots : trois quarts !" }, { "qui": "Mathéo", "texte": "Bip ! Les trois cartes sont pareilles !", "humeur": "joie" } ] },
+      { "n": 6, "plan": "Large", "scene": { "fond": "classe", "personnages": [ { "qui": "Maître Léo", "x": 20, "y": 70, "w": 70 }, { "qui": "Mathéo", "x": 130, "y": 112, "w": 52, "humeur": "joie" }, { "qui": "Anita", "x": 214, "y": 128, "w": 54 }, { "qui": "Kola", "x": 284, "y": 128, "w": 54 } ], "objets": [ { "t": "fragment", "x": 160, "y": 168, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Bravo ! La boîte s'ouvre." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "3/4 : trois quarts. Le haut d'abord, puis le bas avec son mot." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Le nombre du haut dit combien de parts sont prises. Le nombre du bas dit en combien de parts égales le tout est partagé.",
+  "carte": "3/4 se lit trois quarts : le haut d'abord, puis le bas avec son mot.",
+  "pourquoi": "Pourquoi un mot spécial pour le bas ? Parce qu'il dit la taille des parts : quarts, tiers, cinquièmes.",
+  "fiche": { "titre": "N19 · Lire et écrire une fraction", "piege": "Lire « trois quatre » pour 3/4. On dit trois quarts : le bas se lit avec un mot spécial." },
+  "controles": [ { "expr": "10-7", "attendu": 3 }, { "expr": "4-3", "attendu": 1 } ]
+}
