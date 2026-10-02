@@ -132,6 +132,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .video .gal.pris circle:first-child { filter: drop-shadow(0 0 6px #ffe066); stroke: #ffe066; }
 .sous-titre { min-height: 3.3em; margin-top: 10px; padding: 8px 12px; border-radius: 12px; background: rgba(0,0,0,.45); text-align: center; font-weight: 600; line-height: 1.35; }
 .lecon-badge { font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: var(--turquoise); text-align: center; margin-bottom: 4px; opacity: .85; }
+/* Mathéo présentateur : il occupe l'angle du cadre pour que l'enfant voie
+   TOUJOURS qui lui parle, sans rogner le tableau (le tableau garde toute sa
+   largeur pour les 24 objets et les 3 tas). */
+.lecon-cadre { position: relative; }
+.lecon-presentateur { position: absolute; left: -6px; bottom: -10px; width: 74px; pointer-events: none; }
+.lecon-presentateur svg { width: 100%; height: auto; display: block; overflow: visible;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,.5)); }
+@media (max-width: 380px) { .lecon-presentateur { width: 62px; left: -4px; } }
 .lecteur { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .barre-v { flex: 1; height: 8px; border-radius: 999px; background: rgba(255,255,255,.2); overflow: hidden; }
 .barre-v i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--turquoise), var(--lumiere)); }

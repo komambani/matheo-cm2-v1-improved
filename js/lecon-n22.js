@@ -15,6 +15,40 @@
 const NS = "http://www.w3.org/2000/svg";
 const CRAIE = "'Segoe Print','Bradley Hand','Comic Sans MS',cursive,system-ui,sans-serif";
 
+/* Mathéo dans la leçon — phase Gold Standard.
+ * L'enfant ne doit jamais regarder un tableau de maths sans voir celui qui lui
+ * parle. Mathéo est ici le PRÉSENTATEUR : il occupe l'angle du cadre (le
+ * tableau garde toute sa largeur pour les 24 objets et les 3 tas, aucune
+ * collision), et son expression suit le temps pédagogique — ce n'est pas une
+ * animation décorative :
+ *   surpris  → accroche : l'enfant ne s'attendait pas à ce problème
+ *   content  → découverte et explication
+ *   pense    → erreur fréquente : il réfléchit avec l'enfant
+ *   joie     → exemple guidé réussi et résumé
+ * Le dessin est identique à celui de art.js (mêmes couleurs, mêmes yeux,
+ * mêmes antennes) pour que Mathéo reste reconnaissable partout dans l'app. */
+const BOUCHE = {
+  content: '<path d="M51 86 q9 10 18 0" stroke="#7a3b00" stroke-width="3" fill="none" stroke-linecap="round"/>',
+  joie: '<path d="M48 84 q12 16 24 0 z" fill="#7a3b00"/><path d="M52 90 q8 5 16 0" fill="#ff8f6b"/>',
+  surpris: '<ellipse cx="60" cy="88" rx="5" ry="6.5" fill="#7a3b00"/>',
+  pense: '<path d="M52 89 q8 -4 16 0" stroke="#7a3b00" stroke-width="3" fill="none" stroke-linecap="round"/>'
+};
+
+/** Mathéo en SVG autonome (viewBox 0 0 120 140), prêt à être injecté. */
+function mathEO(humeur = "content") {
+  return `<svg viewBox="0 0 120 140" class="matheo" role="img" aria-label="Mathéo">
+    <circle cx="60" cy="82" r="58" fill="url(#g-halo)" class="halo"/>
+    <path d="M46 40 Q38 20 30 12" stroke="#ffbf2e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <circle cx="29" cy="11" r="5.5" fill="#fffbd0" class="pointe"/>
+    <path d="M74 40 Q82 20 90 12" stroke="#ffbf2e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <circle cx="91" cy="11" r="5.5" fill="#fffbd0" class="pointe p2"/>
+    <ellipse cx="60" cy="82" rx="40" ry="44" fill="url(#g-matheo)" stroke="#e3a300" stroke-width="2"/>
+    <ellipse cx="46" cy="76" rx="7" ry="9.5" fill="#2b1d4a"/><ellipse cx="74" cy="76" rx="7" ry="9.5" fill="#2b1d4a"/>
+    <circle cx="43.6" cy="72" r="2.8" fill="#fff"/><circle cx="71.6" cy="72" r="2.8" fill="#fff"/>
+    ${BOUCHE[humeur] || ""}
+  </svg>`;
+}
+
 // Durées réelles mesurées (ffprobe) le 2026-10-02 — à régénérer si l'audio change.
 const BLOCS = [
   { id: "A", fichier: "audio/lecons/n22/bloc_A.mp3", duree: 23.92,
@@ -46,6 +80,17 @@ const BLOCS = [
       { frac: 0.86, texte: "Pour que chaque part soit égale." },
       { frac: 0.94, texte: "Le bas donne la taille d'une part." }
     ]},
+  { id: "E", fichier: "audio/lecons/n22/bloc_E.mp3", duree: 43.33,
+    sous_titres: [
+      { frac: 0.00, texte: "Changeons tout : ce ne sont plus des galettes, mais des arachides." },
+      { frac: 0.13, texte: "Kola en a seize dans son sac. Il en donne les trois quarts à l'école." },
+      { frac: 0.28, texte: "Même méthode qu'avant. Le quatre, en bas, dit qu'on partage d'abord." },
+      { frac: 0.42, texte: "Seize divisé par quatre, égale quatre. Une part, c'est quatre arachides." },
+      { frac: 0.56, texte: "Le trois, en haut, dit qu'on prend trois parts. Quatre fois trois, égale douze." },
+      { frac: 0.70, texte: "Donc les trois quarts de seize, ça fait douze arachides." },
+      { frac: 0.83, texte: "Les nombres ont changé, mais la méthode reste la même." },
+      { frac: 0.93, texte: "Le bas partage, le haut prend. Retiens bien ça !" }
+    ]},
   { id: "D", fichier: "audio/lecons/n22/bloc_D.mp3", duree: 26.47,
     sous_titres: [
       { frac: 0.00, texte: "Retenons trois choses." },
@@ -70,11 +115,14 @@ export function creerLeconN22(racine, { surFin, surPasser } = {}) {
   racine.innerHTML = `
     <div class="video lecon-premium">
       <div class="lecon-badge">Leçon de Mathéo · voix réelle</div>
-      <svg class="tableau" viewBox="0 0 360 203" role="img" aria-label="Tableau animé de la leçon">
-        <rect width="360" height="203" rx="10" fill="#1f3d36"/>
-        <rect x="3" y="3" width="354" height="197" rx="8" fill="none" stroke="#2f5a4f" stroke-width="2"/>
-        <g id="scene-lecon"></g>
-      </svg>
+      <div class="lecon-cadre">
+        <svg class="tableau" viewBox="0 0 360 203" role="img" aria-label="Tableau animé de la leçon">
+          <rect width="360" height="203" rx="10" fill="#1f3d36"/>
+          <rect x="3" y="3" width="354" height="197" rx="8" fill="none" stroke="#2f5a4f" stroke-width="2"/>
+          <g id="scene-lecon"></g>
+        </svg>
+        <div class="lecon-presentateur" id="l-matheo" aria-hidden="true"></div>
+      </div>
       <div class="sous-titre" id="l-st" aria-live="polite">&nbsp;</div>
       <div class="lecteur">
         <button class="rond" id="l-play" aria-label="Pause">⏸</button>
@@ -85,6 +133,7 @@ export function creerLeconN22(racine, { surFin, surPasser } = {}) {
     </div>`;
   const $ = (s) => racine.querySelector(s);
   const scene = $("#scene-lecon"), st = $("#l-st"), bPlay = $("#l-play"), prog = $("#l-prog"), tmps = $("#l-temps");
+  const presentateur = $("#l-matheo");
 
   const el = (html) => { scene.insertAdjacentHTML("beforeend", html); return scene.lastElementChild; };
   const voir = (e) => setTimeout(() => e.classList.add("vu"), 30);
@@ -100,15 +149,23 @@ export function creerLeconN22(racine, { surFin, surPasser } = {}) {
   let blocActuel = -1, tempsAccumule = 0, enPause = false, detruit = false, fini = false;
   let rafId = null;
 
+  /** Change l'expression de Mathéo selon le temps pédagogique en cours. */
+  const setHumeur = (humeur) => {
+    if (!presentateur) return;
+    presentateur.innerHTML = mathEO(humeur);
+  };
+
   const SCENES = {
     A: () => {
       vider();
+      setHumeur("surpris"); // accroche : l'enfant ne s'attendait pas à ce problème
       el(`<ellipse id="assiette" class="el" cx="180" cy="100" rx="98" ry="64" fill="#e9e4d6" stroke="#b9b09a" stroke-width="3"/>`);
       for (let k = 0; k < 12; k++) voir(galette(k, assiette(k)));
       setTimeout(() => voir(texte("obj", "Objectif : fractions", 180, 190, 18, "#6fe3d8")), 14000);
     },
     B: () => {
       vider();
+      setHumeur("content"); // découverte et explication
       voir(el(`<g id="frac" class="el"><text x="180" y="60" font-size="46" font-weight="700" fill="#ffe066" text-anchor="middle" font-family="${CRAIE}">2</text><path d="M152 70 H208" stroke="#fff" stroke-width="4" stroke-linecap="round"/><text x="180" y="110" font-size="46" font-weight="700" fill="#6fe3d8" text-anchor="middle" font-family="${CRAIE}">3</text></g>`));
       setTimeout(() => {
         for (let k = 0; k < 12; k++) voir(galette(k, assiette(k)));
@@ -126,11 +183,13 @@ export function creerLeconN22(racine, { surFin, surPasser } = {}) {
     },
     C: () => {
       vider();
+      setHumeur("pense"); // règle, puis erreur fréquente : il réfléchit avec l'enfant
       voir(el(`<rect class="el" x="50" y="34" width="260" height="90" rx="16" fill="#f6ebd3" stroke="#c58a52" stroke-width="5"/>`));
       voir(texte("r1", "bas : on partage", 180, 72, 24, "#2b1d4a"));
       voir(texte("r2", "haut : on prend", 180, 104, 24, "#2b1d4a"));
       setTimeout(() => {
         vider();
+        setHumeur("pense"); // contre-exemple : il montre l'erreur, tête penchée
         voir(texte("faux", "12 ÷ 2 = 6", 180, 52, 30, "#fff"));
         voir(el(`<path class="el" d="M104 30 L256 62 M256 30 L104 62" stroke="#ff6b6b" stroke-width="5" stroke-linecap="round"/>`));
         for (let k = 0; k < 12; k++) voir(galette(k, tas(k, 122)));
@@ -138,22 +197,64 @@ export function creerLeconN22(racine, { surFin, surPasser } = {}) {
       }, 12000);
       setTimeout(() => {
         vider();
+        setHumeur("joie"); // « pourquoi partager ? » : il a la réponse, content
         voir(texte("pq", "Pourquoi ?", 180, 50, 36, "#ffe066"));
         for (let k = 0; k < 12; k++) voir(galette(k, tas(k, 116)));
         for (const x of TAS_X) voir(el(`<rect class="el" x="${x - 34}" y="${116 - 34}" width="68" height="68" rx="12" fill="rgba(111,227,216,.14)" stroke="#6fe3d8" stroke-width="3"/>`));
       }, 26200);
     },
+    // Temps 08 — DEUXIÈME EXEMPLE (phase Gold Standard).
+    // Contexte volontairement changé : ce ne sont plus des galettes mais des
+    // arachides, et le total n'est plus 12 mais 16. L'enfant doit appliquer
+    // la MÊME règle sur des nombres qu'il n'a jamais vus — c'est ce qui
+    // vérifie qu'il a compris, et non mémorisé.
+    // 16 ÷ 4 = 4 (une part), puis 4 × 3 = 12 (on prend 3 parts).
+    E: () => {
+      vider();
+      setHumeur("content"); // il vérifie avec l'enfant, posé
+      // 16 arachides d'abord, en tas serrés
+      for (let k = 0; k < 16; k++) {
+        const x = 44 + (k % 8) * 36, y = 44 + Math.floor(k / 8) * 34;
+        voir(el(`<g class="el gal" style="transform:translate(${x}px,${y}px)"><ellipse rx="11" ry="8" transform="rotate(-20)" fill="#e0a24a" stroke="#8a5a1e" stroke-width="1.4"/><circle cx="3" cy="2" r="1.5" fill="#f6d28a"/></g>`));
+      }
+      voir(texte("t16", "16 arachides", 180, 140, 22, "#ffe066"));
+      // Puis : 16 partagées en 4 tas de 4
+      setTimeout(() => {
+        const tous = [...scene.querySelectorAll(".gal")];
+        for (let k = 0; k < 16; k++) {
+          const g = tous[k]; if (!g) continue;
+          const t = Math.floor(k / 4), d = k % 4;
+          const px = 58 + t * 82 + [0, 1, 0, 1][d] * 12;
+          const py = 96 + [0, 0, 1, 1][d] * 12;
+          g.style.transform = `translate(${px}px,${py}px)`;
+        }
+        const t16 = scene.querySelector("#t16"); if (t16) t16.remove();
+        for (const x of [58, 140, 222, 304]) voir(el(`<rect class="el" x="${x - 30}" y="62" width="60" height="60" rx="12" fill="rgba(111,227,216,.14)" stroke="#6fe3d8" stroke-width="3"/>`));
+        voir(texte("e1", "16 ÷ 4 = 4", 180, 168, 26, "#ffe066"));
+      }, 17000);
+      // Enfin : on prend 3 tas sur 4 → 12
+      setTimeout(() => {
+        const groupes = [...scene.querySelectorAll(".gal")];
+        for (let k = 12; k < 16; k++) { const g = groupes[k]; if (g) g.style.opacity = ".18"; }
+        for (const x of [222, 304]) voir(el(`<rect class="el" x="${x - 30}" y="62" width="60" height="60" rx="12" fill="rgba(255,224,102,.2)" stroke="#ffe066" stroke-width="4"/>`));
+        const e1 = scene.querySelector("#e1"); if (e1) e1.remove();
+        voir(texte("e2", "4 × 3 = 12", 180, 168, 26, "#6fe3d8"));
+      }, 31500);
+    },
     D: () => {
       vider();
+      setHumeur("joie"); // résumé : il recapitule avec l'enfant, content
       voir(texte("rs1", "1. Le bas partage", 180, 50, 20, "#fff"));
       setTimeout(() => voir(texte("rs2", "2. Le haut prend", 180, 80, 20, "#fff")), 3300);
       setTimeout(() => voir(texte("rs3", "3. Chaque part égale", 180, 110, 20, "#fff")), 6600);
       setTimeout(() => {
         vider();
+        setHumeur("pense"); // mini-défi : il attend la réponse de l'enfant
         voir(texte("defi", "3/4 de 8 ?", 180, 70, 42, "#ffe066"));
         voir(el(`<text class="el" x="180" y="100" font-size="16" fill="#6fe3d8" text-anchor="middle">mets en pause et cherche</text>`));
       }, 13800);
       setTimeout(() => {
+        setHumeur("joie"); // la réponse tombe : il est fier de l'enfant
         voir(texte("s1", "8 ÷ 4 = 2", 180, 150, 28, "#fff"));
         voir(texte("s2", "2 × 3 = 6", 180, 180, 28, "#6fe3d8"));
       }, 22500);

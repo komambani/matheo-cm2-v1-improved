@@ -148,7 +148,10 @@ function ecranDefi() {
     succes() {
       incrementer(cle("defi_ok"));
       gerbe(); sfx.bravo();
-      ctx.dire_("Mathéo", d.reussite, "bravo", "joie");
+      // Phrase signature de Mathéo CM2 (§13 du prompt maître) : elle ouvre
+      // chaque résolution. Le canon posait déjà "Tu as partagé, puis pris"
+      // en n22.json — on ne l'écrase pas, on l'ouvre avec la signature.
+      ctx.dire_("Mathéo", "Affaire classée ! " + d.reussite, "bravo", "joie");
       actions.innerHTML = `<button class="btn principal large" id="suite">Continuer</button>`;
       $("#suite").addEventListener("click", () => ecranQuiz(0, 0));
     }
@@ -299,7 +302,10 @@ function ecranBoss() {
       ecrire(cle("boss.essais"), essais);
       gerbe(30); sfx.bravo();
       $("#nuage").innerHTML = nuageParesse({ humeur: "fond" });
-      dans(parole, bulle({ qui: "Nuage-Paresse", texte: C.interface.boss_fin, humeur: "joie" }), C.interface.boss_fin);
+      // Affaire classée ! — signature Mathéo CM2 : le Boss est vaincu, donc
+      // c'est ici qu'elle est le plus justifiée. Le nuage répond ensuite.
+      dans(parole, bulle({ qui: "Mathéo", texte: "Affaire classée !", type: "bravo", humeur: "joie" }), "Affaire classée !");
+      setTimeout(() => { if (vivant(jeton)) dans(parole, bulle({ qui: "Nuage-Paresse", texte: C.interface.boss_fin, humeur: "joie" }), C.interface.boss_fin); }, 1100);
       setTimeout(() => { if (vivant(jeton)) ecranFin(essais === 1 && !indiceUtilise); }, 1400);
     } else {
       btn.classList.add("faux"); btn.style.pointerEvents = "none"; sfx.oups(); incrementer(cle(`erreurs.${o.m.e}`));
