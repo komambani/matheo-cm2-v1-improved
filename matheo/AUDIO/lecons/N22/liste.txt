@@ -1,0 +1,4 @@
+file '../../tests-voix/bloc_A_accroche_objectif.mp3'
+file '../../tests-voix/bloc_B_decouverte_explication.mp3'
+file '../../tests-voix/bloc_C_regle_erreur_pourquoi.mp3'
+file '../../tests-voix/bloc_D_resume_minidefi.mp3'

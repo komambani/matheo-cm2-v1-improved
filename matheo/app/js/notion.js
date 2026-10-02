@@ -5,6 +5,7 @@ import { fragmentBoussole, nuageParesse } from "./art.js";
 import { sfx } from "./sfx.js";
 import { dire, lire as lireVoix } from "./voix.js";
 import { creerVideo } from "./video.js";
+import { creerLeconN22 } from "./lecon-n22.js";
 import { rendreScene } from "./scenes.js";
 import { visuelSVG } from "./visuels.js";
 import { creerAlea, melanger, messageErreur } from "./generators/fractions.js";
@@ -40,8 +41,61 @@ function ecranMission(i) {
   if (m.qui === "Mathéo") sfx.bip();
   $("#suite").addEventListener("click", () => {
     if (!vivant(jeton)) return;
-    if (i < C.mission.length - 1) ecranMission(i + 1); else ecranBD(0);
+    if (i < C.mission.length - 1) ecranMission(i + 1);
+    // Refonte V1 améliorée : pour N22 uniquement, la leçon vidéo premium
+    // (voix ElevenLabs réelle) vient tout de suite après l'immersion,
+    // avant la BD — nouvel ordre pédagogique demandé (leçon avant exercices).
+    // Les 11 autres notions gardent le parcours original intact (BD → vidéo → défi).
+    else if (C.id === "N22") ecranLecon();
+    else ecranBD(0);
   });
+}
+
+/* ---------- leçon vidéo premium (N22 uniquement) et mini-vérification ---------- */
+
+function ecranLecon() {
+  const C = C_();
+  const jeton = monter(`
+    ${barre("Leçon de Mathéo", 1)}
+    <div id="lecteur-lecon"></div>
+    <div class="actions"><button class="btn principal large" id="suite" disabled>Continuer</button></div>`, 62);
+  const bSuite = $("#suite");
+  const l = creerLeconN22($("#lecteur-lecon"), {
+    surFin: () => { if (vivant(jeton)) { bSuite.disabled = false; bSuite.textContent = "J'ai compris !"; gerbe(10); sfx.bravo(); } },
+    surPasser: () => { if (vivant(jeton)) ecranMiniVerif(); }
+  });
+  bSuite.addEventListener("click", () => { l.detruire(); ecranMiniVerif(); });
+}
+
+/** Mini-vérification immédiate après la leçon : pas un gros quiz, une seule
+ * question de compréhension (conforme étape 3 du prompt maître V2). */
+function ecranMiniVerif() {
+  const C = C_();
+  const jeton = monter(`
+    ${barre("Vérification rapide", 2)}
+    ${enonce("Pour prendre 3/4 de 24, que fait-on EN PREMIER ?")}
+    <div class="choix" id="choix-mv">
+      <button data-ok="1">Partager 24 en 4 parts égales</button>
+      <button data-ok="0">Multiplier 24 par 3</button>
+      <button data-ok="0">Diviser 24 par 3</button>
+    </div>
+    <div id="parole-mv"></div>
+    <div class="actions" id="actions-mv"></div>`, 63);
+  const parole = $("#parole-mv");
+  $("#choix-mv").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    if (!vivant(jeton)) return;
+    const ok = b.dataset.ok === "1";
+    $("#choix-mv").querySelectorAll("button").forEach((x) => (x.style.pointerEvents = "none"));
+    if (ok) {
+      b.classList.add("juste"); sfx.bravo(); gerbe(8);
+      dans(parole, bulle({ qui: "Mathéo", texte: "Bip bip ! Exactement : le bas de la fraction dit combien de parts faire.", humeur: "joie" }), "");
+    } else {
+      b.classList.add("faux"); sfx.oups();
+      dans(parole, bulle({ qui: "Mathéo", texte: "Bip ! Pas tout à fait : on partage d'abord avec le nombre du bas (le dénominateur).", humeur: "pense" }), "");
+    }
+    $("#actions-mv").innerHTML = `<button class="btn principal large" id="suite-mv">Continuer l'aventure</button>`;
+    $("#suite-mv").addEventListener("click", () => ecranBD(0));
+  }));
 }
 
 /* ---------- défi ---------- */
@@ -258,6 +312,7 @@ export function ecranFiche(C, retour) {
 /** Accès direct à un écran (tests et reprise). */
 export const ecrans = {
   mission: () => ecranMission(0), defi: ecranDefi, video: ecranVideo, bd: () => ecranBD(0),
+  lecon: ecranLecon, miniverif: ecranMiniVerif,
   quiz: () => ecranQuiz(0, 0), boss: ecranBoss, fin: () => ecranFin(true), fiche: () => ecranFiche(E.C),
   remediation: () => MODULES[E.C.defi.type || "lots"].remediation(0, { suivant: () => ecranQuiz(0, 0) })
 };
