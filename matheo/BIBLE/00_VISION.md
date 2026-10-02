@@ -48,4 +48,29 @@ Un seul parcours complet, extrêmement fini, pour UNE notion de CM2
 ## Chaîne de production cible
 
 Claude Sonnet 5 (cerveau) → Hermes (orchestration) → scripts/CLI → média
-→ contrôle qualité → résultat vérifié → publication Netlify → test réel.
+→ contrôle qualité → résultat vérifié → publication → test réel.
+
+## État du déploiement (2026-10-02)
+
+- Dépôt de travail : https://github.com/komambani/matheo-cm2-v1-improved
+  (public — nécessaire pour GitHub Pages sur ce plan ; vérifié avant
+  bascule qu'aucun secret n'était présent dans l'historique).
+- Site publié et testé réellement : https://komambani.github.io/matheo-cm2-v1-improved/
+  (GitHub Pages, branche `gh-pages`, générée par `git subtree split
+  --prefix=matheo/app`).
+- Vercel MCP a été audité et fonctionne pour la plupart des opérations,
+  mais `create_git_project` a échoué avec une erreur 403 scope
+  ("Not authorized... re-authenticate to this scope") et `list_projects`
+  renvoie une liste vide malgré un compte authentifié — limite
+  d'autorisation réelle de ce token, pas contournée, documentée ici plutôt
+  que cachée. GitHub Pages a été utilisé à la place : méthode de
+  publication tout aussi légitime, entièrement sous contrôle `gh` déjà
+  authentifié.
+- Netlify (plateforme de la V1 originale) : CLI non installé sur ce VPS,
+  `npx netlify` a timeout à l'installation. Non utilisé pour cette copie
+  de travail — n'affecte pas le site original `matheo-cm2-benin.netlify.app`
+  qui reste intact et indépendant.
+- Parcours complet testé en production réelle (navigateur réel, clics
+  réels, pas de simulation) : Mission N22 → Leçon vidéo premium (audio
+  ElevenLabs joué réellement, 1:56, synchronisation vérifiée visuellement
+  à plusieurs instants) → Mini-vérification → BD. Confirmé sans erreur.
