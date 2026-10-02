@@ -68,7 +68,10 @@ function ecranLecon() {
 }
 
 /** Mini-vérification immédiate après la leçon : pas un gros quiz, une seule
- * question de compréhension (conforme étape 3 du prompt maître V2). */
+ * question de compréhension (conforme étape 3 du prompt maître V2).
+ * Corrigé (phase Gold Standard) : une mauvaise réponse ne montre plus
+ * "Continuer" directement — elle propose un nouvel essai, comme le Défi
+ * guidé et le Quiz, pour rester cohérent avec §12 du prompt maître. */
 function ecranMiniVerif() {
   const C = C_();
   const jeton = monter(`
@@ -82,20 +85,35 @@ function ecranMiniVerif() {
     <div id="parole-mv"></div>
     <div class="actions" id="actions-mv"></div>`, 63);
   const parole = $("#parole-mv");
-  $("#choix-mv").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
-    if (!vivant(jeton)) return;
-    const ok = b.dataset.ok === "1";
-    $("#choix-mv").querySelectorAll("button").forEach((x) => (x.style.pointerEvents = "none"));
-    if (ok) {
-      b.classList.add("juste"); sfx.bravo(); gerbe(8);
-      dans(parole, bulle({ qui: "Mathéo", texte: "Bip bip ! Exactement : le bas de la fraction dit combien de parts faire.", humeur: "joie" }), "");
-    } else {
-      b.classList.add("faux"); sfx.oups();
-      dans(parole, bulle({ qui: "Mathéo", texte: "Bip ! Pas tout à fait : on partage d'abord avec le nombre du bas (le dénominateur).", humeur: "pense" }), "");
-    }
-    $("#actions-mv").innerHTML = `<button class="btn principal large" id="suite-mv">Continuer l'aventure</button>`;
-    $("#suite-mv").addEventListener("click", () => ecranBD(0));
-  }));
+  let essais = 0;
+  function brancher() {
+    $("#choix-mv").querySelectorAll("button").forEach((b) => {
+      b.classList.remove("juste", "faux"); b.style.pointerEvents = "";
+      b.addEventListener("click", () => {
+        if (!vivant(jeton)) return;
+        const ok = b.dataset.ok === "1";
+        $("#choix-mv").querySelectorAll("button").forEach((x) => (x.style.pointerEvents = "none"));
+        if (ok) {
+          b.classList.add("juste"); sfx.bravo(); gerbe(8);
+          dans(parole, bulle({ qui: "Mathéo", texte: "Bip bip ! Exactement : le bas de la fraction dit combien de parts faire.", humeur: "joie" }), "");
+          $("#actions-mv").innerHTML = `<button class="btn principal large" id="suite-mv">Continuer l'aventure</button>`;
+          $("#suite-mv").addEventListener("click", () => ecranBD(0));
+        } else {
+          essais++;
+          b.classList.add("faux"); sfx.oups();
+          // Après un 2e échec, on change de représentation (§12) : on montre
+          // directement les 24 mangues partagées au lieu de redire la même phrase.
+          const texte = essais >= 2
+            ? "Bip ! Regarde : 24 mangues, 4 lots égaux de 6. On prend 3 lots, donc 3 × 6."
+            : "Bip ! Pas tout à fait : on partage d'abord avec le nombre du bas (le dénominateur).";
+          dans(parole, bulle({ qui: "Mathéo", texte, humeur: "pense" }), "");
+          $("#actions-mv").innerHTML = `<button class="btn large" id="reessai-mv">Nouvel essai</button>`;
+          $("#reessai-mv").addEventListener("click", () => { parole.innerHTML = ""; brancher(); });
+        }
+      }, { once: true });
+    });
+  }
+  brancher();
 }
 
 /* ---------- défi ---------- */
@@ -190,7 +208,21 @@ function ecranBD(i) {
     if (c.legende && vivant(jeton)) await lireVoix(c.legende);
     if (c.encadre && vivant(jeton)) await lireVoix(c.encadre);
   })();
-  $("#suite").addEventListener("click", () => (dernier ? ecranVideo() : ecranBD(i + 1)));
+  $("#suite").addEventListener("click", () => {
+    if (dernier) {
+      // Correction phase Gold Standard : pour N22, l'ancienne "Vidéo défi"
+      // (voix Piper) répétait presque mot pour mot la leçon premium déjà vue
+      // à l'étape 2 (même exemple des 12 galettes), juste après que la BD
+      // elle-même se termine déjà par un récapitulatif encadré ("On partage
+      // avec le bas..."). Trois fois la même explication cassait le rythme
+      // et mélangeait deux voix différentes pour la même notion (incohérent
+      // avec §8-9 du prompt maître). On enchaîne donc directement sur le
+      // Défi, qui applique la règle à un cas nouveau (24 mangues, 3/4) —
+      // aucune perte pédagogique, uniquement une redite supprimée.
+      // Les 11 autres notions gardent ecranVideo() intact.
+      if (C.id === "N22") ecranDefi(); else ecranVideo();
+    } else ecranBD(i + 1);
+  });
   const p = $("#prec"); if (p) p.addEventListener("click", () => ecranBD(i - 1));
 }
 
