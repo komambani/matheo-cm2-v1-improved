@@ -1,0 +1,221 @@
+{
+  "id": "N21",
+  "version": "0.1",
+  "titre": "Fractions équivalentes",
+  "domaine": "Fractions",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Deux fractions peuvent avoir des écritures différentes tout en représentant la même quantité.",
+  "erreurs_ciblees": ["E1 : ajouter le même nombre en haut et en bas", "E2 : ne changer que le bas (ou que le haut)", "E7 : croire que deux écritures différentes sont deux quantités différentes"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 },
+      { "qui": "Anita", "x": 40, "y": 124, "w": 54 },
+      { "qui": "Kola", "x": 108, "y": 124, "w": 54 },
+      { "qui": "Mathéo", "x": 180, "y": 100, "w": 50, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "barre", "x": 40, "y": 196, "w": 260, "h": 22, "den": 1, "num": 1, "couleur": "#e0a24a" } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au marché, Mamie Sègla coupe un grand pain." },
+    { "qui": "Anita", "texte": "Je prends 1/2 du pain." },
+    { "qui": "Kola", "texte": "Moi, je prends 2/4. J'en ai plus !" },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est cachée sous le pain !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "Je te le rends si tu dis qui a le plus de pain." },
+    { "qui": "Narrateur", "texte": "1/2 et 2/4, est-ce la même quantité ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Anita prend 1/2 du pain. Kola prend 2/4 du même pain. Ont-ils la même quantité ?",
+    "reponse": "Oui",
+    "reussite": "Bip bip ! 1/2 est égal à 2/4. Même quantité, deux écritures.",
+    "etapes": [
+      {
+        "type": "subdiviser", "forme": "barre", "den": 2, "num": 1, "options": [2, 3, 4], "facteur": 2,
+        "intro": "Voici le pain d'Anita : 1/2. Coupons chaque part en plus de parts.",
+        "question": "Pour obtenir des quarts, coupe chaque part en combien de parts ?",
+        "retours": { "3": "Bip ! Avec 3, on obtient des sixièmes. Pour des quarts, coupe chaque part en 2.", "4": "Bip ! Avec 4, on obtient des huitièmes. Pour des quarts, coupe chaque part en 2." },
+        "voix_fin": "La part coloriée n'a pas changé de taille."
+      },
+      {
+        "type": "fraction", "num": 2, "den": 4,
+        "visuel": { "t": "barre", "den": 4, "num": 2, "alt": "Une barre de 4 parts dont 2 sont coloriées" },
+        "intro": "Écris la fraction coloriée maintenant.",
+        "question_haut": "Combien de parts sont coloriées ? C'est le nombre du haut.",
+        "question_bas": "Combien de parts y a-t-il en tout ? C'est le nombre du bas.",
+        "retour_haut": "Bip ! Compte les parts coloriées.",
+        "retour_inverse": "Bip ! Ce nombre compte toutes les parts. Ici, on cherche les parts coloriées.",
+        "retour_bas": "Bip ! Compte toutes les parts de la barre, coloriées ou non.",
+        "retour_inverse_bas": "Bip ! Ce nombre compte les parts coloriées. Ici, on cherche le nombre de parts en tout."
+      },
+      {
+        "type": "choix",
+        "intro": "Compare les deux dessins : 1/2 avant, 2/4 après.",
+        "question": "Anita et Kola ont-ils la même quantité de pain ?",
+        "visuel": { "t": "paire", "a": { "t": "barre", "den": 2, "num": 1 }, "b": { "t": "barre", "den": 4, "num": 2 }, "etiquettes": ["1/2", "2/4"], "alt": "Deux barres de même longueur : 1 part sur 2 coloriée, et 2 parts sur 4 coloriées" },
+        "options": [
+          { "t": "Oui, 1/2 et 2/4 sont équivalentes", "ok": true },
+          { "t": "Non, Kola en a plus car 2 est plus grand que 1", "e": "E7", "retour": "Bip ! Regarde les barres : la partie coloriée a la même longueur. Les parts de 2/4 sont plus petites." },
+          { "t": "Non, Anita en a plus car 1/2 a moins de parts", "e": "E7", "retour": "Bip ! Regarde les barres : la partie coloriée a la même longueur." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Regarde les deux barres. La partie coloriée a-t-elle la même longueur ?" },
+    { "niveau": 2, "texte": "Quand on coupe chaque part en 2, on obtient deux fois plus de parts." },
+    { "niveau": 3, "texte": "Les parts coloriées aussi sont coupées en 2 : il y en a deux fois plus." },
+    { "niveau": 4, "texte": "Exemple : 1/3 devient 2/6. Je coupe chaque part en 2. À toi, avec 1/2 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je coupe chaque part en 2 et je compte." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Trouve une fraction équivalente à 1/3.",
+      "etapes": [
+        { "type": "subdiviser", "forme": "barre", "den": 3, "num": 1, "options": [2, 3, 4], "facteur": 2, "intro": "Voici 1/3. Coupe chaque part en 2.", "question": "Coupe chaque part en combien de parts pour avoir des sixièmes ?", "retours": { "3": "Bip ! Avec 3, on obtient des neuvièmes. Pour des sixièmes, coupe chaque part en 2.", "4": "Bip ! Avec 4, on obtient des douzièmes. Pour des sixièmes, coupe chaque part en 2." }, "voix_fin": "1/3 devient 2/6." },
+        { "type": "fraction", "num": 2, "den": 6, "visuel": { "t": "barre", "den": 6, "num": 2, "alt": "Une barre de 6 parts dont 2 sont coloriées" }, "question_haut": "Combien de parts sont coloriées ?", "question_bas": "Combien de parts y a-t-il en tout ?" }
+      ],
+      "fin": "1/3 est égal à 2/6."
+    },
+    {
+      "enonce": "Trouve une fraction équivalente à 2/3.",
+      "etapes": [
+        { "type": "subdiviser", "forme": "barre", "den": 3, "num": 2, "options": [2, 3, 4], "facteur": 2, "intro": "Voici 2/3. Coupe chaque part en 2.", "question": "Coupe chaque part en combien de parts pour avoir des sixièmes ?", "retours": { "3": "Bip ! Avec 3, on obtient des neuvièmes. Pour des sixièmes, coupe chaque part en 2.", "4": "Bip ! Avec 4, on obtient des douzièmes. Pour des sixièmes, coupe chaque part en 2." }, "voix_fin": "2/3 devient 4/6." },
+        { "type": "fraction", "num": 4, "den": 6, "visuel": { "t": "barre", "den": 6, "num": 4, "alt": "Une barre de 6 parts dont 4 sont coloriées" }, "question_haut": "Combien de parts sont coloriées ?", "question_bas": "Combien de parts y a-t-il en tout ?" }
+      ],
+      "fin": "2/3 est égal à 4/6."
+    },
+    {
+      "enonce": "Reviens au pain : 1/2 et 2/4.",
+      "etapes": [
+        { "type": "subdiviser", "forme": "disque", "den": 2, "num": 1, "options": [2, 3, 4], "facteur": 2, "intro": "Voici une galette coupée en 2 parts, 1 part coloriée.", "question": "Coupe chaque part en combien de parts pour avoir des quarts ?", "retours": { "3": "Bip ! Avec 3, on obtient des sixièmes. Pour des quarts, coupe chaque part en 2.", "4": "Bip ! Avec 4, on obtient des huitièmes. Pour des quarts, coupe chaque part en 2." }, "voix_fin": "1/2 devient 2/4." }
+      ],
+      "fin": "1/2 est égal à 2/4."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Quelle fraction est équivalente à 1/2 ?", "bonne": "2/4",
+      "mauvaises": [
+        { "t": "2/3", "e": "E1", "retour": "Bip ! On n'ajoute pas 1 en haut et en bas. On coupe chaque part en 2 : 1/2 devient 2/4." },
+        { "t": "1/4", "e": "E2", "retour": "Bip ! Tu as changé seulement le bas. Il faut aussi doubler le haut : 2/4." },
+        { "t": "2/2", "e": "E2", "retour": "Bip ! Tu as changé seulement le haut. Il faut aussi doubler le bas : 2/4." } ] },
+    { "id": "A2", "niveau": "A", "question": "Ces deux barres montrent-elles la même quantité ?", "visuel": { "t": "paire", "a": { "t": "barre", "den": 2, "num": 1 }, "b": { "t": "barre", "den": 4, "num": 2 }, "etiquettes": ["1/2", "2/4"], "alt": "Deux barres : 1 part sur 2 coloriée, et 2 parts sur 4 coloriées" }, "bonne": "Oui, 1/2 = 2/4",
+      "mauvaises": [
+        { "t": "Non, la deuxième a plus de parts", "e": "E7", "retour": "Bip ! Plus de parts, mais des parts plus petites. La partie coloriée a la même longueur." },
+        { "t": "Non, la première est plus grande", "e": "E7", "retour": "Bip ! Regarde : les deux parties coloriées ont la même longueur." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : compare la longueur coloriée." } ] },
+    { "id": "B1", "niveau": "B", "question": "2/3 = ?/6", "bonne": "4",
+      "mauvaises": [
+        { "t": "3", "e": "E1", "retour": "Bip ! On n'ajoute pas 1. On coupe chaque part en 2 : le bas double, le haut aussi. 2 × 2 = 4." },
+        { "t": "2", "e": "E2", "retour": "Bip ! Tu as changé seulement le bas. Le haut doit doubler aussi : 2 × 2 = 4." },
+        { "t": "6", "e": "E1", "retour": "Bip ! Le haut double : 2 × 2 = 4. Il ne devient pas 6." } ] },
+    { "id": "B2", "niveau": "B", "question": "3/4 = 6/?", "bonne": "8",
+      "mauvaises": [
+        { "t": "5", "e": "E1", "retour": "Bip ! On n'ajoute pas 1. Le haut a doublé : 3 × 2 = 6. Le bas double aussi : 4 × 2 = 8." },
+        { "t": "6", "e": "E2", "retour": "Bip ! Tu as gardé le bas ou copié le haut. Le bas double aussi : 4 × 2 = 8." },
+        { "t": "4", "e": "E2", "retour": "Bip ! Tu as gardé le bas. Le bas double aussi : 4 × 2 = 8." } ] },
+    { "id": "C1", "niveau": "C", "question": "Anita mange 1/3 d'une galette. Kola coupe la même galette en 6 parts. Combien de parts doit-il manger pour avoir la même quantité ?", "bonne": "2 parts",
+      "mauvaises": [
+        { "t": "1 part", "e": "E2", "retour": "Bip ! Les parts de Kola sont deux fois plus petites. Il lui faut 2 parts pour 1/3." },
+        { "t": "3 parts", "e": "E1", "retour": "Bip ! 3 parts sur 6, c'est la moitié. 1/3 vaut 2/6." },
+        { "t": "6 parts", "e": "E1", "retour": "Bip ! 6 parts sur 6, c'est toute la galette. 1/3 vaut 2/6." } ] },
+    { "id": "C2", "niveau": "C", "question": "Quelle fraction est équivalente à 3/5 ?", "bonne": "6/10",
+      "mauvaises": [
+        { "t": "3/10", "e": "E2", "retour": "Bip ! Tu as changé seulement le bas. Il faut doubler le haut aussi : 6/10." },
+        { "t": "4/6", "e": "E1", "retour": "Bip ! On n'ajoute pas 1 en haut et en bas. On double : 3 × 2 = 6 et 5 × 2 = 10." },
+        { "t": "5/3", "e": "E2", "retour": "Bip ! Tu as échangé le haut et le bas. 3/5 devient 6/10." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola dit : « 1/2 et 1/4 sont équivalentes, car les deux ont 1 en haut. » A-t-il raison ?", "bonne": "Non, 1/4 est plus petit que 1/2",
+      "mauvaises": [
+        { "t": "Oui, ils ont le même haut", "e": "E7", "retour": "Bip ! Le même haut ne suffit pas. Il faut que la quantité soit la même. 1/4 est plus petit que 1/2." },
+        { "t": "Oui, car 1 = 1", "e": "E7", "retour": "Bip ! Le bas compte aussi. Avec 4 parts égales, une part est plus petite qu'avec 2 parts." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : dessine une barre en 2 parts et une barre en 4 parts." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita dit : « Pour trouver une fraction équivalente, je multiplie le haut et le bas par le même nombre. » A-t-elle raison ?", "bonne": "Oui, par exemple 1/2 = 2/4",
+      "mauvaises": [
+        { "t": "Non, il faut ajouter le même nombre", "e": "E1", "retour": "Bip ! Si on ajoute, la quantité change. Si on multiplie le haut et le bas, elle ne change pas." },
+        { "t": "Non, il faut multiplier seulement le haut", "e": "E2", "retour": "Bip ! Si on change seulement le haut, la quantité change. Il faut multiplier le haut et le bas." },
+        { "t": "Non, c'est impossible", "e": "E7", "retour": "Bip ! C'est possible : 1/2 = 2/4." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla coupe un pagne en 3 parts égales et en prend 2. Kola coupe le même pagne en 6 parts égales. Combien de parts doit-il prendre pour avoir la même quantité ?",
+    "reponse": "4 parts",
+    "mauvaises": [
+      { "valeur": "2 parts", "e": "E2", "retour": "Bip ! Les parts de Kola sont deux fois plus petites. Il lui en faut deux fois plus." },
+      { "valeur": "3 parts", "e": "E1", "retour": "Bip ! 3 parts sur 6, c'est la moitié du pagne. Mamie en prend 2/3." },
+      { "valeur": "6 parts", "e": "E1", "retour": "Bip ! 6 parts sur 6, c'est tout le pagne. Mamie n'en prend pas autant." }
+    ],
+    "indice": "2/3 = ?/6. Coupe chaque part en 2 : combien de parts coloriées ?"
+  },
+
+  "video": {
+    "titre": "Fractions équivalentes",
+    "duree": 150,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, les fractions équivalentes." },
+          { "t": 5, "texte": "Anita prend 1/2 du pain. Kola prend 2/4." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "c1", "texte": "1/2   2/4", "x": 180, "y": 110, "taille": 58 } ] },
+      { "debut": 14, "fin": 40, "parties": [
+          { "t": 0, "texte": "Je dessine 1/2 d'une barre." },
+          { "t": 6, "texte": "Une part sur deux parts égales." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "barre", "id": "b2", "x": 30, "y": 70, "w": 300, "h": 56, "den": 2, "num": 0 }, { "t": 6.5, "a": "colorier", "id": "b2", "parts": [0] } ] },
+      { "debut": 40, "fin": 75, "parties": [
+          { "t": 0, "texte": "Maintenant, je coupe chaque part en 2." },
+          { "t": 8, "texte": "Il y a 4 parts égales, et 2 parts sont coloriées." },
+          { "t": 18, "texte": "La partie coloriée n'a pas changé de taille." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1.2, "a": "barre", "id": "b3", "x": 30, "y": 50, "w": 300, "h": 56, "den": 2, "num": 1 },
+          { "t": 3, "a": "effacer" }, { "t": 4, "a": "barre", "id": "b3b", "x": 30, "y": 50, "w": 300, "h": 56, "den": 4, "num": 2 },
+          { "t": 9, "a": "fraction", "id": "f3", "num": 2, "den": 4, "x": 180, "y": 130, "taille": 44 } ] },
+      { "debut": 75, "fin": 105, "parties": [
+          { "t": 0, "texte": "1/2 et 2/4 disent la même quantité." },
+          { "t": 6, "texte": "On dit qu'elles sont équivalentes." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "e4", "texte": "1/2 = 2/4", "x": 180, "y": 100, "taille": 62, "couleur": "#6fe3d8" } ] },
+      { "debut": 105, "fin": 130, "parties": [
+          { "t": 0, "texte": "Pour trouver une fraction équivalente, je multiplie le haut et le bas par le même nombre." },
+          { "t": 10, "texte": "Un fois 2 égale 2. Deux fois 2 égale 4." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "m5a", "texte": "1 × 2 = 2", "x": 180, "y": 66, "taille": 44, "couleur": "#ffe066" }, { "t": 11, "a": "ecrire", "id": "m5b", "texte": "2 × 2 = 4", "x": 180, "y": 130, "taille": 44, "couleur": "#6fe3d8" } ] },
+      { "debut": 130, "fin": 150, "parties": [
+          { "t": 0, "texte": "À toi ! Trouve la fraction équivalente à 1/3 avec 6 parts." },
+          { "t": 6, "texte": "Mets la vidéo en pause." },
+          { "t": 10, "texte": "Réponse : 2/6." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "q6", "texte": "1/3 = ?/6", "x": 180, "y": 100, "taille": 56, "couleur": "#ffe066" }, { "t": 10.4, "a": "ecrire", "id": "r6", "texte": "1/3 = 2/6", "x": 180, "y": 170, "taille": 44, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Le pain de Mamie Sègla",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 }, { "qui": "Anita", "x": 30, "y": 124, "w": 54 }, { "qui": "Kola", "x": 100, "y": 124, "w": 54 }, { "qui": "Mathéo", "x": 176, "y": 100, "w": 50, "humeur": "surpris" } ], "objets": [ { "t": "barre", "x": 40, "y": 198, "w": 260, "h": 22, "den": 1, "num": 1, "couleur": "#e0a24a" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Je prends 1/2 du pain." }, { "qui": "Kola", "texte": "Moi, 2/4. J'en ai plus !" } ], "legende": "Au marché. Un grand pain." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Anita", "x": 6, "y": 120, "w": 56 } ], "objets": [ { "t": "barre", "x": 80, "y": 60, "w": 260, "h": 44, "den": 2, "num": 1 }, { "t": "barre", "x": 80, "y": 124, "w": 260, "h": 44, "den": 4, "num": 2, "couleur": "#6fe3d8" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Regarde. Je dessine 1/2, puis 2/4." }, { "qui": "Kola", "texte": "2 est plus grand que 1 !" } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "barre", "x": 170, "y": 70, "w": 180, "h": 40, "den": 2, "num": 1 }, { "t": "barre", "x": 170, "y": 126, "w": 180, "h": 40, "den": 4, "num": 2, "couleur": "#6fe3d8" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "La partie coloriée a la même longueur !" }, { "qui": "Kola", "texte": "C'est vrai !" } ], "legende": "1/2 et 2/4 : même longueur." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 290, "y": 118, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "texte", "texte": "1/2 = 2/4", "x": 150, "y": 100, "taille": 56, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Mathéo", "texte": "Bip ! Deux écritures, une seule quantité !", "humeur": "joie" }, { "qui": "Kola", "texte": "Équivalentes !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "1 × 2", "x": 180, "y": 80, "taille": 40, "couleur": "#c1440e" }, { "t": "ligne", "x1": 130, "y1": 98, "x2": 230, "y2": 98 }, { "t": "texte", "texte": "2 × 2", "x": 180, "y": 160, "taille": 40, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "On multiplie le haut et le bas par 2." }, { "qui": "Kola", "texte": "1 fois 2, 2. 2 fois 2, 4 !" } ] },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 262, "y": 84, "w": 66 }, { "qui": "Mathéo", "x": 60, "y": 104, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 126, "y": 128, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! Vous avez la même quantité." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "1/2 = 2/4 : on multiplie le haut et le bas par le même nombre." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Deux fractions peuvent avoir des écritures différentes et représenter la même quantité. On multiplie le haut et le bas par le même nombre.",
+  "carte": "1/2 = 2/4 : on coupe chaque part en 2, la quantité ne change pas.",
+  "pourquoi": "Pourquoi multiplier le haut et le bas ? Parce que chaque part est coupée, et les parts coloriées aussi.",
+  "fiche": { "titre": "N21 · Fractions équivalentes", "piege": "Ajouter le même nombre en haut et en bas : 1/2 ne devient pas 2/3. Il faut multiplier." },
+  "controles": [ { "expr": "2*2", "attendu": 4 }, { "expr": "3*2", "attendu": 6 }, { "expr": "4*2", "attendu": 8 }, { "expr": "5*2", "attendu": 10 }, { "expr": "1*2+2*2", "attendu": 6 } ]
+}

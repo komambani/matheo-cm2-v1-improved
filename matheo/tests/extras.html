@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Éléments transversaux</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}iframe{width:390px;height:780px;border:1px solid #ccc;float:right;margin-left:16px}</style>
+</head>
+<body>
+  <h1>Éléments transversaux (automatique)</h1>
+  <iframe id="app" src="../app/?test=1"></iframe>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    const cadre = document.getElementById("app");
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const nb = (s) => (s || "").replace(/ /g, " ").replace(/\s+/g, " ").trim();
+    const res = [];
+    const verifier = (nom, cond, detail = "") => res.push({ nom, ok: !!cond, detail: cond ? "" : String(detail).slice(0, 220) });
+    await new Promise((r) => (cadre.onload = r));
+    const w = cadre.contentWindow, d = cadre.contentDocument;
+    await sleep(900);
+    const M = w.__matheo;
+    const get = (f) => fetch("../app/content/" + f).then((r) => r.json());
+    const [P, E0, S, F] = await Promise.all(["positionnement.json", "episode0.json", "cep_blanc1.json", "finale_fractions.json"].map(get));
+    const sans = (e) => { if (!e) return ""; const k = e.cloneNode(true); k.querySelectorAll(".qui,.ecouter,.ecouter-q").forEach((x) => x.remove()); return nb(k.textContent); };
+    const txt = () => sans(d.querySelector(".bulle"));
+    const question = () => sans(d.querySelector(".question"));
+    const tous = (s) => [...d.querySelectorAll(s)];
+    const btn = (sel, t) => { const l = tous(sel); return l.find((b) => nb(b.textContent) === nb(t)) || l.find((b) => nb(b.textContent).includes(nb(t))); };
+    const parAlt = (alt) => tous(".choix button").find((b) => b.innerHTML.includes(`aria-label="${alt}"`));
+    const attendre = async (sel, ms = 6000) => { for (let t = 0; t < ms; t += 100) { if (d.querySelector(sel)) return true; await sleep(100); } return false; };
+    const cle = async (s) => { for (const c of String(s)) { btn(".clavier button", c).click(); await sleep(25); } };
+    const nombre = async (v) => { await attendre(".clavier"); await cle(v); btn(".clavier button", "✓").click(); await sleep(250); };
+    const choisir = async (q, bonne = true, pause = 700) => {
+      await attendre("#choix button");
+      const o = bonne ? { t: q.bonne, v: q.bonne_visuel } : { t: q.mauvaises[0].t, v: q.mauvaises[0].visuel };
+      const b = o.v ? parAlt(o.v.alt) : btn("#choix button", o.t);
+      if (!b) throw new Error("option introuvable : " + (o.t || (o.v && o.v.alt)) + " / " + q.question);
+      b.click(); await sleep(pause);
+    };
+    const suite = async () => { await attendre("#suite"); d.querySelector("#suite").click(); await sleep(300); };
+    const extra = (k) => d.querySelector(`[data-extra="${k}"]`);
+    const remettre = () => { w.localStorage.clear(); };
+
+    // ---------- Carte ----------
+    remettre(); M.carte(); await sleep(400);
+    verifier("Carte : 12 notions regroupées par domaine", tous(".notion[data-id]").length === 12 && tous("h3.domaine").length === 4, tous(".notion[data-id]").length);
+    verifier("Carte : Épisode 0 mis en avant au premier lancement", extra("ep0").classList.contains("debut"));
+    verifier("Carte : finale verrouillée au début", nb(extra("finale").textContent).includes("verrouillée"));
+
+    // ---------- Positionnement : bon profil → N17 ----------
+    extra("pos").click(); await attendre("#go"); d.querySelector("#go").click(); await sleep(300);
+    for (const q of P.questions) { verifier(`Positionnement ${q.id} : question exacte`, question() === nb(q.question), question()); await choisir(q, true); }
+    await attendre("#go");
+    verifier("Positionnement : tout juste → on peut commencer par N17", nb(d.body.textContent).includes(nb(P.orientations.aucune.message)), nb(d.body.textContent).slice(0, 120));
+    verifier("Positionnement : sauvegardé", JSON.parse(w.localStorage.getItem("matheo.v1")).positionnement.notion === "N17");
+    // Positionnement : erreurs en multiplication → N10
+    remettre(); M.carte(); await sleep(300);
+    extra("pos").click(); await attendre("#go"); d.querySelector("#go").click(); await sleep(300);
+    for (const q of P.questions) await choisir(q, q.competence !== "mult");
+    await attendre("#go");
+    verifier("Positionnement : multiplication ratée → on conseille N10", nb(d.body.textContent).includes(nb(P.orientations.mult.message)), nb(d.body.textContent).slice(0, 140));
+    d.querySelector("#retour").click(); await sleep(400);
+    verifier("Carte : la notion conseillée est signalée", nb(d.querySelector('.notion[data-id="N10"]').textContent).includes("conseillé"));
+
+    // ---------- Épisode 0 ----------
+    remettre(); M.carte(); await sleep(300);
+    extra("ep0").click(); await sleep(500);
+    for (const c of E0.bd.cases) {
+      const bulles = tous(".bd-paroles .bulle").map((b) => sans(b));
+      verifier(`Épisode 0 case ${c.n} : textes exacts`, JSON.stringify(bulles) === JSON.stringify(c.bulles.map((b) => nb(b.texte))), JSON.stringify(bulles));
+      await suite();
+    }
+    for (const s of E0.tutoriel.etapes) {
+      if (s.type === "choix") { await attendre(".choix button"); const faux = s.options.find((o) => !o.ok); parAlt(faux.visuel.alt).click(); await sleep(250); verifier("Tutoriel : une erreur est rassurante", txt() === nb(faux.retour), txt()); parAlt(s.options.find((o) => o.ok).visuel.alt).click(); await sleep(900); }
+      else if (s.type === "nombre") { await nombre(s.erreurs[0].reponses[0]); verifier("Tutoriel : erreur de calcul douce", txt() === nb(s.erreurs[0].texte), txt()); await nombre(s.reponse); await sleep(300); }
+      else if (s.type === "construire") {
+        await attendre(".choix button");
+        btn(".choix button", `Partager en ${s.den} parts égales`).click(); await sleep(500);
+        clic: { const p = tous(".jeu-fraction .part")[0]; p.dispatchEvent(new w.MouseEvent("click", { bubbles: true })); }
+        d.querySelector("#valider-col").click(); await sleep(3300);
+      }
+    }
+    await attendre("#suite", 8000);
+    verifier("Tutoriel terminé : message de fin exact", txt() === nb(E0.tutoriel.fin), txt());
+    d.querySelector("#suite").click(); await sleep(400);
+    verifier("Épisode 0 sauvegardé", JSON.parse(w.localStorage.getItem("matheo.v1")).episode0.fait === true);
+
+    // ---------- Finale : verrouillée, puis réussie, puis échec ----------
+    extra("finale").click(); await sleep(500);
+    verifier("Finale : verrouillée tant que les 7 étoiles manquent", nb(d.body.textContent).includes("Pas encore"), nb(d.body.textContent).slice(0, 120));
+    d.querySelector("#retour").click(); await sleep(300);
+    const fake = {}; for (const id of F.prerequis) fake[id.toLowerCase()] = { fini: true, fragment: true, etoiles: 3 };
+    w.localStorage.setItem("matheo.v1", JSON.stringify({ ...fake, episode0: { fait: true } })); M.carte(); await sleep(400);
+    extra("finale").click(); await attendre("#go"); d.querySelector("#go").click(); await sleep(300);
+    for (const q of F.questions) await choisir(q, q.id === "F2" ? false : true);       // 1 seule erreur : autorisée
+    await attendre("#retour");
+    verifier("Finale : une erreur au plus → étoiles réunies", nb(d.body.textContent).includes(nb(F.reussite)), nb(d.body.textContent).slice(0, 140));
+    verifier("Finale : explication de l'erreur affichée", nb(d.body.textContent).includes(nb(F.questions[1].mauvaises[0].retour)));
+    d.querySelector("#retour").click(); await sleep(300);
+    w.localStorage.setItem("matheo.v1", JSON.stringify({ ...fake })); M.carte(); await sleep(300);
+    extra("finale").click(); await attendre("#go"); d.querySelector("#go").click(); await sleep(300);
+    for (const [i, q] of F.questions.entries()) await choisir(q, i > 1);                 // 2 erreurs : échec
+    await attendre("#encore");
+    verifier("Finale : deux erreurs → il faut réessayer", !!d.querySelector("#encore"));
+
+    // ---------- Sujet blanc du CEP ----------
+    d.querySelector("#retour").click(); await sleep(300);
+    extra("cep").click(); await attendre("#go"); d.querySelector("#go").click(); await sleep(300);
+    for (const [i, q] of S.questions.entries()) { verifier(`CEP ${q.id} : question exacte`, question() === nb(q.question), question()); await choisir(q, i !== 2 && i !== 7); }
+    await attendre("#retour");
+    verifier("CEP : score 8 sur 10", nb(d.querySelector(".carte.centre").textContent).includes("8 sur 10"), nb(d.querySelector(".carte.centre").textContent));
+    verifier("CEP : les deux erreurs sont expliquées", [2, 7].every((i) => nb(d.body.textContent).includes(nb(S.questions[i].mauvaises[0].retour))));
+    verifier("CEP : résultat par domaine", nb(d.body.textContent).includes("Fractions") && nb(d.body.textContent).includes("Problèmes"));
+    d.querySelector("#retour").click(); await sleep(300);
+
+    // ---------- Révision ----------
+    remettre(); M.carte(); await sleep(300);
+    extra("rev").click(); await sleep(400);
+    verifier("Révision : sans notion terminée, un message clair", nb(d.body.textContent).includes("Termine d'abord"));
+    d.querySelector("#retour").click(); await sleep(300);
+    w.localStorage.setItem("matheo.v1", JSON.stringify({ n17: { fini: true, fragment: true, erreurs: { E3: 4 } }, n21: { fini: true, fragment: true } })); M.carte(); await sleep(300);
+    extra("rev").click(); await sleep(900);
+    let nq = 0;
+    for (;;) { if (!d.querySelector("#choix")) break; const q = question(); nq++; const bons = [...(await Promise.all(["n17.json", "n21.json"].map(get)))].flatMap((C) => C.quiz).find((x) => nb(x.question) === q); if (!bons) { verifier("Révision : la question vient d'une notion terminée", false, q); break; } await choisir(bons, true, 250); await suite(); }
+    verifier("Révision : 4 questions (2 par notion terminée)", nq === 4, nq);
+    verifier("Révision : bilan affiché", nb(d.body.textContent).includes("bonnes réponses du premier coup sur 4"), nb(d.body.textContent).slice(0, 100));
+    d.querySelector("#retour").click(); await sleep(300);
+
+    // ---------- Vérifie ma réponse ----------
+    extra("ver").click(); await sleep(400);
+    d.querySelector('[data-op="mul"]').click(); await nombre(47); await nombre(6); await nombre(282); await attendre(".bulle");
+    verifier("Tuteur : 47 × 6 = 282 juste", txt().includes("juste") && nb(d.body.textContent).includes("47 × 6 = 282"), txt());
+    d.querySelector("#encore").click(); await sleep(300);
+    d.querySelector('[data-op="div"]').click(); await nombre(156); await nombre(4); await nombre(38); await attendre(".bulle");
+    verifier("Tuteur : 156 ÷ 4 = 38 faux, bonne réponse 39 expliquée", txt().includes("Pas tout à fait") && nb(d.body.textContent).includes("Bonne réponse : 39"), nb(d.body.textContent).slice(0, 200));
+    d.querySelector("#encore").click(); await sleep(300);
+    d.querySelector('[data-op="frac"]').click(); await nombre(3); await nombre(4); await nombre(24); await nombre(18); await attendre(".bulle");
+    verifier("Tuteur : 3/4 de 24 = 18 juste, avec le chemin", txt().includes("juste") && nb(d.body.textContent).includes("24 ÷ 4 = 6"), nb(d.body.textContent).slice(0, 200));
+    d.querySelector("#retour").click(); await sleep(300);
+
+    // ---------- Espace adulte ----------
+    w.localStorage.setItem("matheo.v1", JSON.stringify({ n17: { fini: true, etoiles: 3, quiz: { score: 7 }, erreurs: { E2: 3, E3: 1 } } })); M.carte(); await sleep(300);
+    d.querySelector('[data-extra="adulte"]').click(); await sleep(400);
+    await nombre(55); await sleep(400);
+    verifier("Espace adulte : une mauvaise réponse ne laisse pas entrer", !nb(d.body.textContent).includes("Progression par notion"));
+    await nombre(56); await attendre(".tab");
+    verifier("Espace adulte : progression par notion et erreurs fréquentes", nb(d.body.textContent).includes("E2") && nb(d.body.textContent).includes("N17") && nb(d.body.textContent).includes("3/3"), nb(d.body.textContent).slice(0, 200));
+    verifier("Espace adulte : mention « aucun nom, aucun identifiant »", nb(d.body.textContent).includes("aucun nom, aucun identifiant"));
+
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} contrôles réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    document.getElementById("liste").innerHTML = res.map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : ` — ${r.detail}`}</div>`).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>

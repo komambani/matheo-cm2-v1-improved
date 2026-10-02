@@ -1,0 +1,223 @@
+{
+  "id": "N64",
+  "version": "0.1",
+  "titre": "Choisir l'opération",
+  "domaine": "Résolution de problèmes",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Je choisis l'opération après avoir compris la situation, pas avant.",
+  "erreurs_ciblees": ["E8 : choisir la mauvaise opération", "E5 : choisir l'opération trop vite à cause d'un mot de l'énoncé", "E9 : ne pas vérifier si la réponse a du sens"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 },
+      { "qui": "Kola", "x": 40, "y": 126, "w": 54 },
+      { "qui": "Mathéo", "x": 128, "y": 100, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "objets", "genre": "mangue", "n": 16, "x": 40, "y": 152, "colonnes": 8, "pas": 26, "taille": 22 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au marché, Mamie Sègla a un problème de caisses." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est dans la dernière caisse !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "J'ai 8 caisses de 24 mangues. J'en vends 50." },
+    { "qui": "Kola", "texte": "Il y a 8, 24 et 50 : j'additionne !" },
+    { "qui": "Mamie Sègla", "texte": "Dis-moi combien de mangues il me reste, et je te rends l'étoile." },
+    { "qui": "Narrateur", "texte": "Quelle opération faut-il choisir ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Mamie Sègla a 8 caisses de 24 mangues. Elle vend 50 mangues. Combien de mangues lui reste-t-il ?",
+    "reponse": "142",
+    "reussite": "Bip bip ! Il lui reste 142 mangues. On a compris la situation avant de calculer.",
+    "etapes": [
+      {
+        "type": "choix",
+        "intro": "D'abord, combien de mangues Mamie avait-elle au départ ?",
+        "question": "Quelle opération donne le nombre de mangues au départ ?",
+        "options": [
+          { "t": "8 × 24", "ok": true },
+          { "t": "8 + 24", "e": "E8", "retour": "Bip ! 8 caisses de 24 mangues : on répète 24, huit fois. C'est une multiplication, pas une addition." },
+          { "t": "24 − 8", "e": "E8", "retour": "Bip ! On n'enlève rien au départ. On répète 24 mangues, 8 fois." },
+          { "t": "24 ÷ 8", "e": "E8", "retour": "Bip ! Rien n'est partagé ici. On répète 24 mangues, 8 fois." }
+        ]
+      },
+      { "type": "pose", "a": 24, "b": 8 },
+      {
+        "type": "choix",
+        "intro": "Maintenant, elle vend 50 mangues.",
+        "question": "Quelle opération donne le nombre de mangues qui restent ?",
+        "options": [
+          { "t": "192 − 50", "ok": true },
+          { "t": "192 + 50", "e": "E8", "retour": "Bip ! Elle vend des mangues : il en reste moins qu'avant. On enlève 50." },
+          { "t": "192 × 50", "e": "E8", "retour": "Bip ! Multiplier donnerait beaucoup trop. Pour ce qui reste après une vente, on soustrait." },
+          { "t": "192 ÷ 50", "e": "E8", "retour": "Bip ! Elle ne partage pas les mangues. Elle en vend 50 : on soustrait." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "question": "Combien de mangues lui reste-t-il ?",
+        "reponse": 142,
+        "erreurs": [
+          { "reponses": [242], "type": "E8", "texte": "Bip ! 242 vient de 192 + 50. Elle vend des mangues : on enlève." },
+          { "reponses": [192], "type": "E9", "texte": "Bip ! 192, c'est avant la vente. La question demande ce qu'il reste." },
+          { "reponses": [152], "type": "E3", "texte": "Bip ! Ta méthode est bonne. Vérifie 192 − 50 : 9 dizaines moins 5 dizaines font 4 dizaines." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Raconte la situation avec tes mots. Que se passe-t-il d'abord ?" },
+    { "niveau": 2, "texte": "On a plusieurs caisses avec le même nombre de mangues. Quelle opération répète un nombre ?" },
+    { "niveau": 3, "texte": "On répète 24 mangues, 8 fois : c'est 8 × 24. Ensuite, elle vend 50 : on enlève." },
+    { "niveau": 4, "texte": "Exemple : 3 sacs de 10 kg, puis on en vend 5 kg. D'abord 3 × 10 = 30, puis 30 − 5. À toi !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je comprends la situation, puis je choisis chaque opération." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Kola a 35 billes. Il en gagne 12.",
+      "etapes": [
+        { "type": "choix", "question": "Quelle opération donne le total de billes ?", "options": [ { "t": "35 + 12", "ok": true }, { "t": "35 − 12", "e": "E8", "retour": "Bip ! Kola gagne des billes : il en a plus. On ajoute." }, { "t": "35 × 12", "e": "E8", "retour": "Bip ! Il ne répète pas 35 fois. Il gagne 12 billes : on ajoute." } ] },
+        { "type": "nombre", "question": "Combien de billes a-t-il maintenant ?", "reponse": 47, "erreurs": [ { "reponses": [23], "type": "E8", "texte": "Bip ! 23 vient de 35 − 12. Il gagne des billes : on ajoute." } ] }
+      ],
+      "fin": "35 + 12 = 47."
+    },
+    {
+      "enonce": "Mamie a 90 mangues. Elle les range dans 6 paniers égaux.",
+      "etapes": [
+        { "type": "choix", "question": "Quelle opération donne le nombre de mangues par panier ?", "options": [ { "t": "90 ÷ 6", "ok": true }, { "t": "90 × 6", "e": "E8", "retour": "Bip ! Elle partage ses mangues en 6 paniers : on divise." }, { "t": "90 − 6", "e": "E8", "retour": "Bip ! Enlever 6 mangues ne les range pas dans 6 paniers. On divise." } ] },
+        { "type": "nombre", "question": "Combien de mangues par panier ?", "reponse": 15, "erreurs": [ { "reponses": [540], "type": "E8", "texte": "Bip ! 540 vient de 90 × 6. Un partage donne moins que le total." } ] }
+      ],
+      "fin": "90 ÷ 6 = 15."
+    },
+    {
+      "enonce": "Reviens aux caisses : 8 caisses de 24 mangues.",
+      "etapes": [
+        { "type": "choix", "question": "Quelle opération donne le nombre de mangues au départ ?", "options": [ { "t": "8 × 24", "ok": true }, { "t": "8 + 24", "e": "E8", "retour": "Bip ! On répète 24 mangues, 8 fois. On multiplie." } ] }
+      ],
+      "fin": "8 × 24 = 192."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "On répète plusieurs fois le même groupe. Quelle opération utilise-t-on ?", "bonne": "La multiplication",
+      "mauvaises": [
+        { "t": "L'addition", "e": "E8", "retour": "Bip ! On peut additionner chaque groupe, mais répéter le même groupe plusieurs fois, c'est multiplier." },
+        { "t": "La soustraction", "e": "E8", "retour": "Bip ! Soustraire enlève. Ici, on répète un groupe : on multiplie." },
+        { "t": "La division", "e": "E8", "retour": "Bip ! Diviser partage. Ici, on répète un groupe : on multiplie." } ] },
+    { "id": "A2", "niveau": "A", "question": "On partage une quantité en parts égales. Quelle opération utilise-t-on ?", "bonne": "La division",
+      "mauvaises": [
+        { "t": "La multiplication", "e": "E8", "retour": "Bip ! Multiplier répète un groupe. Partager en parts égales, c'est diviser." },
+        { "t": "L'addition", "e": "E8", "retour": "Bip ! Ajouter ne partage rien. Partager en parts égales, c'est diviser." },
+        { "t": "La soustraction", "e": "E8", "retour": "Bip ! Soustraire enlève. Partager en parts égales, c'est diviser." } ] },
+    { "id": "B1", "niveau": "B", "question": "Kola a 35 billes et en gagne 12. Quelle opération donne le nouveau total ?", "bonne": "35 + 12",
+      "mauvaises": [
+        { "t": "35 − 12", "e": "E8", "retour": "Bip ! Il gagne des billes : il en a plus. On ajoute." },
+        { "t": "35 × 12", "e": "E8", "retour": "Bip ! Il ne répète pas 35 billes, 12 fois. Il en gagne 12 : on ajoute." },
+        { "t": "35 ÷ 12", "e": "E8", "retour": "Bip ! Il ne partage pas ses billes. Il en gagne 12 : on ajoute." } ] },
+    { "id": "B2", "niveau": "B", "question": "Mamie a 90 mangues. Elle les range dans 6 paniers égaux. Quelle opération donne le nombre de mangues par panier ?", "bonne": "90 ÷ 6",
+      "mauvaises": [
+        { "t": "90 × 6", "e": "E8", "retour": "Bip ! Elle partage ses mangues : on divise." },
+        { "t": "90 − 6", "e": "E8", "retour": "Bip ! Enlever 6 mangues ne partage pas en paniers. On divise." },
+        { "t": "90 + 6", "e": "E8", "retour": "Bip ! Ajouter ne partage rien. On divise." } ] },
+    { "id": "C1", "niveau": "C", "question": "Mamie a 5 sacs de 36 kg de riz. Combien de kilogrammes a-t-elle en tout ?", "bonne": "180 kg",
+      "mauvaises": [
+        { "t": "41 kg", "e": "E5", "retour": "Bip ! 41 vient de 5 + 36. Même si on dit « en tout », on répète 36 kg, 5 fois : on multiplie." },
+        { "t": "7 kg", "e": "E8", "retour": "Bip ! 7 vient de 36 ÷ 5. Elle ne partage pas : elle a 5 sacs de 36 kg." },
+        { "t": "31 kg", "e": "E8", "retour": "Bip ! 31 vient de 36 − 5. Elle n'enlève rien. On multiplie 36 par 5." } ] },
+    { "id": "C2", "niveau": "C", "question": "Une corde de 84 mètres est coupée en morceaux de 4 mètres. Combien de morceaux obtient-on ?", "bonne": "21",
+      "mauvaises": [
+        { "t": "88", "e": "E1", "retour": "Bip ! 88 vient de 84 + 4. On cherche combien de morceaux de 4 m il y a dans 84 m : on divise." },
+        { "t": "336", "e": "E7", "retour": "Bip ! 336 vient de 84 × 4. On ne peut pas avoir plus de morceaux que de mètres. On divise." },
+        { "t": "80", "e": "E8", "retour": "Bip ! 80 vient de 84 − 4. On cherche combien de fois 4 m entre dans 84 m : on divise." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola dit : « Il y a les mots « en tout », donc j'additionne toujours. » A-t-il raison ?", "bonne": "Non, il faut comprendre la situation avant de choisir",
+      "mauvaises": [
+        { "t": "Oui, « en tout » veut dire additionner", "e": "E5", "retour": "Bip ! Avec 5 sacs de 36 kg, « en tout » se calcule avec une multiplication. On comprend d'abord la situation." },
+        { "t": "Oui, c'est une règle sûre", "e": "E5", "retour": "Bip ! Les mots seuls ne suffisent pas. On imagine la situation." },
+        { "t": "Non, il faut toujours multiplier", "e": "E8", "retour": "Bip ! Il n'y a pas de règle toute faite. On comprend la situation, puis on choisit." } ] },
+    { "id": "D2", "niveau": "D", "question": "Mamie a 7 paniers de 12 mangues. Elle en vend 20. Quelles opérations faut-il faire ?", "bonne": "D'abord 7 × 12, puis soustraire 20",
+      "mauvaises": [
+        { "t": "D'abord 7 + 12, puis soustraire 20", "e": "E7", "retour": "Bip ! 7 paniers de 12 mangues : on répète 12, sept fois. On multiplie d'abord." },
+        { "t": "D'abord 7 × 12, puis ajouter 20", "e": "E8", "retour": "Bip ! Elle vend 20 mangues : il en reste moins. On soustrait." },
+        { "t": "D'abord 84 ÷ 20", "e": "E8", "retour": "Bip ! Elle ne partage pas ses mangues. Elle en vend 20 : on soustrait." } ] }
+  ],
+
+  "boss": {
+    "question": "Une école reçoit 9 cartons de 36 cahiers. Elle donne 100 cahiers aux élèves du CE2. Combien de cahiers lui reste-t-il ?",
+    "reponse": "224 cahiers",
+    "mauvaises": [
+      { "valeur": "45 cahiers", "e": "E8", "retour": "Bip ! 45 vient de 36 + 9. 9 cartons de 36 cahiers : on répète 36, neuf fois." },
+      { "valeur": "324 cahiers", "e": "E9", "retour": "Bip ! 324, c'est avant de donner 100 cahiers. La question demande ce qu'il reste." },
+      { "valeur": "424 cahiers", "e": "E8", "retour": "Bip ! 424 vient de 324 + 100. L'école donne des cahiers : on enlève." }
+    ],
+    "indice": "D'abord, combien de cahiers en tout ? Répète 36, neuf fois. Ensuite, que fait l'école ?"
+  },
+
+  "video": {
+    "titre": "Choisir l'opération",
+    "duree": 150,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, choisir l'opération." },
+          { "t": 5, "texte": "Mamie a 8 caisses de 24 mangues. Elle en vend 50." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "p1", "texte": "8 caisses · 24 · 50", "x": 180, "y": 110, "taille": 44 } ] },
+      { "debut": 14, "fin": 45, "parties": [
+          { "t": 0, "texte": "Je ne choisis pas l'opération avec les nombres." },
+          { "t": 6, "texte": "Je comprends d'abord la situation." },
+          { "t": 14, "texte": "Je me la raconte avec mes mots." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 6.5, "a": "ecrire", "id": "s2", "texte": "Comprendre d'abord", "x": 180, "y": 100, "taille": 44, "couleur": "#ffe066" } ] },
+      { "debut": 45, "fin": 80, "parties": [
+          { "t": 0, "texte": "8 caisses, avec 24 mangues dans chaque caisse." },
+          { "t": 9, "texte": "On répète 24, huit fois. J'utilise la multiplication." },
+          { "t": 18, "texte": "8 fois 24 égale 192." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 9.5, "a": "ecrire", "id": "m3a", "texte": "répéter → ×", "x": 180, "y": 70, "taille": 44, "couleur": "#ffe066" }, { "t": 18.5, "a": "ecrire", "id": "m3b", "texte": "8 × 24 = 192", "x": 180, "y": 140, "taille": 50, "couleur": "#6fe3d8" } ] },
+      { "debut": 80, "fin": 110, "parties": [
+          { "t": 0, "texte": "Ensuite, Mamie vend 50 mangues." },
+          { "t": 6, "texte": "Elle en a moins. J'utilise la soustraction." },
+          { "t": 14, "texte": "192 moins 50 égale 142." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 6.5, "a": "ecrire", "id": "s4a", "texte": "vendre → −", "x": 180, "y": 70, "taille": 44, "couleur": "#ffe066" }, { "t": 14.5, "a": "ecrire", "id": "s4b", "texte": "192 − 50 = 142", "x": 180, "y": 140, "taille": 50, "couleur": "#6fe3d8" } ] },
+      { "debut": 110, "fin": 130, "parties": [
+          { "t": 0, "texte": "Attention aux mots seuls. « En tout » ne veut pas toujours dire additionner." },
+          { "t": 10, "texte": "Je regarde toujours la situation." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "a5", "texte": "« en tout » ≠ toujours +", "x": 180, "y": 100, "taille": 38, "couleur": "#ff8f6b" } ] },
+      { "debut": 130, "fin": 150, "parties": [
+          { "t": 0, "texte": "À toi ! Mamie range 90 mangues dans 6 paniers égaux." },
+          { "t": 7, "texte": "Quelle opération ? Mets la vidéo en pause. Réponse : 90 divisé par 6." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "t6", "texte": "90 ? 6", "x": 180, "y": 90, "taille": 56, "couleur": "#ffe066" }, { "t": 12, "a": "ecrire", "id": "r6", "texte": "90 ÷ 6", "x": 180, "y": 170, "taille": 54, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Les caisses de Mamie Sègla",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Kola", "x": 40, "y": 126, "w": 54 }, { "qui": "Mathéo", "x": 128, "y": 100, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "objets", "genre": "mangue", "n": 16, "x": 40, "y": 152, "colonnes": 8, "pas": 26, "taille": 22 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "8 caisses de 24 mangues. J'en vends 50." }, { "qui": "Kola", "texte": "8, 24, 50… J'additionne !" } ], "legende": "Au marché." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 112, "w": 66 } ], "objets": [ { "t": "texte", "texte": "8 + 24 + 50 = 82", "x": 236, "y": 110, "taille": 30, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "82 mangues !" }, { "qui": "Anita", "texte": "Raconte la situation d'abord." } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "texte", "texte": "8 caisses", "x": 256, "y": 86, "taille": 30, "couleur": "#c1440e" }, { "t": "texte", "texte": "de 24 mangues", "x": 256, "y": 130, "taille": 26, "couleur": "#c1440e" }, { "t": "texte", "texte": "→ 8 × 24", "x": 256, "y": 178, "taille": 34, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Huit caisses, avec 24 mangues dans chaque." }, { "qui": "Kola", "texte": "On répète 24, huit fois !" } ], "legende": "On répète : on multiplie." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "content" } ], "objets": [ { "t": "texte", "texte": "8 × 24 = 192", "x": 150, "y": 110, "taille": 46, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "8 fois 24 égale 192." }, { "qui": "Mathéo", "texte": "Bip ! 192 mangues au départ !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "192 − 50 = 142", "x": 180, "y": 120, "taille": 46, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Elle vend 50 : j'enlève !" }, { "qui": "Anita", "texte": "Il lui reste 142 mangues." } ], "legende": "192 − 50 = 142." },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Mathéo", "x": 60, "y": 104, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 126, "y": 128, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! Il me reste 142 mangues." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Je comprends la situation, puis je choisis l'opération. Je ne choisis pas avec un mot seul." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Je choisis l'opération après avoir compris la situation, pas avant. Un mot seul ne décide pas.",
+  "carte": "8 caisses de 24 : 8 × 24 = 192. Elle vend 50 : 192 − 50 = 142.",
+  "pourquoi": "Pourquoi comprendre d'abord ? Parce que les mêmes mots peuvent demander des opérations différentes.",
+  "fiche": { "titre": "N64 · Choisir l'opération", "piege": "Croire que « en tout » veut toujours dire additionner. 5 sacs de 36 kg en tout : on multiplie." },
+  "controles": [ { "expr": "8*24", "attendu": 192 }, { "expr": "192-50", "attendu": 142 }, { "expr": "35+12", "attendu": 47 }, { "expr": "90/6", "attendu": 15 }, { "expr": "5*36", "attendu": 180 }, { "expr": "84/4", "attendu": 21 }, { "expr": "9*36", "attendu": 324 }, { "expr": "324-100", "attendu": 224 }, { "expr": "7*12", "attendu": 84 } ]
+}

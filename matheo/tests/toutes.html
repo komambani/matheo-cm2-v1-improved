@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Tous les tests</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}iframe{width:420px;height:300px;border:1px solid #ccc;float:right}</style>
+</head>
+<body>
+  <h1>Tous les tests Mathéo, l'un après l'autre</h1>
+  <iframe id="cadre"></iframe>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    // Chaque page de test publie ses résultats dans window.__RESULTATS__ ; on les rassemble ici.
+    const index = await (await fetch("../app/content/index.json")).json();
+    const pages = [
+      ["Générateur et N22 (unitaires)", "index.html"],
+      ["Opérations posées", "operations.html"],
+      ["Parcours N22", "parcours.html"],
+      ...index.notions.filter((n) => n.id !== "N22").map((n) => [`Parcours ${n.id}`, `notion.html?id=${n.id}`]),
+      ["Éléments transversaux", "extras.html"],
+      ["Contrôle des contenus", "contenus.html"],
+      ["Scène 3D du défi N10", "scene3d.html"]
+    ];
+    const cadre = document.getElementById("cadre");
+    const lignes = [];
+    let total = 0, reussis = 0;
+    for (const [nom, url] of pages) {
+      cadre.src = url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+      let res = null;
+      for (let t = 0; t < 180 && !res; t++) {
+        await new Promise((r) => setTimeout(r, 1000));
+        try { res = cadre.contentWindow.__RESULTATS__; } catch { /* page pas encore prête */ }
+      }
+      const echecs = (res || []).filter((r) => !r.ok);
+      total += (res || []).length; reussis += (res || []).length - echecs.length;
+      lignes.push(`<div class="${res && !echecs.length ? "ok" : "ko"}">${res && !echecs.length ? "✓" : "✗"} ${nom} : ${res ? `${res.length - echecs.length}/${res.length}` : "pas de résultat (délai dépassé)"}${echecs.slice(0, 3).map((e) => `<br>&nbsp;&nbsp;— ${e.nom} : ${String(e.detail).slice(0, 120)}`).join("")}</div>`);
+      document.getElementById("liste").innerHTML = lignes.join("");
+    }
+    const ok = reussis === total && lignes.every((l) => l.startsWith('<div class="ok"'));
+    document.getElementById("resume").textContent = `${reussis}/${total} contrôles réussis sur ${pages.length} pages` + (ok ? "" : " — ÉCHECS");
+    document.title = ok ? "OK" : "ECHEC";
+    window.__FINI__ = { ok, total, reussis };
+  </script>
+</body>
+</html>

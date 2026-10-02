@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><title>Aperçu BD</title>
+<style>body{margin:12px;background:#120d33;color:#fff;font:14px system-ui}.g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:760px}.c{border:1px solid #555;border-radius:10px;overflow:hidden}.c svg{width:100%;height:auto;display:block}.c b{display:block;padding:2px 8px;background:#222}</style></head>
+<body>
+  <div id="defs"></div><div class="g" id="g"></div>
+  <script type="module">
+    import { DEFS } from "../app/js/art.js";
+    import { caseBD } from "../app/js/bd.js";
+    document.getElementById("defs").innerHTML = DEFS;
+    document.getElementById("g").innerHTML = [1,2,3,4,5,6,7,8].map((n) => `<div class="c"><b>Case ${n}</b>${caseBD(n)}</div>`).join("");
+    window.__OK__ = true;
+  </script>
+</body>
+</html>

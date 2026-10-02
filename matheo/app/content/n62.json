@@ -1,0 +1,223 @@
+{
+  "id": "N62",
+  "version": "0.1",
+  "titre": "Repérer les données utiles",
+  "domaine": "Résolution de problèmes",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Toutes les données d'un énoncé ne sont pas forcément nécessaires.",
+  "erreurs_ciblees": ["E1 : prendre toutes les données sans trier", "E5 : choisir l'opération trop vite", "E9 : ne pas vérifier si la réponse a du sens"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 },
+      { "qui": "Anita", "x": 40, "y": 126, "w": 54 },
+      { "qui": "Mathéo", "x": 128, "y": 100, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "objets", "genre": "mangue", "n": 12, "x": 40, "y": 152, "colonnes": 12, "pas": 24, "taille": 22 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au marché, Mamie Sègla raconte sa journée à Mathéo." },
+    { "qui": "Mamie Sègla", "texte": "J'ai ouvert à 7 heures. J'ai 45 mangues, 30 beignets et 12 galettes." },
+    { "qui": "Mamie Sègla", "texte": "Il a plu pendant 2 heures. J'ai vendu 18 mangues." },
+    { "qui": "Mathéo", "texte": "Bip ! Que de nombres ! Mon étoile est dans sa caisse !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "Dis-moi combien de mangues il me reste, et je te le rends." },
+    { "qui": "Narrateur", "texte": "Quelles informations servent vraiment ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Mamie Sègla ouvre son étal à 7 heures. Elle a 45 mangues et 30 beignets. Il pleut pendant 2 heures. Elle vend 18 mangues. Combien de mangues lui reste-t-il ?",
+    "reponse": "27",
+    "reussite": "Bip bip ! Il lui reste 27 mangues. On a gardé seulement les données utiles.",
+    "etapes": [
+      {
+        "type": "selection",
+        "intro": "Lisons l'énoncé phrase par phrase.",
+        "question": "Touche les phrases qui servent à répondre à la question.",
+        "items": [
+          "Mamie Sègla ouvre son étal à 7 heures.",
+          "Elle a 45 mangues.",
+          "Elle a 30 beignets.",
+          "Il pleut pendant 2 heures.",
+          "Elle vend 18 mangues."
+        ],
+        "utiles": [1, 4],
+        "retour_trop": "Bip ! Une de ces informations ne sert pas. La question parle seulement des mangues : l'heure, la pluie et les beignets ne comptent pas.",
+        "retour_manque": "Bip ! Il manque une information utile. Il faut les mangues de départ et les mangues vendues."
+      },
+      {
+        "type": "nombre",
+        "intro": "Maintenant, on utilise seulement les données utiles : 45 mangues et 18 vendues.",
+        "question": "Combien de mangues lui reste-t-il ?",
+        "reponse": 27,
+        "erreurs": [
+          { "reponses": [63], "type": "E5", "texte": "Bip ! 45 + 18 = 63 ajoute les mangues vendues. Pour savoir ce qui reste, on enlève ce qui est vendu." },
+          { "reponses": [75], "type": "E1", "texte": "Bip ! 75 utilise les beignets (45 + 30). La question parle seulement des mangues." },
+          { "reponses": [18], "type": "E9", "texte": "Bip ! 18, ce sont les mangues vendues. Que demande la question ? Ce qu'il lui reste." }
+        ]
+      },
+      {
+        "type": "choix",
+        "intro": "Vérifions si la réponse a du sens.",
+        "question": "27 mangues restantes : est-ce possible ?",
+        "options": [
+          { "t": "Oui, 27 est plus petit que 45", "ok": true },
+          { "t": "Non, elle doit en avoir plus que 45", "e": "E9", "retour": "Bip ! Elle a vendu des mangues : il lui en reste moins qu'au début." },
+          { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : après une vente, il en reste moins qu'avant." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Relis la question. De quoi parle-t-elle ?" },
+    { "niveau": 2, "texte": "La question parle de mangues. Quelles phrases parlent de mangues ?" },
+    { "niveau": 3, "texte": "Il faut les mangues de départ et les mangues vendues. Le reste ne sert pas." },
+    { "niveau": 4, "texte": "Exemple : Kola a 12 billes rouges et 5 billes bleues. Il perd 3 billes rouges. Pour les rouges, je garde 12 et 3. À toi !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je barre ce qui ne sert pas, puis je calcule." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Anita a 8 billes rouges et 5 billes bleues. Elle perd 3 billes rouges.",
+      "etapes": [
+        { "type": "selection", "question": "Combien de billes rouges lui reste-t-il ? Touche les phrases utiles.", "items": ["Anita a 8 billes rouges.", "Anita a 5 billes bleues.", "Elle perd 3 billes rouges."], "utiles": [0, 2], "retour_trop": "Bip ! Les billes bleues ne servent pas : on cherche les rouges.", "retour_manque": "Bip ! Il manque une information utile : les rouges de départ et les rouges perdues." },
+        { "type": "nombre", "question": "Combien de billes rouges lui reste-t-il ?", "reponse": 5, "erreurs": [ { "reponses": [16], "type": "E1", "texte": "Bip ! 16 additionne 8, 5 et 3. Les billes bleues ne servent pas. On enlève 3 à 8." } ] }
+      ],
+      "fin": "8 − 3 = 5 billes rouges."
+    },
+    {
+      "enonce": "Kola a 12 cahiers. Il habite à 3 km de l'école. Il en donne 4 à Anita.",
+      "etapes": [
+        { "type": "selection", "question": "Combien de cahiers lui reste-t-il ? Touche les phrases utiles.", "items": ["Kola a 12 cahiers.", "Il habite à 3 km de l'école.", "Il en donne 4 à Anita."], "utiles": [0, 2], "retour_trop": "Bip ! La distance de 3 km ne sert pas : on cherche des cahiers.", "retour_manque": "Bip ! Il manque une information utile : les cahiers de départ et les cahiers donnés." },
+        { "type": "nombre", "question": "Combien de cahiers lui reste-t-il ?", "reponse": 8, "erreurs": [ { "reponses": [19], "type": "E1", "texte": "Bip ! 19 additionne tout. La distance ne sert pas. On enlève 4 à 12." } ] }
+      ],
+      "fin": "12 − 4 = 8 cahiers."
+    },
+    {
+      "enonce": "Reviens aux mangues : 45 mangues, 18 vendues.",
+      "etapes": [ { "type": "nombre", "question": "Combien de mangues lui reste-t-il ?", "reponse": 27, "erreurs": [ { "reponses": [63], "type": "E5", "texte": "Bip ! Pour savoir ce qui reste, on enlève ce qui est vendu." } ] } ],
+      "fin": "45 − 18 = 27 mangues."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Toutes les données d'un énoncé servent-elles toujours ?", "bonne": "Non, certaines ne servent pas",
+      "mauvaises": [
+        { "t": "Oui, il faut toutes les utiliser", "e": "E1", "retour": "Bip ! Certaines informations sont là pour distraire. Il faut trier celles qui répondent à la question." },
+        { "t": "Oui, sinon le problème est faux", "e": "E1", "retour": "Bip ! Le problème reste juste, même avec des informations inutiles. On les met de côté." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : on relit la question et on garde ce qui sert." } ] },
+    { "id": "A2", "niveau": "A", "question": "Anita a 8 billes rouges et 5 billes bleues. Elle perd 3 billes rouges. Combien lui reste-t-il de billes rouges ? Quelle donnée ne sert pas ?", "bonne": "5 billes bleues",
+      "mauvaises": [
+        { "t": "8 billes rouges", "e": "E1", "retour": "Bip ! Les 8 billes rouges servent : ce sont les rouges de départ." },
+        { "t": "3 billes rouges", "e": "E1", "retour": "Bip ! Les 3 billes perdues servent : on les enlève." },
+        { "t": "Aucune", "e": "E1", "retour": "Bip ! Les billes bleues ne servent pas : la question parle des rouges." } ] },
+    { "id": "B1", "niveau": "B", "question": "Kola a 12 cahiers. Il habite à 3 km de l'école. Il en donne 4 à Anita. Combien de cahiers lui reste-t-il ? Combien de données servent ?", "bonne": "2 données : 12 cahiers et 4 donnés",
+      "mauvaises": [
+        { "t": "3 données : tous les nombres", "e": "E1", "retour": "Bip ! La distance de 3 km ne sert pas. Seuls 12 et 4 répondent à la question." },
+        { "t": "1 donnée : 12 cahiers", "e": "E5", "retour": "Bip ! Il faut aussi les 4 cahiers donnés pour savoir ce qui reste." },
+        { "t": "1 donnée : 4 cahiers", "e": "E5", "retour": "Bip ! Il faut aussi les 12 cahiers de départ." } ] },
+    { "id": "B2", "niveau": "B", "question": "Mamie a 20 beignets à 50 FCFA. Il y a 4 clients. Elle en vend 6. Combien de beignets lui reste-t-il ? Quelles données ne servent pas ?", "bonne": "Le prix de 50 FCFA et les 4 clients",
+      "mauvaises": [
+        { "t": "Les 20 beignets", "e": "E1", "retour": "Bip ! Les 20 beignets servent : c'est le nombre de départ." },
+        { "t": "Les 6 beignets vendus", "e": "E1", "retour": "Bip ! Les 6 beignets vendus servent : on les enlève." },
+        { "t": "Aucune donnée", "e": "E1", "retour": "Bip ! Le prix et le nombre de clients ne servent pas à trouver ce qui reste." } ] },
+    { "id": "C1", "niveau": "C", "question": "Un marchand a 36 mangues et 24 oranges. Il vend 15 mangues. Combien de mangues lui reste-t-il ?", "bonne": "21",
+      "mauvaises": [
+        { "t": "60", "e": "E1", "retour": "Bip ! 60 vient de 36 + 24 : tu as utilisé les oranges. La question parle des mangues." },
+        { "t": "51", "e": "E5", "retour": "Bip ! 51 vient de 36 + 15. Pour savoir ce qui reste, on enlève ce qui est vendu." },
+        { "t": "9", "e": "E1", "retour": "Bip ! 9 vient de 24 − 15 : tu as utilisé les oranges. On part des 36 mangues." } ] },
+    { "id": "C2", "niveau": "C", "question": "Un car part à 8 h avec 45 passagers. 12 descendent à la gare. Il roule 2 h. Combien de passagers restent dans le car ?", "bonne": "33",
+      "mauvaises": [
+        { "t": "57", "e": "E5", "retour": "Bip ! 57 vient de 45 + 12. Des passagers descendent : on enlève." },
+        { "t": "43", "e": "E1", "retour": "Bip ! 43 vient de 45 − 2 : tu as utilisé les 2 heures. L'heure ne sert pas." },
+        { "t": "10", "e": "E1", "retour": "Bip ! 10 vient de 12 − 2 : tu as utilisé les heures. On part de 45 passagers." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola dit : « Pour résoudre un problème, j'additionne tous les nombres de l'énoncé. » A-t-il raison ?", "bonne": "Non, je trie d'abord les données utiles",
+      "mauvaises": [
+        { "t": "Oui, c'est toujours comme ça", "e": "E1", "retour": "Bip ! Parfois il faut soustraire, et parfois certaines données ne servent pas. On trie d'abord." },
+        { "t": "Oui, c'est plus sûr", "e": "E1", "retour": "Bip ! Additionner au hasard donne souvent une réponse fausse. On relit la question." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : on relit la question et on garde les données utiles." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita barre un nombre de l'énoncé. Que doit-elle vérifier avant de le barrer ?", "bonne": "Qu'il ne sert pas à répondre à la question",
+      "mauvaises": [
+        { "t": "Qu'il est petit", "e": "E5", "retour": "Bip ! La taille du nombre ne compte pas. Ce qui compte, c'est s'il sert à répondre." },
+        { "t": "Qu'il est écrit en premier", "e": "E5", "retour": "Bip ! La place du nombre ne compte pas. Ce qui compte, c'est s'il sert à répondre." },
+        { "t": "Rien, on barre au hasard", "e": "E1", "retour": "Bip ! On ne barre pas au hasard : on relit la question et on vérifie." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla vend ses mangues 25 FCFA pièce. Elle a 60 mangues, 3 paniers, et son étal est ouvert depuis 7 heures. Elle en vend 24. Combien de mangues lui reste-t-il ?",
+    "reponse": "36 mangues",
+    "mauvaises": [
+      { "valeur": "84 mangues", "e": "E5", "retour": "Bip ! 84 vient de 60 + 24. Des mangues sont vendues : on enlève." },
+      { "valeur": "24 mangues", "e": "E9", "retour": "Bip ! 24, ce sont les mangues vendues. Que demande la question ? Ce qu'il lui reste." },
+      { "valeur": "57 mangues", "e": "E1", "retour": "Bip ! 57 vient de 60 − 3 : tu as utilisé les paniers. Les paniers ne servent pas." }
+    ],
+    "indice": "Quelles données servent ? Le prix, les paniers et l'heure répondent-ils à la question ?"
+  },
+
+  "video": {
+    "titre": "Repérer les données utiles",
+    "duree": 150,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, repérer les données utiles." },
+          { "t": 5, "texte": "Un énoncé peut avoir beaucoup de nombres." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "p1", "texte": "7 h   45   30   2 h   18", "x": 180, "y": 110, "taille": 40 } ] },
+      { "debut": 14, "fin": 40, "parties": [
+          { "t": 0, "texte": "Mamie ouvre à 7 heures. Elle a 45 mangues et 30 beignets." },
+          { "t": 9, "texte": "Il pleut 2 heures. Elle vend 18 mangues." },
+          { "t": 16, "texte": "Combien de mangues lui reste-t-il ?" } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "carte", "id": "c2", "x": 30, "y": 20, "w": 300, "h": 164, "lignes": [ { "t": 0.4, "texte": "7 h · 45 mangues · 30 beignets", "couleur": "#2b1d4a" }, { "t": 9, "texte": "2 h de pluie · 18 mangues vendues", "couleur": "#0e7f74" }, { "t": 16, "texte": "Combien de mangues restent ?", "couleur": "#b45309" } ] } ] },
+      { "debut": 40, "fin": 75, "parties": [
+          { "t": 0, "texte": "Premier pas : je lis la question. Elle parle de mangues." },
+          { "t": 9, "texte": "Deuxième pas : je garde ce qui parle de mangues." },
+          { "t": 18, "texte": "Je garde 45 mangues et 18 mangues vendues." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "q3", "texte": "Question : des mangues", "x": 180, "y": 60, "taille": 34, "couleur": "#ffe066" }, { "t": 19, "a": "ecrire", "id": "g3", "texte": "45 et 18", "x": 180, "y": 140, "taille": 54, "couleur": "#6fe3d8" } ] },
+      { "debut": 75, "fin": 100, "parties": [
+          { "t": 0, "texte": "Je barre ce qui ne sert pas : l'heure, les beignets, la pluie." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "b4", "texte": "7 h   30 beignets   2 h", "x": 180, "y": 100, "taille": 36 }, { "t": 5, "a": "croix", "x1": 40, "y1": 70, "x2": 320, "y2": 124 } ] },
+      { "debut": 100, "fin": 130, "parties": [
+          { "t": 0, "texte": "Troisième pas : je calcule avec les données utiles." },
+          { "t": 8, "texte": "Elle vend des mangues : j'enlève. 45 moins 18 égale 27." },
+          { "t": 20, "texte": "Il lui reste 27 mangues." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 8.5, "a": "ecrire", "id": "c5", "texte": "45 − 18 = 27", "x": 180, "y": 110, "taille": 58, "couleur": "#6fe3d8" } ] },
+      { "debut": 130, "fin": 150, "parties": [
+          { "t": 0, "texte": "À toi ! Kola a 12 cahiers. Il habite à 3 kilomètres. Il en donne 4." },
+          { "t": 8, "texte": "Quelle donnée ne sert pas ? Mets la vidéo en pause. Réponse : 3 kilomètres." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "t6", "texte": "12   3 km   4", "x": 180, "y": 90, "taille": 50, "couleur": "#ffe066" }, { "t": 12, "a": "croix", "x1": 150, "y1": 40, "x2": 230, "y2": 100 } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Les nombres de Mamie Sègla",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Anita", "x": 40, "y": 126, "w": 54 }, { "qui": "Mathéo", "x": 128, "y": 100, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "objets", "genre": "mangue", "n": 12, "x": 40, "y": 152, "colonnes": 12, "pas": 24, "taille": 22 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "J'ai 45 mangues, 30 beignets. J'ai vendu 18 mangues." }, { "qui": "Mathéo", "texte": "Bip ! Beaucoup de nombres !", "humeur": "surpris" } ], "legende": "Au marché." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 112, "w": 66 } ], "objets": [ { "t": "texte", "texte": "45 + 30 + 18", "x": 236, "y": 110, "taille": 32, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "J'additionne tout : 45 + 30 + 18 !" }, { "qui": "Anita", "texte": "Attends, Kola. Relisons la question." } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "texte", "texte": "Combien de", "x": 256, "y": 90, "taille": 28, "couleur": "#c1440e" }, { "t": "texte", "texte": "MANGUES ?", "x": 256, "y": 140, "taille": 40, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "La question parle de mangues." }, { "qui": "Kola", "texte": "Donc les beignets ne servent pas !" } ], "legende": "On relit la question." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "content" } ], "objets": [ { "t": "texte", "texte": "7 h", "x": 60, "y": 80, "taille": 36, "couleur": "#8a8a8a" }, { "t": "ligne", "x1": 36, "y1": 70, "x2": 90, "y2": 90, "couleur": "#c1440e" }, { "t": "texte", "texte": "45  18", "x": 190, "y": 110, "taille": 52, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "On barre l'heure, la pluie, les beignets." }, { "qui": "Mathéo", "texte": "Bip ! Il reste 45 et 18 !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "45 − 18 = 27", "x": 180, "y": 120, "taille": 50, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Elle vend : j'enlève ! 45 moins 18." }, { "qui": "Anita", "texte": "Il lui reste 27 mangues." } ], "legende": "45 − 18 = 27." },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Mathéo", "x": 60, "y": 104, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 126, "y": 128, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! Il me reste 27 mangues." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Je lis la question, je garde les données utiles, je barre le reste, puis je calcule." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Toutes les données d'un énoncé ne sont pas forcément nécessaires. Je lis la question, puis je garde seulement ce qui sert.",
+  "carte": "45 mangues, 18 vendues : 45 − 18 = 27. L'heure, la pluie et les beignets ne servent pas.",
+  "pourquoi": "Pourquoi trier ? Pour ne pas utiliser un nombre qui n'a rien à voir avec la question.",
+  "fiche": { "titre": "N62 · Repérer les données utiles", "piege": "Additionner tous les nombres de l'énoncé. Certaines informations ne servent pas." },
+  "controles": [ { "expr": "45-18", "attendu": 27 }, { "expr": "8-3", "attendu": 5 }, { "expr": "12-4", "attendu": 8 }, { "expr": "36-15", "attendu": 21 }, { "expr": "45-12", "attendu": 33 }, { "expr": "60-24", "attendu": 36 }, { "expr": "45+18", "attendu": 63 } ]
+}

@@ -1,0 +1,238 @@
+{
+  "id": "N20",
+  "version": "0.1",
+  "titre": "Comparer des fractions",
+  "domaine": "Fractions",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4).",
+  "idee_cle": "Pour comparer des fractions, il faut savoir si elles portent sur le même tout et utiliser une représentation ou une méthode adaptée.",
+  "erreurs_ciblees": ["E2 : croire que plus le bas est grand, plus la fraction est grande", "E1 : comparer sans regarder le tout", "E7 : ne pas savoir comparer quand les deux nombres changent"],
+
+  "mission_scene": {
+    "fond": "champ",
+    "personnages": [
+      { "qui": "Maître Léo", "x": 22, "y": 100, "w": 56 },
+      { "qui": "Anita", "x": 104, "y": 118, "w": 54 },
+      { "qui": "Kola", "x": 176, "y": 118, "w": 54 },
+      { "qui": "Mathéo", "x": 268, "y": 96, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "barre", "x": 30, "y": 196, "w": 300, "h": 18, "den": 8, "num": 0 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au stade, Anita et Kola courent sur la piste." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est sur le podium !", "humeur": "surpris" },
+    { "qui": "Maître Léo", "texte": "Je te le rends si tu dis qui a couru le plus loin." },
+    { "qui": "Anita", "texte": "J'ai couru 3/8 du tour." },
+    { "qui": "Kola", "texte": "Moi, j'ai couru 5/8 du tour !" },
+    { "qui": "Narrateur", "texte": "Comment savoir quelle fraction est la plus grande ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Anita a couru 3/8 du tour de piste. Kola a couru 5/8 du même tour. Qui a couru le plus loin ?",
+    "reponse": "Kola",
+    "reussite": "Bip bip ! Kola a couru le plus loin. 5/8 est plus grand que 3/8.",
+    "etapes": [
+      {
+        "type": "construire", "forme": "barre", "den": 8, "num": 3, "options_den": [3, 5, 8, 10],
+        "intro": "La piste est une barre. Dessinons d'abord le chemin d'Anita.",
+        "question_partage": "Partage la piste en parts égales. Regarde le bas de 3/8.",
+        "retour_partage": "Bip ! Regarde le bas de 3/8 : c'est 8. Partage la piste en 8 parts égales.",
+        "retour_partage_haut": "Bip ! Le 3 dit combien de parts Anita a couru. Pour partager la piste, regarde le bas : 8.",
+        "question_colorier": "Colorie les parts qu'Anita a courues.",
+        "retour_trop": "Bip ! Tu as colorié trop de parts. Anita a couru 3/8.",
+        "retour_peu": "Bip ! Il manque des parts. Anita a couru 3/8.",
+        "voix_fin": "Anita a couru trois parts sur huit."
+      },
+      {
+        "type": "construire", "forme": "barre", "den": 8, "num": 5, "options_den": [3, 5, 8, 10],
+        "intro": "Maintenant, le chemin de Kola, sur une piste identique.",
+        "question_partage": "Partage la piste en parts égales. Regarde le bas de 5/8.",
+        "retour_partage": "Bip ! Regarde le bas de 5/8 : c'est 8. Partage la piste en 8 parts égales.",
+        "retour_partage_haut": "Bip ! Le 5 dit combien de parts Kola a couru. Pour partager la piste, regarde le bas : 8.",
+        "question_colorier": "Colorie les parts que Kola a courues.",
+        "retour_trop": "Bip ! Tu as colorié trop de parts. Kola a couru 5/8.",
+        "retour_peu": "Bip ! Il manque des parts. Kola a couru 5/8.",
+        "voix_fin": "Kola a couru cinq parts sur huit."
+      },
+      {
+        "type": "choix",
+        "intro": "Regarde les deux pistes. Elles ont la même longueur.",
+        "question": "Qui a couru le plus loin ?",
+        "visuel": { "t": "paire", "a": { "t": "barre", "den": 8, "num": 3 }, "b": { "t": "barre", "den": 8, "num": 5 }, "etiquettes": ["Anita", "Kola"], "alt": "Deux pistes de 8 parts : Anita a coloré 3 parts, Kola 5 parts" },
+        "options": [
+          { "t": "Kola, 5/8", "ok": true },
+          { "t": "Anita, 3/8", "e": "E2", "retour": "Bip ! Les parts ont la même taille. Kola en a colorié plus : 5 parts contre 3 parts." },
+          { "t": "Ils ont couru pareil", "e": "E1", "retour": "Bip ! Les deux pistes ont la même longueur, mais pas les mêmes parts coloriées : 5 contre 3." }
+        ]
+      },
+      {
+        "type": "choix",
+        "intro": "Maintenant, mets le bon signe.",
+        "question": "3/8 … 5/8. Quel signe faut-il mettre ?",
+        "options": [
+          { "t": "3/8 < 5/8", "ok": true },
+          { "t": "3/8 > 5/8", "e": "E2", "retour": "Bip ! Le signe > veut dire plus grand. Ici, 3 parts sont moins que 5 parts de même taille." },
+          { "t": "3/8 = 5/8", "e": "E1", "retour": "Bip ! Le signe = veut dire pareil. Ici, les parts coloriées ne sont pas pareilles : 3 et 5." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Regarde les deux pistes. Ont-elles la même longueur ?" },
+    { "niveau": 2, "texte": "Les parts ont la même taille. Compare le nombre de parts coloriées." },
+    { "niveau": 3, "texte": "Anita a colorié 3 parts. Kola en a colorié 5. Qui en a le plus ?" },
+    { "niveau": 4, "texte": "Exemple : 2/5 et 4/5 sur la même barre. 4 parts sont plus que 2 parts. Donc 4/5 est plus grand. À toi !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je dessine les deux barres, puis je compare." }
+  ],
+
+  "remediation": [
+    {
+      "enonce": "Compare 2/5 et 4/5.",
+      "etapes": [
+        { "type": "choix", "question": "Quelle fraction est la plus grande ?", "visuel": { "t": "paire", "a": { "t": "barre", "den": 5, "num": 2 }, "b": { "t": "barre", "den": 5, "num": 4 }, "etiquettes": ["2/5", "4/5"], "alt": "Deux barres de 5 parts : 2 parts coloriées et 4 parts coloriées" },
+          "options": [ { "t": "4/5", "ok": true }, { "t": "2/5", "e": "E2", "retour": "Bip ! Les parts ont la même taille. Il y a plus de parts coloriées dans 4/5." }, { "t": "Elles sont égales", "e": "E1", "retour": "Bip ! Les parts coloriées ne sont pas pareilles : 2 et 4." } ] }
+      ],
+      "fin": "Même bas : la plus grande fraction a le plus grand haut."
+    },
+    {
+      "enonce": "Compare 1/2 et 1/4 d'une galette.",
+      "etapes": [
+        { "type": "choix", "question": "Quelle part est la plus grande ?", "visuel": { "t": "paire", "a": { "t": "disque", "den": 2, "num": 1 }, "b": { "t": "disque", "den": 4, "num": 1 }, "etiquettes": ["1/2", "1/4"], "alt": "Deux galettes : une moitié coloriée et un quart colorié" },
+          "options": [ { "t": "1/2", "ok": true }, { "t": "1/4", "e": "E2", "retour": "Bip ! Avec 4 parts égales, chaque part est plus petite qu'avec 2 parts. 1/4 est plus petit que 1/2." }, { "t": "Elles sont égales", "e": "E1", "retour": "Bip ! Regarde les dessins : la part de 1/2 est plus grande que la part de 1/4." } ] }
+      ],
+      "fin": "Même haut : plus le bas est grand, plus les parts sont petites."
+    },
+    {
+      "enonce": "Reviens à la piste : 3/8 ou 5/8 ?",
+      "etapes": [
+        { "type": "choix", "question": "Quelle fraction est la plus grande ?", "visuel": { "t": "paire", "a": { "t": "barre", "den": 8, "num": 3 }, "b": { "t": "barre", "den": 8, "num": 5 }, "etiquettes": ["3/8", "5/8"], "alt": "Deux barres de 8 parts : 3 parts coloriées et 5 parts coloriées" },
+          "options": [ { "t": "5/8", "ok": true }, { "t": "3/8", "e": "E2", "retour": "Bip ! Les parts ont la même taille. Il y a plus de parts coloriées dans 5/8." }, { "t": "Elles sont égales", "e": "E1", "retour": "Bip ! Les parts coloriées ne sont pas pareilles : 3 et 5." } ] }
+      ],
+      "fin": "5/8 est plus grand que 3/8."
+    }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Deux fractions ont le même bas : 2/5 et 4/5. Laquelle est la plus grande ?", "bonne": "4/5",
+      "mauvaises": [
+        { "t": "2/5", "e": "E2", "retour": "Bip ! Les parts ont la même taille. Plus on en prend, plus c'est grand : 4 parts sont plus que 2 parts." },
+        { "t": "Elles sont égales", "e": "E1", "retour": "Bip ! Pas pareilles : 2 parts et 4 parts de même taille." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : les parts ont la même taille, et 4 parts sont plus que 2 parts." } ] },
+    { "id": "A2", "niveau": "A", "question": "Quelle part de galette est la plus grande : 1/2 ou 1/4 ?", "visuel": { "t": "paire", "a": { "t": "disque", "den": 2, "num": 1 }, "b": { "t": "disque", "den": 4, "num": 1 }, "etiquettes": ["1/2", "1/4"], "alt": "Deux galettes : une moitié coloriée et un quart colorié" }, "bonne": "1/2",
+      "mauvaises": [
+        { "t": "1/4", "e": "E2", "retour": "Bip ! Plus le bas est grand, plus les parts sont petites. 1/4 est plus petit que 1/2." },
+        { "t": "Elles sont pareilles", "e": "E1", "retour": "Bip ! Regarde les dessins : la part de 1/2 est plus grande." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : regarde la taille des parts." } ] },
+    { "id": "B1", "niveau": "B", "question": "Quel signe met-on ? 3/7 … 5/7", "bonne": "<",
+      "mauvaises": [
+        { "t": ">", "e": "E2", "retour": "Bip ! Le signe > veut dire plus grand. 3 parts sont moins que 5 parts de même taille." },
+        { "t": "=", "e": "E1", "retour": "Bip ! Le signe = veut dire pareil. Ici, 3 et 5 ne sont pas pareils." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : les parts sont de même taille. 3 parts sont moins que 5 parts." } ] },
+    { "id": "B2", "niveau": "B", "question": "Range du plus petit au plus grand : 3/4, 1/4, 2/4.", "bonne": "1/4 ; 2/4 ; 3/4",
+      "mauvaises": [
+        { "t": "3/4 ; 2/4 ; 1/4", "e": "E2", "retour": "Bip ! Tu as rangé du plus grand au plus petit. Le plus petit a le moins de parts : 1/4." },
+        { "t": "2/4 ; 1/4 ; 3/4", "e": "E1", "retour": "Bip ! Les parts ont la même taille. Range d'abord 1 part, puis 2 parts, puis 3 parts." },
+        { "t": "1/4 ; 3/4 ; 2/4", "e": "E1", "retour": "Bip ! Range d'abord 1 part, puis 2 parts, puis 3 parts." } ] },
+    { "id": "C1", "niveau": "C", "question": "Anita boit 1/3 d'une bouteille. Kola boit 1/5 de la même bouteille. Qui boit le plus ?", "bonne": "Anita",
+      "mauvaises": [
+        { "t": "Kola", "e": "E2", "retour": "Bip ! Plus le bas est grand, plus les parts sont petites. 1/5 est plus petit que 1/3." },
+        { "t": "Ils boivent pareil", "e": "E1", "retour": "Bip ! Les parts ne sont pas de même taille : un tiers est plus grand qu'un cinquième." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : coupe la bouteille en 3 parts, puis en 5 parts. Les tiers sont plus grands." } ] },
+    { "id": "C2", "niveau": "C", "question": "Mamie Sègla vend 2/6 de ses mangues le matin et 4/6 l'après-midi. Quand vend-elle le plus ?", "bonne": "L'après-midi",
+      "mauvaises": [
+        { "t": "Le matin", "e": "E2", "retour": "Bip ! Les parts ont la même taille. L'après-midi, elle vend 4 parts contre 2 parts le matin." },
+        { "t": "Pareil", "e": "E1", "retour": "Bip ! Pas pareil : 2 parts le matin, 4 parts l'après-midi." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : mêmes parts, 4 sont plus que 2." } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola dit : « 1/8 est plus grand que 1/2, car 8 est plus grand que 2. » A-t-il raison ?", "bonne": "Non, avec un bas plus grand, les parts sont plus petites",
+      "mauvaises": [
+        { "t": "Oui, 8 est plus grand que 2", "e": "E2", "retour": "Bip ! Le bas dit en combien de parts on partage. Plus il y a de parts, plus elles sont petites." },
+        { "t": "Oui, car il y a plus de parts", "e": "E2", "retour": "Bip ! Il y a plus de parts, mais chaque part est beaucoup plus petite." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : dessine une galette en 2 parts et une galette en 8 parts." } ] },
+    { "id": "D2", "niveau": "D", "question": "Anita dit : « La moitié d'une petite galette est plus grande que la moitié d'une très grande galette. » A-t-elle raison ?", "bonne": "Non, la moitié d'une grande galette est plus grande",
+      "mauvaises": [
+        { "t": "Oui, la petite est plus facile à manger", "e": "E7", "retour": "Bip ! Pour comparer, on regarde la taille du tout. La moitié d'une grande galette est plus grande." },
+        { "t": "Oui, car 1/2 est égal à 1/2", "e": "E1", "retour": "Bip ! 1/2 est le même nombre, mais le tout n'est pas le même. Il faut comparer sur le même tout." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : le tout est plus grand, donc sa moitié aussi." } ] }
+  ],
+
+  "boss": {
+    "question": "Mamie Sègla a trois pagnes de même longueur. Elle coupe 1/2 du premier, 1/4 du deuxième et 3/4 du troisième. Quel pagne a la plus grande partie coupée ?",
+    "reponse": "Le troisième",
+    "mauvaises": [
+      { "valeur": "Le premier", "e": "E2", "retour": "Bip ! 1/2 est plus petit que 3/4. Compare les parts : 3/4 est plus de la moitié." },
+      { "valeur": "Le deuxième", "e": "E2", "retour": "Bip ! Plus le bas est grand, plus les parts sont petites. Mais 1/4 n'est qu'une part, 3/4 en a trois." },
+      { "valeur": "Ils sont pareils", "e": "E1", "retour": "Bip ! Les parties coupées ne sont pas pareilles : 1/2, 1/4 et 3/4 sont différents." }
+    ],
+    "indice": "Dessine trois barres de même longueur. Compare les parties coloriées."
+  },
+
+  "video": {
+    "titre": "Comparer des fractions",
+    "duree": 150,
+    "segments": [
+      { "debut": 0, "fin": 14, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, comparer des fractions." },
+          { "t": 5, "texte": "Anita a couru 3/8 de la piste. Kola a couru 5/8." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "c1", "texte": "3/8   5/8", "x": 180, "y": 110, "taille": 56 } ] },
+      { "debut": 14, "fin": 45, "parties": [
+          { "t": 0, "texte": "Je dessine deux pistes identiques." },
+          { "t": 5, "texte": "Elles ont la même longueur et des parts égales." },
+          { "t": 14, "texte": "J'en colorie 3 pour Anita, 5 pour Kola." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "barre", "id": "ba", "x": 30, "y": 40, "w": 300, "h": 46, "den": 8, "num": 0 }, { "t": 1.4, "a": "barre", "id": "bk", "x": 30, "y": 112, "w": 300, "h": 46, "den": 8, "num": 0 },
+          { "t": 15, "a": "colorier", "id": "ba", "parts": [0, 1, 2] }, { "t": 19, "a": "colorier", "id": "bk", "parts": [0, 1, 2, 3, 4], "couleur": "#6fe3d8" } ] },
+      { "debut": 45, "fin": 75, "parties": [
+          { "t": 0, "texte": "Les parts ont la même taille." },
+          { "t": 5, "texte": "Kola en a colorié plus. Donc 5/8 est plus grand que 3/8." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "barre", "id": "b3a", "x": 30, "y": 36, "w": 300, "h": 40, "den": 8, "num": 3 }, { "t": 1.2, "a": "barre", "id": "b3k", "x": 30, "y": 90, "w": 300, "h": 40, "den": 8, "num": 5, "couleur": "#6fe3d8" },
+          { "t": 8, "a": "ecrire", "id": "s3", "texte": "3/8 < 5/8", "x": 180, "y": 182, "taille": 42, "couleur": "#ffe066" } ] },
+      { "debut": 75, "fin": 105, "parties": [
+          { "t": 0, "texte": "Maintenant, 1/3 et 1/5." },
+          { "t": 5, "texte": "Avec 5 parts, chaque part est plus petite qu'avec 3 parts." },
+          { "t": 12, "texte": "Donc 1/3 est plus grand que 1/5." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "barre", "id": "b4a", "x": 30, "y": 36, "w": 300, "h": 40, "den": 3, "num": 1 }, { "t": 1.2, "a": "barre", "id": "b4b", "x": 30, "y": 90, "w": 300, "h": 40, "den": 5, "num": 1, "couleur": "#6fe3d8" },
+          { "t": 12.5, "a": "ecrire", "id": "s4", "texte": "1/3 > 1/5", "x": 180, "y": 182, "taille": 42, "couleur": "#ffe066" } ] },
+      { "debut": 105, "fin": 130, "parties": [
+          { "t": 0, "texte": "Attention ! Un grand bas ne veut pas dire une grande fraction." },
+          { "t": 8, "texte": "Il faut aussi comparer sur le même tout." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "a5", "texte": "5 > 3 mais", "x": 180, "y": 70, "taille": 40, "couleur": "#fff" }, { "t": 3.5, "a": "ecrire", "id": "b5", "texte": "1/5 < 1/3", "x": 180, "y": 130, "taille": 44, "couleur": "#6fe3d8" } ] },
+      { "debut": 130, "fin": 150, "parties": [
+          { "t": 0, "texte": "À toi ! Compare 2/6 et 4/6." },
+          { "t": 4, "texte": "Mets la vidéo en pause." },
+          { "t": 9, "texte": "Réponse : 2/6 est plus petit que 4/6." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "q6", "texte": "2/6 … 4/6", "x": 180, "y": 100, "taille": 54, "couleur": "#ffe066" }, { "t": 9.4, "a": "ecrire", "id": "r6", "texte": "2/6 < 4/6", "x": 180, "y": 170, "taille": 44, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "La course au stade",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "champ", "personnages": [ { "qui": "Anita", "x": 40, "y": 124, "w": 56 }, { "qui": "Kola", "x": 120, "y": 124, "w": 56 }, { "qui": "Maître Léo", "x": 290, "y": 92, "w": 56 }, { "qui": "Mathéo", "x": 210, "y": 100, "w": 50, "humeur": "surpris" } ], "objets": [], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Qui a couru le plus loin ?" }, { "qui": "Anita", "texte": "J'ai couru 3/8 du tour." } ], "legende": "Au stade." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Kola", "x": 12, "y": 110, "w": 66 }, { "qui": "Anita", "x": 292, "y": 116, "w": 60 } ], "objets": [ { "t": "texte", "texte": "3/8   5/8", "x": 184, "y": 130, "taille": 44, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Moi, j'ai couru 5/8 ! J'ai gagné !" }, { "qui": "Anita", "texte": "Vérifions avec un dessin." } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "sable", "personnages": [ { "qui": "Anita", "x": 4, "y": 126, "w": 54 } ], "objets": [ { "t": "barre", "x": 70, "y": 40, "w": 280, "h": 40, "den": 8, "num": 3 }, { "t": "barre", "x": 70, "y": 100, "w": 280, "h": 40, "den": 8, "num": 5, "couleur": "#6fe3d8" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Deux pistes de même longueur, avec 8 parts égales." }, { "qui": "Kola", "texte": "Moi, j'en ai colorié 5 !" } ], "legende": "3/8 et 5/8." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "joie" } ], "objets": [ { "t": "barre", "x": 20, "y": 50, "w": 260, "h": 38, "den": 8, "num": 3 }, { "t": "barre", "x": 20, "y": 106, "w": 260, "h": 38, "den": 8, "num": 5, "couleur": "#6fe3d8" }, { "t": "texte", "texte": "3/8 < 5/8", "x": 150, "y": 186, "taille": 38, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Mathéo", "texte": "Bip ! 5 parts sont plus que 3 parts !", "humeur": "joie" }, { "qui": "Kola", "texte": "J'ai couru plus loin !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 10, "y": 126, "w": 54 }, { "qui": "Anita", "x": 296, "y": 126, "w": 54 } ], "objets": [ { "t": "barre", "x": 80, "y": 46, "w": 210, "h": 38, "den": 3, "num": 1 }, { "t": "barre", "x": 80, "y": 104, "w": 210, "h": 38, "den": 5, "num": 1, "couleur": "#6fe3d8" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Et 1/3 contre 1/5 ? 5 est plus grand que 3 !" }, { "qui": "Anita", "texte": "Regarde : les parts de 1/5 sont plus petites." } ] },
+      { "n": 6, "plan": "Large", "scene": { "fond": "champ", "personnages": [ { "qui": "Maître Léo", "x": 140, "y": 90, "w": 60 }, { "qui": "Mathéo", "x": 236, "y": 112, "w": 50, "humeur": "joie" }, { "qui": "Anita", "x": 40, "y": 126, "w": 54 }, { "qui": "Kola", "x": 96, "y": 126, "w": 54 } ], "objets": [ { "t": "fragment", "x": 214, "y": 150, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Maître Léo", "texte": "Bravo ! Même tout, mêmes parts : on compare les nombres du haut." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Même bas : le plus grand haut gagne. Même haut : le plus petit bas est le plus grand." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Pour comparer des fractions, je regarde le tout et la taille des parts. Avec le même bas, le plus grand haut gagne.",
+  "carte": "3/8 < 5/8 : mêmes parts, 5 parts sont plus que 3 parts.",
+  "pourquoi": "Pourquoi comparer sur le même tout ? Parce qu'une moitié de grande galette n'est pas une moitié de petite galette.",
+  "fiche": { "titre": "N20 · Comparer des fractions", "piege": "Croire que 1/8 est plus grand que 1/2 parce que 8 est plus grand que 2. Plus le bas est grand, plus les parts sont petites." },
+  "controles": [ { "expr": "8-5", "attendu": 3 }, { "expr": "5>3", "attendu": true } ]
+}

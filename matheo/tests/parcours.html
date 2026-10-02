@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Parcours N22</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}iframe{width:390px;height:780px;border:1px solid #ccc;float:right;margin-left:16px}</style>
+</head>
+<body>
+  <h1>Parcours élève N22 (automatique)</h1>
+  <iframe id="app" src="../app/?test=1"></iframe>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    const cadre = document.getElementById("app");
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const nb = (s) => (s || "").replace(/ /g, " ").replace(/\s+/g, " ").trim();
+    const res = [];
+    const verifier = (nom, cond, detail = "") => res.push({ nom, ok: !!cond, detail: cond ? "" : detail });
+    await new Promise((r) => (cadre.onload = r));
+    const w = cadre.contentWindow, d = cadre.contentDocument;
+    w.localStorage.clear();
+    const C = await (await fetch("../app/content/n22.json")).json();
+    // Texte lu sans le nom du personnage ni les boutons d'écoute (🔈).
+    const sans = (e) => { if (!e) return ""; const k = e.cloneNode(true); k.querySelectorAll(".qui,.ecouter,.ecouter-q").forEach((x) => x.remove()); return nb(k.textContent); };
+    const txt = () => sans(d.querySelector(".bulle"));
+    const question = () => sans(d.querySelector(".question"));
+    // Correspondance exacte d'abord (« 2 » ne doit pas cliquer « 32 »), puis « contient » pour les libellés longs.
+    const btn = (sel, t) => { const l = [...d.querySelectorAll(sel)]; return l.find((b) => nb(b.textContent) === nb(t)) || l.find((b) => nb(b.textContent).includes(nb(t))); };
+    const lot = (i) => d.querySelectorAll(".lot")[i].dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+    const cle = async (s) => { for (const c of s) { btn(".clavier button", c).click(); await sleep(30); } };
+    await sleep(600);
+
+    // Mission : les 6 répliques exactes, 24 mangues comptables
+    w.__matheo.aller("mission"); await sleep(300);
+    verifier("Scène : exactement 24 mangues", d.querySelectorAll("use.m-sc").length === 24, `${d.querySelectorAll("use.m-sc").length}`);
+    for (let i = 0; i < C.mission.length; i++) {
+      verifier(`Mission ${i + 1} : texte exact du scénario`, txt().endsWith(nb(C.mission[i].texte)), txt());
+      d.querySelector("#suite").click(); await sleep(350);
+    }
+
+    // BD : 8 cases, textes exacts, nombre exact de sacs
+    const sacsAttendus = { 1: 20, 4: 20, 5: 20, 6: 20, 7: 12 };
+    for (let i = 0; i < C.bd.cases.length; i++) {
+      const c = C.bd.cases[i];
+      const bulles = [...d.querySelectorAll(".bd-paroles .bulle")].map((b) => { const k = b.cloneNode(true); k.querySelectorAll(".qui,.ecouter").forEach((x) => x.remove()); return nb(k.textContent); });
+      verifier(`BD case ${c.n} : textes exacts`, JSON.stringify(bulles) === JSON.stringify(c.bulles.map((b) => nb(b.texte))), JSON.stringify(bulles));
+      if (sacsAttendus[c.n]) verifier(`BD case ${c.n} : exactement ${sacsAttendus[c.n]} sacs`, d.querySelectorAll('.case-bd use[href="#sac"]').length === sacsAttendus[c.n], `${d.querySelectorAll('.case-bd use[href="#sac"]').length}`);
+      if (c.legende) verifier(`BD case ${c.n} : légende exacte`, nb(d.querySelector(".legende").textContent) === nb(c.legende));
+      d.querySelector("#suite").click(); await sleep(350);
+    }
+
+    // Vidéo : le lecteur démarre, la voix du scénario s'affiche en sous-titre
+    verifier("Vidéo : lecteur et tableau affichés", !!d.querySelector(".video .tableau") && !!d.querySelector("#v-play"));
+    await sleep(1500);
+    verifier("Vidéo : la première phrase du scénario s'affiche en sous-titre", nb(d.querySelector("#v-st").textContent) === nb(C.video.segments[0].parties[0].texte), nb(d.querySelector("#v-st").textContent));
+    d.querySelector("#v-play").click(); await sleep(300);
+    verifier("Vidéo : mise en pause possible", d.querySelector("#v-play").getAttribute("aria-label") === "Lecture");
+    d.querySelector("#suite").click(); await sleep(500);
+
+    // Défi : erreurs du scénario puis réussite
+    verifier("Défi affiché après la mission", !!d.querySelector("#zone-jeu"));
+    verifier("24 mangues dans la manipulation", d.querySelectorAll("svg.jeu use.m").length === 24);
+    btn("#actions button", "3 parts").click(); await sleep(1800);
+    verifier("Partage en 3 → message E2 exact", txt().includes(nb(C.corrections_defi[0].texte)), txt());
+    d.querySelector("#refaire").click(); await sleep(300);
+    btn("#actions button", "4 parts").click(); await sleep(1800);
+    verifier("Partage en 4 → 4 lots", d.querySelectorAll(".lot").length === 4);
+    lot(0); await sleep(150); d.querySelector("#prendre").click(); await sleep(250);
+    verifier("1 lot → message E5 exact (6, taille d'une part)", txt().includes(nb(C.corrections_defi[1].texte)), txt());
+    lot(1); lot(2); await sleep(250);
+    d.querySelector("#prendre").click(); await sleep(3300);
+    verifier("3 lots pris → compteur du panier = 18", d.querySelector(".panier-compteur").textContent === "18", d.querySelector(".panier-compteur").textContent);
+    verifier("Voix de manipulation exacte", txt().includes(nb(C.defi.voix_manipulation)), txt());
+    await sleep(1500);
+    await cle("72"); btn(".clavier button", "✓").click(); await sleep(250);
+    verifier("Réponse 72 → message E8 exact", txt().includes(nb(C.corrections_defi[2].texte)), txt());
+    btn(".clavier button", "⌫").click(); btn(".clavier button", "⌫").click(); await cle("18"); btn(".clavier button", "✓").click(); await sleep(400);
+    verifier("Réponse 18 → réussite exacte", txt().includes(nb(C.defi.reussite)), txt());
+    d.querySelector("#suite").click(); await sleep(500); // le défi mène maintenant au quiz
+
+    // Quiz : 8 questions, textes exacts, erreurs expliquées
+    await sleep(200);
+    let premier = 0;
+    for (let i = 0; i < C.quiz.length; i++) {
+      const q = C.quiz[i];
+      verifier(`Quiz ${q.id} : question exacte`, question() === nb(q.question), question());
+      verifier(`Quiz ${q.id} : 4 choix dont la bonne réponse`, d.querySelectorAll("#choix button").length === 4 && !!btn("#choix button", q.bonne));
+      if (i % 2 === 1) { btn("#choix button", q.mauvaises[1].t).click(); await sleep(250); verifier(`Quiz ${q.id} : une erreur déclenche une explication « Bip ! »`, txt().includes("Bip !"), txt()); }
+      else premier++;
+      btn("#choix button", q.bonne).click(); await sleep(250);
+      d.querySelector("#suite").click(); await sleep(450);
+    }
+
+    // Boss
+    verifier("Boss : question exacte", question() === nb(C.boss.question), question());
+    btn("#choix button", "24").click(); await sleep(250);
+    verifier("Boss 24 → message exact", txt().includes(nb(C.boss.mauvaises[0].retour)), txt());
+    btn("#choix button", "18").click(); await sleep(250);
+    verifier("Boss 18 → message exact", txt().includes(nb(C.boss.mauvaises[1].retour)), txt());
+    btn("#choix button", "12").click(); await sleep(3000);
+
+    // Fin et sauvegarde
+    verifier("Étoile rallumée", nb(d.querySelector(".barre .titre").textContent).includes("Étoile"));
+    const s = JSON.parse(w.localStorage.getItem("matheo.v1"));
+    verifier("Sauvegarde : fini, fragment, score du quiz", s.n22.fini && s.n22.fragment && s.n22.quiz.score === premier, JSON.stringify(s));
+    verifier("Sauvegarde : aucun nom ni identifiant", !/nom|prenom|email|id_/i.test(JSON.stringify(s)), JSON.stringify(s));
+    d.querySelector("#fiche").click(); await sleep(300);
+    verifier("Fiche de révision : l'essentiel", d.body.innerText.includes("On partage avec le bas"), "");
+
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} contrôles réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    document.getElementById("liste").innerHTML = res.map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : ` — ${r.detail}`}</div>`).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>

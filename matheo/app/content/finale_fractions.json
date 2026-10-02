@@ -1,0 +1,25 @@
+{
+  "id": "BOSS-D4",
+  "titre": "Finale du chapitre Fractions : la Grande Pirogue",
+  "src": "architecte-v0.2 : boss du domaine Fractions écrit par l'architecte ; plan de contenu V1 (élément transversal 3) ; à faire valider par un enseignant béninois.",
+  "prerequis": ["N17", "N18", "N19", "N20", "N21", "N22", "N23"],
+  "intro": "Tu as rallumé les sept étoiles des fractions. Une dernière épreuve pour les réunir, sans aucune aide.",
+  "reussite": "Bip bip ! Les étoiles des fractions brillent ensemble ! La Grande Pirogue reprend sa route dans le ciel.",
+  "questions": [
+    { "id": "F1", "notion": "N17", "niveau": "A", "question": "Une galette est coupée en 6 parts égales. Anita en mange 1. Quelle fraction de la galette mange-t-elle ?", "bonne": "1/6",
+      "mauvaises": [ { "t": "6/1", "e": "E2", "retour": "Bip ! Le haut compte les parts mangées : 1. Le bas compte toutes les parts : 6." }, { "t": "1/5", "e": "E1", "retour": "Bip ! Le bas compte toutes les parts de la galette : 6, pas 5." }, { "t": "5/6", "e": "E5", "retour": "Bip ! 5/6, c'est ce qui reste. Anita en mange 1 part." } ] },
+    { "id": "F2", "notion": "N18", "niveau": "B", "question": "Quel disque représente 3/8 ?", "bonne": "", "bonne_visuel": { "t": "disque", "den": 8, "num": 3, "alt": "Un disque de 8 parts dont 3 sont coloriées" },
+      "mauvaises": [ { "t": "", "visuel": { "t": "disque", "den": 8, "num": 5, "alt": "Un disque de 8 parts dont 5 sont coloriées" }, "e": "E5", "retour": "Bip ! Ici, 5 parts sont coloriées. Pour 3/8, il en faut 3." }, { "t": "", "visuel": { "t": "disque", "den": 3, "num": 3, "alt": "Un disque de 3 parts dont 3 sont coloriées" }, "e": "E2", "retour": "Bip ! Ici, le disque est partagé en 3 parts. Pour 3/8, il faut 8 parts égales." }, { "t": "", "visuel": { "t": "disque", "den": 6, "num": 3, "alt": "Un disque de 6 parts dont 3 sont coloriées" }, "e": "E1", "retour": "Bip ! Ici, le disque a 6 parts. Pour 3/8, il faut 8 parts égales." } ] },
+    { "id": "F3", "notion": "N19", "niveau": "B", "question": "Comment lit-on 3/10 ?", "bonne": "trois dixièmes",
+      "mauvaises": [ { "t": "trois dix", "e": "E6", "retour": "Bip ! Le bas se lit avec un mot spécial : dixièmes." }, { "t": "dix troisièmes", "e": "E2", "retour": "Bip ! On lit d'abord le haut : trois." }, { "t": "trois demis", "e": "E6", "retour": "Bip ! Demis, c'est pour le bas 2. Ici, le bas est 10 : dixièmes." } ] },
+    { "id": "F4", "notion": "N20", "niveau": "B", "question": "Quelle fraction est la plus grande : 1/3 ou 1/5 ?", "bonne": "1/3",
+      "mauvaises": [ { "t": "1/5", "e": "E2", "retour": "Bip ! Plus le bas est grand, plus les parts sont petites. 1/5 est plus petit que 1/3." }, { "t": "Elles sont égales", "e": "E1", "retour": "Bip ! Les parts n'ont pas la même taille : un tiers est plus grand qu'un cinquième." }, { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : coupe en 3 parts, puis en 5 parts." } ] },
+    { "id": "F5", "notion": "N21", "niveau": "B", "question": "1/2 = ?/8", "bonne": "4",
+      "mauvaises": [ { "t": "2", "e": "E1", "retour": "Bip ! On n'ajoute pas. Le bas devient 8 : 2 × 4. Le haut aussi : 1 × 4 = 4." }, { "t": "1", "e": "E2", "retour": "Bip ! Tu as gardé le haut. Il doit être multiplié aussi : 1 × 4 = 4." }, { "t": "8", "e": "E1", "retour": "Bip ! Le haut est multiplié par 4 : 1 × 4 = 4." } ] },
+    { "id": "F6", "notion": "N22", "niveau": "C", "question": "Mamie a 20 mangues. Elle en donne les 3/4. Combien de mangues donne-t-elle ?", "bonne": "15",
+      "mauvaises": [ { "t": "5", "e": "E5", "retour": "Bip ! 5, c'est la taille d'une part. 3/4 veut dire 3 parts : 5 × 3 = 15." }, { "t": "7", "e": "E2", "retour": "Bip ! Tu as partagé avec le 3. On partage avec le bas : 20 ÷ 4." }, { "t": "80", "e": "E8", "retour": "Bip ! 80 est plus que 20. Une partie du tout est plus petite." } ] },
+    { "id": "F7", "notion": "N23", "niveau": "D", "question": "Mamie a 40 mangues. Elle en vend 1/4 le matin et 1/2 l'après-midi. Combien de mangues lui reste-t-il ?", "bonne": "10",
+      "mauvaises": [ { "t": "30", "e": "E9", "retour": "Bip ! 30, ce sont les mangues vendues (10 + 20). La question demande ce qu'il reste." }, { "t": "20", "e": "E5", "retour": "Bip ! 20, c'est seulement la vente de l'après-midi. Il y a aussi 10 le matin." }, { "t": "70", "e": "E8", "retour": "Bip ! 70 vient de 40 + 30. Elle vend des mangues : on enlève." } ] }
+  ],
+  "controles": [ { "expr": "20/4*3", "attendu": 15 }, { "expr": "40/4+40/2", "attendu": 30 }, { "expr": "40-30", "attendu": 10 }, { "expr": "1*4", "attendu": 4 }, { "expr": "2*4", "attendu": 8 } ]
+}

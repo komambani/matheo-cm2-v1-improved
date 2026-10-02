@@ -1,0 +1,168 @@
+{
+  "id": "N22",
+  "version": "0.1-pilote",
+  "titre": "Prendre une fraction d'une quantité",
+  "source": "docs/Scenario_N22_pilote_v0.1.md",
+  "note": "Les textes marqués src=scenario sont repris mot pour mot du scénario. Les textes src=architecte-v0.2 sont des extensions écrites par l'architecte, construites sur les modèles du scénario (section 6), en attente de validation par un enseignant béninois.",
+
+  "mission_scene": { "special": "marche", "mangues": 24 },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au marché, Mathéo s'arrête net.", "src": "scenario" },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile ! Là, sur la balance !", "humeur": "surpris", "src": "scenario" },
+    { "qui": "Mamie Sègla", "texte": "Ça ? Il me sert de poids. Je te le rends si tu m'aides.", "src": "scenario" },
+    { "qui": "Mamie Sègla", "texte": "Je dois donner les 3/4 de mes 24 mangues. J'ai trop de clients ! Peux-tu préparer le panier ?", "src": "scenario" },
+    { "qui": "Mathéo", "texte": "Je compte en étoiles, pas en mangues ! Aide-moi !", "src": "scenario" },
+    { "qui": "Narrateur", "texte": "Comment prendre seulement une partie des 24 mangues ?", "src": "scenario" }
+  ],
+
+  "defi": {
+    "enonce": "Mamie Sègla donne les 3/4 de ses 24 mangues. Combien de mangues met-elle dans le panier ?",
+    "total": 24, "num": 3, "den": 4, "reponse": 18,
+    "exemple_resolu": "Regarde. 8 mangues, et 1/4. Partageons 8 en 4 lots. Chaque lot a 2 mangues. Je prends 1 lot. Ça fait 2 mangues.",
+    "voix_manipulation": "Tu viens de prendre trois parts sur quatre.",
+    "reussite": "Bip bip ! 18 mangues ! Tu as partagé, puis pris.",
+    "src": "scenario"
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Regarde le 4 de 3/4. Que te dit-il ?", "src": "scenario" },
+    { "niveau": 2, "texte": "Partage les 24 mangues en 4 lots égaux. Combien dans chaque lot ?", "src": "scenario" },
+    { "niveau": 3, "texte": "Chaque lot a 6 mangues. Il faut en prendre 3 lots. Combien de mangues ?", "src": "scenario" },
+    { "niveau": 4, "texte": "Voyons avec 15 mangues et 2/3. D'abord, 15 ÷ 3 = 5. Puis, 5 × 2 = 10. À toi, avec 24 et 3/4 !", "src": "scenario" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. On partage, puis on prend.", "src": "architecte-v0.2", "note": "Le scénario demande une animation complète au niveau 5, sans en fixer le texte." }
+  ],
+
+  "corrections_defi": [
+    { "reponses": [8], "type": "E2", "texte": "Bip ! Tu as partagé avec le 3. Regarde 3/4. Le 4, en bas, dit en combien de parts partager. Faisons d'abord 24 ÷ 4. Pourquoi ? On cherche d'abord la taille d'une part.", "src": "scenario" },
+    { "reponses": [6], "type": "E5", "texte": "Bip ! 6, c'est la taille d'une part. Mais 3/4 veut dire 3 parts. Combien de mangues dans 3 parts ?", "src": "scenario" },
+    { "reponses": [72], "type": "E8", "texte": "Bip ! 72, c'est plus que 24 mangues. Mamie n'en a que 24. Une partie du tout est plus petite. Alors, on partage d'abord. Par combien ?", "src": "scenario" },
+    { "reponses": [21, 27], "type": "E1", "texte": "Bip ! Le 3 compte des parts, pas des mangues. Une part, c'est un lot de mangues. Partageons d'abord en 4 lots égaux.", "src": "scenario" },
+    { "reponses": [16], "type": "E3", "texte": "Bip ! Ta méthode est bonne. Vérifions ton calcul : 6 × 3. 6 + 6 + 6, ça fait combien ?", "src": "scenario" }
+  ],
+  "correction_lots_inegaux": { "type": "E1", "texte": "Bip ! Ces lots n'ont pas la même taille. Les parts d'une fraction sont égales. Compte avec moi : combien dans chaque lot ?", "src": "scenario" },
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait.", "src": "scenario" },
+
+  "modeles_correction": {
+    "E2": "Bip ! Tu as partagé avec le {num}. Regarde {num}/{den}. Le {den}, en bas, dit en combien de parts partager. Pourquoi ? On cherche d'abord la taille d'une part.",
+    "E5": "Bip ! {part}, c'est la taille d'une part. Mais {num}/{den} veut dire {num} parts. Combien d'objets dans {num} parts ?",
+    "E8": "Bip ! {valeur}, c'est plus que {total}. Une partie du tout est plus petite. Alors, on partage d'abord. Par combien ?",
+    "E8_autre": "Bip ! {valeur}, ce n'est pas le bon calcul. On partage d'abord le tout en {den} lots égaux. Par combien ?",
+    "E1": "Bip ! Le {num} compte des parts, pas des objets. Une part, c'est un lot. Partageons d'abord en {den} lots égaux.",
+    "E3": "Bip ! Ta méthode est bonne. Vérifions ton calcul ensemble.",
+    "src": "architecte-v0.2",
+    "note": "Généralisation des messages de la section 6 du scénario à d'autres nombres. À valider par un enseignant."
+  },
+
+  "remediation": [
+    { "total": 8, "num": 1, "den": 4, "reponse": 2 },
+    { "total": 10, "num": 2, "den": 5, "reponse": 4 },
+    { "total": 16, "num": 3, "den": 4, "reponse": 12 },
+    { "total": 24, "num": 3, "den": 4, "reponse": 18 }
+  ],
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Pour trouver les 2/5 de 10 mangues, par quoi partage-t-on d'abord ?", "bonne": "5",
+      "mauvaises": [ { "t": "2", "e": "E2" }, { "t": "10", "e": "E1" }, { "t": "7", "e": "E1" } ],
+      "retour": { "E2": "Bip ! Tu as pris le 2, en haut. Le 5, en bas, dit en combien de parts partager.", "E1": "Bip ! On partage avec le nombre du bas. Regarde bien 2/5." } },
+    { "id": "A2", "niveau": "A", "question": "Dans 3/4 de 24, que dit le nombre 3 ?", "bonne": "Combien de parts on prend",
+      "mauvaises": [ { "t": "En combien de parts on partage", "e": "E2" }, { "t": "Combien de mangues on a", "e": "E1" }, { "t": "La taille d'une part", "e": "E1" } ],
+      "retour": { "E2": "Bip ! Le nombre du bas dit en combien de parts on partage. Le 3, en haut, dit combien de parts on prend.", "E1": "Bip ! Le 3 compte des parts. On partage avec le bas, on prend avec le haut." } },
+    { "id": "B1", "niveau": "B", "question": "Combien font les 1/4 de 8 ?", "bonne": "2", "total": 8, "num": 1, "den": 4,
+      "mauvaises": [ { "t": "4", "e": "E8" }, { "t": "7", "e": "E1" }, { "t": "32", "e": "E8" } ] },
+    { "id": "B2", "niveau": "B", "question": "Combien font les 3/5 de 10 ?", "bonne": "6", "total": 10, "num": 3, "den": 5,
+      "mauvaises": [ { "t": "2", "e": "E5" }, { "t": "3", "e": "E2" }, { "t": "30", "e": "E8" } ] },
+    { "id": "C1", "niveau": "C", "question": "Mamie a 18 beignets. Elle en vend les 2/3. Combien en vend-elle ?", "bonne": "12", "total": 18, "num": 2, "den": 3,
+      "mauvaises": [ { "t": "6", "e": "E5" }, { "t": "9", "e": "E2" }, { "t": "16", "e": "E1" } ] },
+    { "id": "C2", "niveau": "C", "question": "Il y a 30 élèves. Les 3/10 portent un chapeau. Combien portent un chapeau ?", "bonne": "9", "total": 30, "num": 3, "den": 10,
+      "mauvaises": [ { "t": "3", "e": "E5" }, { "t": "10", "e": "E2" }, { "t": "27", "e": "E1" } ] },
+    { "id": "D1", "niveau": "D", "question": "Kola dit : « Les 3/4 de 20, c'est 20 ÷ 3. » A-t-il raison ?", "bonne": "Non, il faut diviser par 4, puis prendre 3 parts",
+      "mauvaises": [ { "t": "Oui", "e": "E2" }, { "t": "Non, il faut multiplier 20 par 3", "e": "E8" }, { "t": "On ne peut pas savoir", "e": "E7" } ],
+      "retour": { "E2": "Bip ! Kola a partagé avec le 3. Regarde 3/4 : le 4, en bas, dit en combien de parts partager.", "E8": "Bip ! 20 × 3 fait 60, c'est plus que 20. Une partie du tout est plus petite.", "E7": "Bip ! On peut savoir. Vérifions ensemble : partageons avec le 4, puis prenons 3 parts." } },
+    { "id": "D2", "niveau": "D", "question": "Mamie a 20 mangues. Elle en donne les 3/4 et dit : « J'en garde 10. » Est-ce vrai ?", "bonne": "Faux : elle en garde 5",
+      "mauvaises": [ { "t": "Vrai", "e": "E9" }, { "t": "Faux : elle en garde 15", "e": "E9" }, { "t": "Faux : elle en garde 17", "e": "E1" } ],
+      "retour": { "E9": "Bip ! Attention : 15 mangues sont données. Que demande la question ? Ce qu'elle garde.", "E1": "Bip ! Le 3 compte des parts, pas des mangues. Vérifions : 20 ÷ 4 = 5, puis 5 × 3 = 15." } }
+  ],
+  "quiz_src": "scenario (questions et réponses) ; retours écrits par l'architecte (v0.2)",
+
+  "boss": {
+    "question": "Mamie Sègla prépare 36 galettes pour la fête du marché. Les 2/3 sont pour les enfants. Combien de galettes reste-t-il ?",
+    "total": 36, "num": 2, "den": 3, "reponse": 12,
+    "mauvaises": [ { "valeur": 24, "e": "E9", "retour": "Bip ! 24, ce sont les galettes des enfants. Que demande la question ?" },
+                   { "valeur": 18, "e": "E2", "retour": "Bip ! Tu as partagé avec le 2. Regarde le 3, en bas." },
+                   { "valeur": 72, "e": "E8", "retour": "Bip ! 72, c'est plus que 36 galettes. Une partie du tout est plus petite." } ],
+    "indice": "Que demande la question ? Les galettes des enfants, ou celles qui restent ?",
+    "src": "scenario (question, réponses, messages 24 et 18) ; message 72 et indice écrits par l'architecte"
+  },
+
+  "bd": {
+    "titre": "L'aventure des sacs",
+    "src": "scenario (section 5) : textes exacts",
+    "cases": [
+      { "n": 1, "plan": "Large", "bulles": [ { "qui": "Mamie Sègla", "texte": "Prends ma charrette pour ton étoile, Mathéo. D'abord, porte 3/5 de mes 20 sacs à l'école." } ], "legende": "Au marché. 20 sacs d'arachides." },
+      { "n": 2, "plan": "Moyen", "bulles": [ { "qui": "Kola", "texte": "Facile ! 20 divisé par 3 !" }, { "qui": "Mathéo", "texte": "Bip ? Deux sacs sont perdus ?" } ] },
+      { "n": 3, "plan": "Gros plan", "bulles": [ { "qui": "Anita", "texte": "Le 3, c'est le nombre de parts qu'on prend." }, { "qui": "Kola", "texte": "Alors, on partage avec quoi ?" } ] },
+      { "n": 4, "plan": "Moyen", "bulles": [ { "qui": "Anita", "texte": "On partage avec le 5, en bas." }, { "qui": "Kola", "texte": "Cinq tas de 4 sacs !" } ], "legende": "20 ÷ 5 = 4 sacs dans chaque tas." },
+      { "n": 5, "plan": "Moyen", "bulles": [ { "qui": "Anita", "texte": "On prend 3 tas." }, { "qui": "Mathéo", "texte": "Trois fois 4, ça fait 12 !" } ], "legende": "3 × 4 = 12 sacs." },
+      { "n": 6, "plan": "Large", "bulles": [ { "qui": "Mathéo", "texte": "Vérifions ensemble !" }, { "qui": "Anita", "texte": "Il reste 2 tas : 8 sacs. 12 plus 8 font 20." } ] },
+      { "n": 7, "plan": "Large", "bulles": [ { "qui": "Maître Léo", "texte": "Douze sacs ! Merci, les enfants." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !" } ] },
+      { "n": 8, "plan": "Gros plan", "bulles": [ { "qui": "Mathéo", "texte": "On partage avec le bas. On prend avec le haut." } ], "encadre": "3/5 de 20 : 20 ÷ 5 = 4, puis 4 × 3 = 12." }
+    ]
+  },
+
+  "video": {
+    "titre": "Une fraction d'une quantité",
+    "duree": 190,
+    "src": "scenario (section 4) : la voix exacte est découpée en phrases minutées ; la concaténation des phrases de chaque segment est identique au texte du scénario",
+    "segments": [
+      { "debut": 0, "fin": 15, "parties": [
+        { "t": 0, "texte": "Bip ! Aujourd'hui, une fraction d'une quantité." },
+        { "t": 4, "texte": "Mamie Sègla a 12 galettes." },
+        { "t": 9, "texte": "Elle donne les 2/3 à sa voisine." },
+        { "t": 12, "texte": "Combien de galettes ?" } ] },
+      { "debut": 15, "fin": 40, "parties": [
+        { "t": 0, "texte": "Regarde 2/3." },
+        { "t": 4, "texte": "Le 3, en bas, dit en combien de parts partager." },
+        { "t": 11, "texte": "Le 2, en haut, dit combien de parts on prend." } ] },
+      { "debut": 40, "fin": 75, "parties": [
+        { "t": 0, "texte": "D'abord, je partage 12 en 3 parts égales." },
+        { "t": 8, "texte": "12 divisé par 3 égale 4." },
+        { "t": 16, "texte": "Chaque part a 4 galettes." } ] },
+      { "debut": 75, "fin": 105, "parties": [
+        { "t": 0, "texte": "Maintenant, je prends 2 parts." },
+        { "t": 7, "texte": "2 fois 4 égale 8." },
+        { "t": 14, "texte": "Mamie donne 8 galettes." } ] },
+      { "debut": 105, "fin": 125, "parties": [
+        { "t": 0, "texte": "Le bas s'appelle le dénominateur. Le haut s'appelle le numérateur." },
+        { "t": 8, "texte": "On partage avec le bas. On prend avec le haut." } ] },
+      { "debut": 125, "fin": 155, "parties": [
+        { "t": 0, "texte": "Attention ! Certains divisent par le 2 et trouvent 6." },
+        { "t": 7, "texte": "Vérifions." },
+        { "t": 10, "texte": "Deux parts font 8 galettes, pas 6." } ] },
+      { "debut": 155, "fin": 170, "parties": [
+        { "t": 0, "texte": "Pourquoi partager d'abord ?" },
+        { "t": 4, "texte": "Pour que chaque part soit égale." },
+        { "t": 9, "texte": "Le bas donne la taille d'une part." } ] },
+      { "debut": 170, "fin": 190, "parties": [
+        { "t": 0, "texte": "À toi ! Trouve les 3/4 de 8." },
+        { "t": 4, "texte": "Mets la vidéo en pause." },
+        { "t": 9, "texte": "Réponse : 8 divisé par 4 égale 2." },
+        { "t": 14, "texte": "2 fois 3 égale 6." } ] }
+    ]
+  },
+
+  "interface": {
+    "choisir_partage": "Choisis comment partager les mangues.",
+    "toucher_parts": "Maintenant, touche les parts à prendre.",
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "tout_pris": "Bip ! Tu as tout pris. Regarde 3/4 : on prend 3 parts sur 4.",
+    "nombre_haut": "Bip ! Regarde 3/4. Le 3, en haut, dit combien de parts on prend.",
+    "fragment": "Bip ! L'étoile se rallume !",
+    "src": "architecte-v0.2 ; « Le fragment brille » vient de la case 7 de la BD du scénario"
+  },
+
+  "fiche": { "titre": "N22 · Prendre une fraction d'une quantité", "piege": "Partager avec le haut : 24 ÷ 3 = 8. Mais 3/4 se partage avec le 4, en bas." },
+  "essentiel": "On partage avec le bas. On prend avec le haut.",
+  "carte": "3/4 de 24 : 24 ÷ 4 = 6, puis 6 × 3 = 18.",
+  "pourquoi": "Pourquoi partager d'abord ? Pour que chaque part soit égale. Le bas donne la taille d'une part.",
+  "fragment": "Une étoile de la Grande Pirogue (domaine Fractions)."
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Contrôle des contenus</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}h2{margin:14px 0 4px}</style>
+</head>
+<body>
+  <h1>Contrôle des contenus – toutes les notions</h1>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    // Règles de la chaîne éditoriale et de la bible narrative, vérifiées automatiquement pour CHAQUE notion.
+    import { listerTextes } from "../app/js/textes.js";
+    import { idVoix } from "../app/js/voix.js";
+    const res = [];
+    const verifier = (notion, nom, cond, detail = "") => res.push({ notion, nom, ok: !!cond, detail: cond ? "" : String(detail).slice(0, 200) });
+    const index = await (await fetch("../app/content/index.json")).json();
+    const audio = await fetch("../app/audio/index.json").then((r) => r.json()).catch(() => ({}));
+    const CODES = /^E(10|[1-9])$/;
+    const mots = (s) => String(s).trim().split(/\s+/).length;
+    const calc = (expr) => Function(`"use strict"; return (${expr});`)();
+
+    for (const n of index.notions) {
+      if (n.id === "N22") continue; // prototype fait à la main, structure propre : couvert par index.html et parcours.html
+      const C = await (await fetch("../app/content/" + n.fichier)).json();
+      const id = C.id;
+      verifier(id, "identifiant, titre et domaine", C.id === n.id && C.titre && C.domaine);
+      // Structure de la leçon : les 12 étapes du document maître (mission, défi, aide, vidéo, BD, quiz, boss, fiche…)
+      verifier(id, "mission : 5 à 8 répliques, textes présents", C.mission && C.mission.length >= 5 && C.mission.length <= 8 && C.mission.every((m) => m.qui && m.texte));
+      verifier(id, "aide : 5 niveaux, la solution n'est jamais donnée au niveau 1", C.aide && C.aide.length === 5 && C.aide.every((a, i) => a.niveau === i + 1 && a.texte));
+      verifier(id, "remédiation : 2 à 5 activités ciblées", C.remediation && C.remediation.length >= 2 && C.remediation.length <= 5);
+      verifier(id, "quiz : 8 questions (niveaux A, B, C, D), une bonne réponse et trois mauvaises", C.quiz.length === 8 && ["A", "B", "C", "D"].every((l) => C.quiz.filter((q) => q.niveau === l).length === 2) && C.quiz.every((q) => q.mauvaises.length === 3));
+      verifier(id, "quiz : chaque mauvaise réponse a un code d'erreur et une explication", C.quiz.every((q) => q.mauvaises.every((m) => CODES.test(m.e) && (m.retour || (q.retour && q.retour[m.e])))), "code ou explication manquant");
+      verifier(id, "quiz : au moins 3 erreurs plausibles différentes documentées", new Set(C.quiz.flatMap((q) => q.mauvaises.map((m) => m.e))).size >= 3);
+      verifier(id, "boss : réponse, 3 mauvaises réponses expliquées, un seul indice", C.boss && C.boss.reponse && C.boss.mauvaises.length >= 3 && C.boss.mauvaises.every((m) => CODES.test(m.e) && m.retour) && C.boss.indice);
+      verifier(id, "boss : la bonne réponse n'est pas parmi les mauvaises", !C.boss.mauvaises.some((m) => String(m.valeur ?? m.t) === String(C.boss.reponse)));
+      verifier(id, "essentiel, carte, pourquoi (« Pourquoi faut-il le faire ainsi ? ») et fiche de révision", C.essentiel && C.carte && C.pourquoi && C.fiche && C.fiche.titre);
+      // Vidéo : 2 à 4 minutes (le document maître tolère 2 à 6), minutage continu
+      const V = C.video;
+      verifier(id, "vidéo : durée entre 2 et 6 minutes et segments continus", V.duree >= 120 && V.duree <= 360 && V.segments[0].debut === 0 && V.segments.at(-1).fin === V.duree && V.segments.every((s, i) => i === 0 || s.debut === V.segments[i - 1].fin), `durée ${V.duree}`);
+      verifier(id, "vidéo : chaque phrase est lue avant la fin de son segment", V.segments.every((s) => s.parties.every((p, k) => p.t < s.fin - s.debut && (k === 0 || p.t > s.parties[k - 1].t))));
+      // BD : 4 à 8 cases, 2 bulles et 25 mots au plus par case (bible narrative, section 6)
+      verifier(id, "BD : 4 à 8 cases, 2 bulles et 25 mots au plus par case", C.bd.cases.length >= 4 && C.bd.cases.length <= 8 && C.bd.cases.every((c) => c.bulles.length >= 1 && c.bulles.length <= 2 && c.bulles.reduce((a, b) => a + mots(b.texte), 0) <= 25), "case trop longue");
+      verifier(id, "BD : la dernière case donne la règle (encadré)", !!C.bd.cases.at(-1).encadre);
+      // Langue : phrases courtes (bible : 10 mots au plus) pour les consignes et messages de Mathéo
+      const longues = listerTextes(C).filter((x) => x.qui === "Mathéo" && x.texte.split(/(?<=[.!?])\s+/).some((ph) => mots(ph) > 18));
+      verifier(id, "langue : aucune phrase de Mathéo de plus de 18 mots", longues.length === 0, longues[0] && longues[0].texte);
+      // Interdits (bible narrative, section 6) dans tous les textes
+      const tout = JSON.stringify(C);
+      verifier(id, "interdits : ni moquerie, ni violence, ni marque commerciale", !/stupide|idiot|nul\b|bête|coca|facebook|youtube|whatsapp|pokémon|disney/i.test(tout), "mot interdit");
+      // Contrôles de calcul déclarés dans le contenu
+      for (const c of C.controles || []) verifier(id, `calcul : ${c.expr} = ${c.attendu}`, calc(c.expr) === c.attendu, `obtenu ${calc(c.expr)}`);
+      // Voix : chaque phrase prononcée a son fichier audio
+      const manquantes = listerTextes(C).filter((x) => !audio[idVoix(x.texte)]);
+      verifier(id, `voix : ${listerTextes(C).length} phrases, toutes avec leur audio`, manquantes.length === 0, `${manquantes.length} sans voix, ex. « ${manquantes[0] && manquantes[0].texte} »`);
+    }
+
+    // Éléments transversaux : positionnement, épisode 0, sujet blanc du CEP, finale du chapitre Fractions
+    for (const f of index.extras || []) {
+      const X = await (await fetch("../app/content/" + f)).json();
+      const id = f.replace(".json", "");
+      const Q = X.questions || [];
+      if (Q.length) {
+        verifier(id, `${Q.length} questions, une bonne réponse et trois mauvaises expliquées avec un code d'erreur`, Q.every((q) => q.mauvaises.length === 3 && q.mauvaises.every((m) => CODES.test(m.e) && m.retour)), "question incomplète");
+        verifier(id, "aucune bonne réponse parmi les mauvaises", Q.every((q) => !q.mauvaises.some((m) => m.t !== "" && m.t === q.bonne)));
+      }
+      if (id === "positionnement") verifier(id, "15 questions, 4 compétences évaluées, orientation vers une notion existante", Q.length === 15 && new Set(Q.map((q) => q.competence)).size === 4 && Object.values(X.orientations).every((o) => index.notions.some((n) => n.id === o.notion)));
+      if (id === "cep_blanc1") verifier(id, "10 questions réparties sur Fractions, Problèmes et Calcul", Q.length === 10 && ["Fractions", "Problèmes", "Calcul"].every((dom) => Q.some((q) => q.domaine === dom)));
+      if (id === "finale_fractions") verifier(id, "une question par notion du chapitre (N17 à N23, sauf N22 couvert une fois)", X.prerequis.every((p) => index.notions.some((n) => n.id === p)) && new Set(Q.map((q) => q.notion)).size === 7);
+      if (id === "episode0") verifier(id, "BD de 6 cases et tutoriel de 3 gestes", X.bd.cases.length === 6 && X.tutoriel.etapes.length === 3);
+      for (const c of X.controles || []) verifier(id, `calcul : ${c.expr} = ${c.attendu}`, calc(c.expr) === c.attendu, `obtenu ${calc(c.expr)}`);
+      const textes = listerTextes({ ...X, id: X.id });
+      const manquantes = textes.filter((x) => !audio[idVoix(x.texte)]);
+      verifier(id, `voix : ${textes.length} phrases, toutes avec leur audio`, manquantes.length === 0, `${manquantes.length} sans voix, ex. « ${manquantes[0] && manquantes[0].texte} »`);
+    }
+
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} contrôles réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    const groupes = [...index.notions.map((n) => [n.id, `${n.id} · ${n.titre}`]), ...(index.extras || []).map((f) => [f.replace(".json", ""), f.replace(".json", "")])];
+    document.getElementById("liste").innerHTML = groupes.map(([id, titre]) => `<h2>${titre}</h2>` + res.filter((r) => r.notion === id).map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : ` — ${r.detail}`}</div>`).join("")).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>

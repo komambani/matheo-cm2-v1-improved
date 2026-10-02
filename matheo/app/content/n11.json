@@ -1,0 +1,205 @@
+{
+  "id": "N11",
+  "version": "0.1",
+  "titre": "Diviser des entiers",
+  "domaine": "Calcul",
+  "src": "architecte-v0.2 : scénario écrit par l'architecte selon la bible narrative v0.2 et la chaîne éditoriale v0.1 ; à valider par un enseignant béninois (porte 4). La division posée est guidée pour un diviseur à un chiffre.",
+  "idee_cle": "Diviser peut vouloir dire partager en parts égales ou chercher combien de groupes on peut former.",
+  "erreurs_ciblees": ["E8 : choisir la mauvaise opération", "E3 : se tromper dans la table de multiplication", "E5 : un reste plus grand que le diviseur"],
+
+  "mission_scene": {
+    "fond": "marche",
+    "personnages": [
+      { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 },
+      { "qui": "Kola", "x": 150, "y": 122, "w": 52 },
+      { "qui": "Mathéo", "x": 44, "y": 98, "w": 52, "humeur": "surpris" }
+    ],
+    "objets": [ { "t": "objets", "genre": "mangue", "n": 16, "x": 40, "y": 150, "colonnes": 8, "pas": 26, "taille": 22 } ],
+    "devant": true
+  },
+  "mission": [
+    { "qui": "Narrateur", "texte": "Au marché, Mamie Sègla a 156 mangues à ranger." },
+    { "qui": "Mathéo", "texte": "Bip ! Mon étoile est dans un des paniers !", "humeur": "surpris" },
+    { "qui": "Mamie Sègla", "texte": "Je range mes mangues dans 4 paniers, avec autant dans chaque panier." },
+    { "qui": "Mamie Sègla", "texte": "Dis-moi combien de mangues par panier." },
+    { "qui": "Kola", "texte": "Je mets une mangue dans chaque panier, une par une !" },
+    { "qui": "Narrateur", "texte": "Comment partager 156 mangues en 4 paniers sans tout compter ?" }
+  ],
+
+  "defi": {
+    "type": "etapes",
+    "enonce": "Mamie Sègla partage 156 mangues en 4 paniers égaux. Combien de mangues met-elle dans chaque panier ?",
+    "reponse": "39",
+    "reussite": "Bip bip ! 39 mangues dans chaque panier. 39 × 4 = 156 !",
+    "etapes": [
+      {
+        "type": "choix",
+        "intro": "D'abord, choisissons la bonne opération.",
+        "question": "Quelle opération donne le nombre de mangues par panier ?",
+        "options": [
+          { "t": "156 ÷ 4", "ok": true },
+          { "t": "156 × 4", "e": "E8", "retour": "Bip ! Multiplier répète une quantité. Ici, on partage 156 mangues en 4 paniers : c'est une division." },
+          { "t": "156 − 4", "e": "E8", "retour": "Bip ! Enlever 4 mangues ne partage pas les mangues en 4 paniers. On divise." },
+          { "t": "156 + 4", "e": "E8", "retour": "Bip ! Ajouter 4 mangues ne partage rien. Pour partager en 4 paniers, on divise." }
+        ]
+      },
+      {
+        "type": "nombre",
+        "intro": "Estimons : 156 est proche de 160.",
+        "question": "Combien font 160 ÷ 4 ? C'est une estimation.",
+        "reponse": 40,
+        "erreurs": [
+          { "reponses": [164], "type": "E8", "texte": "Bip ! 164 vient de 160 + 4. Ici, on partage 160 en 4." },
+          { "reponses": [640], "type": "E8", "texte": "Bip ! 640 vient de 160 × 4. C'est plus que 160. Un partage donne moins que le total." }
+        ]
+      },
+      { "type": "division", "a": 156, "d": 4 },
+      {
+        "type": "choix",
+        "intro": "Comparons avec l'estimation.",
+        "question": "Le résultat 39 est-il proche de l'estimation 40 ?",
+        "options": [
+          { "t": "Oui, 39 est proche de 40", "ok": true },
+          { "t": "Non, il est très loin", "e": "E7", "retour": "Bip ! 39 est tout près de 40. Le calcul est cohérent." },
+          { "t": "On ne peut pas comparer", "e": "E7", "retour": "Bip ! On peut comparer : 40 − 39 = 1, c'est un très petit écart." }
+        ]
+      }
+    ]
+  },
+
+  "aide": [
+    { "niveau": 1, "texte": "Il faut partager 156 mangues en 4 paniers égaux. Quelle opération faut-il ?" },
+    { "niveau": 2, "texte": "Partager en parts égales, c'est diviser. On divise 156 par 4." },
+    { "niveau": 3, "texte": "Commence par les centaines et les dizaines : 15 mangues à partager en 4." },
+    { "niveau": 4, "texte": "Exemple : 84 ÷ 4. Dans 8, il y a 2 fois 4. Dans 4, il y a 1 fois 4. Cela fait 21. À toi, avec 156 !" },
+    { "niveau": 5, "texte": "Regarde, je te montre tout. Je divise chiffre par chiffre, puis je vérifie." }
+  ],
+
+  "remediation": [
+    { "enonce": "Pose 84 ÷ 4.", "etapes": [ { "type": "division", "a": 84, "d": 4 } ], "fin": "84 ÷ 4 = 21." },
+    { "enonce": "Pose 95 ÷ 7 (avec un reste).", "etapes": [ { "type": "division", "a": 95, "d": 7 } ], "fin": "95 ÷ 7 = 13, reste 4." },
+    { "enonce": "Reviens aux paniers : pose 156 ÷ 4.", "etapes": [ { "type": "division", "a": 156, "d": 4 } ], "fin": "156 ÷ 4 = 39." }
+  ],
+
+  "correction_inconnue": { "texte": "Bip ! Montre-moi comment tu as fait." },
+
+  "quiz": [
+    { "id": "A1", "niveau": "A", "question": "Que veut dire diviser 156 par 4 ?", "bonne": "Partager 156 en 4 parts égales",
+      "mauvaises": [
+        { "t": "Répéter 156 quatre fois", "e": "E8", "retour": "Bip ! Répéter, c'est multiplier. Diviser, c'est partager en parts égales." },
+        { "t": "Ajouter 4 à 156", "e": "E8", "retour": "Bip ! Ajouter ne partage rien. Diviser, c'est partager en parts égales." },
+        { "t": "Enlever 4 à 156", "e": "E8", "retour": "Bip ! Enlever 4 une fois ne partage pas. Diviser, c'est partager en 4 parts égales." } ] },
+    { "id": "A2", "niveau": "A", "question": "Dans 20 ÷ 4 = 5, que représente le nombre 5 ?", "bonne": "Le quotient : ce qu'il y a dans chaque part",
+      "mauvaises": [
+        { "t": "Le reste", "e": "E6", "retour": "Bip ! Le reste, c'est ce qui n'a pas pu être partagé. Ici, il n'y en a pas. 5 est le quotient." },
+        { "t": "Le diviseur", "e": "E6", "retour": "Bip ! Le diviseur, c'est le nombre par lequel on divise : 4. 5 est le quotient." },
+        { "t": "Le dividende", "e": "E6", "retour": "Bip ! Le dividende, c'est le nombre qu'on partage : 20. 5 est le quotient." } ] },
+    { "id": "B1", "niveau": "B", "question": "Combien font 72 ÷ 6 ?", "bonne": "12",
+      "mauvaises": [
+        { "t": "78", "e": "E8", "retour": "Bip ! 78 vient de 72 + 6. Ici, on partage 72 en 6 parts." },
+        { "t": "432", "e": "E8", "retour": "Bip ! 432 vient de 72 × 6. Un partage donne moins que le total." },
+        { "t": "11", "e": "E3", "retour": "Bip ! Vérifie avec la table de 6 : 11 × 6 = 66, pas 72. Essaie 12 × 6." } ] },
+    { "id": "B2", "niveau": "B", "question": "Quel est le quotient et le reste de 95 ÷ 7 ?", "bonne": "13, reste 4",
+      "mauvaises": [
+        { "t": "13, reste 0", "e": "E5", "retour": "Bip ! 13 × 7 = 91, et 95 − 91 = 4. Il reste 4." },
+        { "t": "14, reste 3", "e": "E3", "retour": "Bip ! 14 × 7 = 98, c'est plus que 95. Le quotient est 13." },
+        { "t": "12, reste 11", "e": "E5", "retour": "Bip ! Le reste doit être plus petit que le diviseur 7. Avec 13, le reste est 4." } ] },
+    { "id": "C1", "niveau": "C", "question": "Mamie a 85 beignets pour 5 enfants. Chaque enfant en reçoit autant. Combien chacun en reçoit-il ?", "bonne": "17",
+      "mauvaises": [
+        { "t": "425", "e": "E8", "retour": "Bip ! 425 vient de 85 × 5. Un partage donne moins que le total." },
+        { "t": "80", "e": "E8", "retour": "Bip ! 80 vient de 85 − 5. Pour partager entre 5 enfants, on divise." },
+        { "t": "18", "e": "E3", "retour": "Bip ! Vérifie : 18 × 5 = 90, c'est plus que 85. Essaie 17 × 5." } ] },
+    { "id": "C2", "niveau": "C", "question": "Kola partage 47 billes entre 6 amis, avec autant pour chacun. Combien de billes reste-t-il ?", "bonne": "5 billes",
+      "mauvaises": [
+        { "t": "7 billes", "e": "E9", "retour": "Bip ! 7, c'est ce que reçoit chaque ami. La question demande ce qui reste." },
+        { "t": "0 bille", "e": "E5", "retour": "Bip ! 7 × 6 = 42, et 47 − 42 = 5. Il reste 5 billes." },
+        { "t": "6 billes", "e": "E5", "retour": "Bip ! Un reste de 6 pourrait encore être partagé entre 6 amis. Le reste est 5." } ] },
+    { "id": "D1", "niveau": "D", "question": "Anita dit : « 25 ÷ 4 = 5 reste 5. » A-t-elle raison ?", "bonne": "Non, le reste 5 est plus grand que 4 : 25 ÷ 4 = 6 reste 1",
+      "mauvaises": [
+        { "t": "Oui, 5 × 4 + 5 = 25", "e": "E5", "retour": "Bip ! Le calcul est juste, mais un reste doit être plus petit que le diviseur 4. On peut encore en partager." },
+        { "t": "Non, 25 ÷ 4 = 4 reste 9", "e": "E5", "retour": "Bip ! Un reste de 9 est encore plus grand que 4. Le bon résultat est 6 reste 1." },
+        { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : 6 × 4 = 24, et 25 − 24 = 1." } ] },
+    { "id": "D2", "niveau": "D", "question": "Pour vérifier 156 ÷ 4 = 39, Kola calcule 39 × 4. Que doit-il trouver ?", "bonne": "156",
+      "mauvaises": [
+        { "t": "39", "e": "E1", "retour": "Bip ! 39, c'est le quotient. Pour vérifier, on multiplie : 39 × 4." },
+        { "t": "43", "e": "E8", "retour": "Bip ! 43 vient de 39 + 4. Pour vérifier, on multiplie : 39 × 4." },
+        { "t": "4", "e": "E1", "retour": "Bip ! 4 est le diviseur. Pour vérifier, 39 × 4 doit redonner le dividende." } ] }
+  ],
+
+  "boss": {
+    "question": "Un camion transporte 275 kg de riz dans 5 sacs égaux. Combien de kilogrammes y a-t-il dans un sac ?",
+    "reponse": "55 kg",
+    "mauvaises": [
+      { "valeur": "1 375 kg", "e": "E8", "retour": "Bip ! 1 375 vient de 275 × 5. Un sac ne peut pas peser plus que tout le riz." },
+      { "valeur": "270 kg", "e": "E8", "retour": "Bip ! 270 vient de 275 − 5. Pour partager en 5 sacs, on divise." },
+      { "valeur": "50 kg", "e": "E3", "retour": "Bip ! Vérifie : 50 × 5 = 250, pas 275. Essaie 55 × 5." }
+    ],
+    "indice": "Pose 275 ÷ 5. Commence par 27 : combien de fois 5 ?"
+  },
+
+  "video": {
+    "titre": "Diviser des entiers",
+    "duree": 165,
+    "segments": [
+      { "debut": 0, "fin": 15, "parties": [
+          { "t": 0, "texte": "Bip ! Aujourd'hui, diviser des entiers." },
+          { "t": 5, "texte": "Mamie Sègla partage 156 mangues dans 4 paniers." } ],
+        "etapes": [ { "t": 5.4, "a": "ecrire", "id": "p1", "texte": "156 mangues, 4 paniers", "x": 180, "y": 110, "taille": 36 } ] },
+      { "debut": 15, "fin": 45, "parties": [
+          { "t": 0, "texte": "Diviser, c'est partager en parts égales." },
+          { "t": 8, "texte": "Je veux savoir combien de mangues va dans chaque panier." },
+          { "t": 18, "texte": "J'écris 156 divisé par 4." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 18.5, "a": "ecrire", "id": "d2", "texte": "156 ÷ 4", "x": 180, "y": 110, "taille": 60, "couleur": "#6fe3d8" } ] },
+      { "debut": 45, "fin": 75, "parties": [
+          { "t": 0, "texte": "D'abord, j'estime. 156 est proche de 160." },
+          { "t": 9, "texte": "160 divisé par 4 égale 40." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "e3a", "texte": "156 ≈ 160", "x": 180, "y": 70, "taille": 46 }, { "t": 9.5, "a": "ecrire", "id": "e3b", "texte": "160 ÷ 4 = 40", "x": 180, "y": 140, "taille": 46, "couleur": "#ffe066" } ] },
+      { "debut": 75, "fin": 130, "parties": [
+          { "t": 0, "texte": "Maintenant, je pose la division. 1 est plus petit que 4 : je prends 15." },
+          { "t": 12, "texte": "Dans 15, il y a 3 fois 4. 3 fois 4 égale 12. 15 moins 12 égale 3." },
+          { "t": 28, "texte": "J'abaisse le 6 : je prends 36. Dans 36, il y a 9 fois 4." },
+          { "t": 42, "texte": "9 fois 4 égale 36. Le reste est 0. Le quotient est 39." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "division", "id": "q1", "n1": 156, "n2": 4, "quotient": "", "lignes": [] },
+          { "t": 13, "a": "supprimer", "id": "q1" }, { "t": 13.1, "a": "division", "id": "q2", "n1": 156, "n2": 4, "quotient": "3", "lignes": ["12", "3"] },
+          { "t": 43, "a": "supprimer", "id": "q2" }, { "t": 43.1, "a": "division", "id": "q3", "n1": 156, "n2": 4, "quotient": "39", "lignes": ["12", "3", "36", "0"] } ] },
+      { "debut": 130, "fin": 148, "parties": [
+          { "t": 0, "texte": "Je vérifie. 39 fois 4 égale 156." },
+          { "t": 6, "texte": "C'est bien le nombre de départ." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 1, "a": "ecrire", "id": "v5", "texte": "39 × 4 = 156", "x": 180, "y": 100, "taille": 52, "couleur": "#6fe3d8" } ] },
+      { "debut": 148, "fin": 165, "parties": [
+          { "t": 0, "texte": "À toi ! Calcule 84 divisé par 4." },
+          { "t": 5, "texte": "Mets la vidéo en pause." },
+          { "t": 9, "texte": "Réponse : 21." } ],
+        "etapes": [ { "t": 0.4, "a": "effacer" }, { "t": 0.8, "a": "ecrire", "id": "t6", "texte": "84 ÷ 4 = ?", "x": 180, "y": 100, "taille": 54, "couleur": "#ffe066" }, { "t": 9.4, "a": "ecrire", "id": "r6", "texte": "21", "x": 180, "y": 170, "taille": 54, "couleur": "#6fe3d8" } ] }
+    ]
+  },
+
+  "bd": {
+    "titre": "Les paniers de Mamie Sègla",
+    "cases": [
+      { "n": 1, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Mathéo", "x": 44, "y": 98, "w": 52, "humeur": "surpris" } ], "objets": [ { "t": "objets", "genre": "mangue", "n": 16, "x": 40, "y": 150, "colonnes": 8, "pas": 26, "taille": 22 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "156 mangues pour 4 paniers égaux." }, { "qui": "Mathéo", "texte": "Bip ! Combien dans chaque panier ?", "humeur": "surpris" } ], "legende": "Au marché, 4 paniers." },
+      { "n": 2, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Kola", "x": 12, "y": 112, "w": 66 } ], "objets": [ { "t": "texte", "texte": "1, 2, 3, 4…", "x": 230, "y": 110, "taille": 40, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Une mangue par panier, une par une !" }, { "qui": "Anita", "texte": "Trop long, Kola. On divise !" } ] },
+      { "n": 3, "plan": "Gros plan", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 4, "y": 36, "w": 150 } ], "objets": [ { "t": "texte", "texte": "156 ÷ 4", "x": 256, "y": 100, "taille": 50, "couleur": "#c1440e" }, { "t": "texte", "texte": "≈ 160 ÷ 4 = 40", "x": 256, "y": 160, "taille": 26, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "D'abord j'estime : environ 40." }, { "qui": "Kola", "texte": "Donc environ 40 par panier !" } ], "legende": "Estimation : environ 40." },
+      { "n": 4, "plan": "Moyen", "scene": { "fond": "sable", "personnages": [ { "qui": "Mathéo", "x": 296, "y": 120, "w": 50, "humeur": "content" } ], "objets": [ { "t": "texte", "texte": "15 ÷ 4 = 3, reste 3", "x": 150, "y": 100, "taille": 30, "couleur": "#c1440e" } ], "devant": true },
+        "bulles": [ { "qui": "Anita", "texte": "Dans 15, il y a 3 fois 4. Il reste 3." }, { "qui": "Mathéo", "texte": "Bip ! J'abaisse le 6 !" } ] },
+      { "n": 5, "plan": "Moyen", "scene": { "fond": "mur", "personnages": [ { "qui": "Anita", "x": 8, "y": 108, "w": 64 }, { "qui": "Kola", "x": 288, "y": 110, "w": 64 } ], "objets": [ { "t": "texte", "texte": "36 ÷ 4 = 9", "x": 180, "y": 86, "taille": 44, "couleur": "#c1440e" }, { "t": "texte", "texte": "39 × 4 = 156", "x": 180, "y": 146, "taille": 40, "couleur": "#0e7f74" } ], "devant": true },
+        "bulles": [ { "qui": "Kola", "texte": "Dans 36, il y a 9 fois 4 !" }, { "qui": "Anita", "texte": "Il y a 39 mangues par panier." } ], "legende": "156 ÷ 4 = 39." },
+      { "n": 6, "plan": "Large", "scene": { "fond": "marche", "personnages": [ { "qui": "Mamie Sègla", "x": 270, "y": 84, "w": 64 }, { "qui": "Mathéo", "x": 44, "y": 98, "w": 52, "humeur": "joie" } ], "objets": [ { "t": "fragment", "x": 118, "y": 124, "w": 34 } ], "devant": true },
+        "bulles": [ { "qui": "Mamie Sègla", "texte": "Bravo ! 39 mangues par panier." }, { "qui": "Mathéo", "texte": "Bip ! L'étoile se rallume !", "humeur": "joie" } ], "encadre": "Je choisis la division, j'estime, je divise chiffre par chiffre et je vérifie par une multiplication." }
+    ]
+  },
+
+  "interface": {
+    "boss_debut": "Hmm… Abandonne, c'est plus confortable !", "boss_fin": "Oh non, je fonds ! Bravo, tu as gagné !", "bien_joue": "Bip bip ! Bien joué !",
+    "fragment": "Bip ! L'étoile se rallume !"
+  },
+
+  "essentiel": "Diviser peut vouloir dire partager en parts égales. Je divise chiffre par chiffre et je vérifie avec une multiplication.",
+  "carte": "156 ÷ 4 = 39 : dans 15, 3 fois 4 ; dans 36, 9 fois 4. Vérification : 39 × 4 = 156.",
+  "pourquoi": "Pourquoi vérifier avec une multiplication ? Parce que le quotient fois le diviseur redonne le nombre de départ.",
+  "fiche": { "titre": "N11 · Diviser des entiers", "piege": "Un reste doit toujours être plus petit que le diviseur. Si ce n'est pas le cas, on peut encore partager." },
+  "controles": [ { "expr": "156/4", "attendu": 39 }, { "expr": "160/4", "attendu": 40 }, { "expr": "84/4", "attendu": 21 }, { "expr": "72/6", "attendu": 12 }, { "expr": "13*7+4", "attendu": 95 }, { "expr": "85/5", "attendu": 17 }, { "expr": "7*6+5", "attendu": 47 }, { "expr": "6*4+1", "attendu": 25 }, { "expr": "39*4", "attendu": 156 }, { "expr": "275/5", "attendu": 55 } ]
+}

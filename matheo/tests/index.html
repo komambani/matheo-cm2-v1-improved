@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Tests Mathéo</title>
+  <style>body{font:16px system-ui;margin:24px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}pre{margin:2px 0 8px 20px;white-space:pre-wrap}</style>
+</head>
+<body>
+  <h1>Tests automatiques – Mathéo</h1>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    import { lancerTests } from "./n22.test.js";
+    const charger = () => fetch("../app/content/n22.json").then((r) => r.json());
+    const res = await lancerTests(charger);
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} tests réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    document.getElementById("liste").innerHTML = res.map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : `<pre>${r.detail}</pre>`}</div>`).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>

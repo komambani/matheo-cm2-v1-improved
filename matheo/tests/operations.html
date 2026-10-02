@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Tests des opérations posées</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}</style>
+</head>
+<body>
+  <h1>Opérations posées guidées : multiplication et division</h1>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    import { etapesMultiplication, etapesDivision } from "../app/js/defis/pose.js";
+    const res = [];
+    const verifier = (nom, cond, detail = "") => res.push({ nom, ok: !!cond, detail: cond ? "" : String(detail).slice(0, 200) });
+
+    // Multiplication : en jouant toutes les bonnes réponses, les chiffres écrits reconstituent a × b.
+    let fautesMul = [], total = 0;
+    for (let a = 2; a <= 999; a++) for (let b = 2; b <= 9; b++) {
+      total++;
+      const et = etapesMultiplication(a, b);
+      const ecrits = et.filter((e) => /^Quel chiffre écris-tu|^Écris/.test(e.question)).map((e) => e.reponse);
+      const nombre = Number([...ecrits].reverse().join(""));
+      // pour un dernier calcul sans retenue, « Écris N tout à gauche » donne le nombre entier
+      if (nombre !== a * b) fautesMul.push(`${a}×${b}: ${ecrits.join(",")} ≠ ${a * b}`);
+      if (et.some((e) => !e.question || e.reponse === undefined || !e.visuel)) fautesMul.push(`${a}×${b}: étape incomplète`);
+    }
+    verifier(`multiplication posée : ${total} opérations (2 à 999 × 2 à 9), résultat reconstitué exact`, fautesMul.length === 0, fautesMul.slice(0, 3).join(" | "));
+
+    // Chaque question de multiplication a une bonne réponse non nulle quand elle est suivie d'un calcul
+    verifier("multiplication 47 × 6 : 7 questions guidées, résultat 282", (() => { const e = etapesMultiplication(47, 6); return e.length === 7 && e.filter((x) => /^Quel chiffre écris-tu|^Écris/.test(x.question)).map((x) => x.reponse).reverse().join("") === "282"; })(), JSON.stringify(etapesMultiplication(47, 6).map((e) => e.question + "=" + e.reponse)));
+
+    // Division : quotient et reste exacts, la vérification redonne le dividende
+    let fautesDiv = [], totalDiv = 0;
+    for (let a = 10; a <= 999; a++) for (let d = 2; d <= 9; d++) {
+      totalDiv++;
+      const et = etapesDivision(a, d);
+      const q = Math.floor(a / d), r = a % d;
+      const quotientEtape = et.find((e) => e.question.startsWith("Quel est le quotient")).reponse;
+      const resteEtape = et.find((e) => e.question === "Quel est le reste ?").reponse;
+      const verif = et.find((e) => e.question.startsWith("Vérifions")).reponse;
+      if (quotientEtape !== q || resteEtape !== r || verif !== a) fautesDiv.push(`${a}÷${d}: q=${quotientEtape} r=${resteEtape} v=${verif}`);
+      // les chiffres du quotient écrits au fil des étapes « Combien de fois » reconstituent le quotient
+      const chiffres = et.filter((e) => e.question.startsWith("Combien de fois")).map((e) => e.reponse).join("");
+      if (Number(chiffres) !== q) fautesDiv.push(`${a}÷${d}: chiffres ${chiffres} ≠ ${q}`);
+      // aucune étape ne demande un reste ≥ diviseur
+      for (const e of et.filter((x) => x.question.startsWith("Calcule") && x.question.includes("−"))) if (e.reponse >= d) fautesDiv.push(`${a}÷${d}: reste ${e.reponse} ≥ ${d}`);
+    }
+    verifier(`division posée : ${totalDiv} opérations (10 à 999 ÷ 2 à 9), quotient, reste et vérification exacts`, fautesDiv.length === 0, fautesDiv.slice(0, 3).join(" | "));
+    verifier("division 156 ÷ 4 : 39", (() => { const e = etapesDivision(156, 4); return e.find((x) => x.question.startsWith("Quel est le quotient")).reponse === 39 && e.find((x) => x.question === "Quel est le reste ?").reponse === 0; })());
+
+    // Messages : jamais de trou, toujours « Bip ! » pour une erreur
+    const toutes = [...etapesMultiplication(47, 6), ...etapesMultiplication(125, 4), ...etapesDivision(156, 4), ...etapesDivision(95, 7)];
+    verifier("messages d'erreur : « Bip ! », aucun trou, aucune valeur invalide", toutes.every((e) => [e.retour_defaut, ...(e.erreurs || []).map((x) => x.texte)].every((t) => t.startsWith("Bip !") && !/NaN|undefined|\{|\}/.test(t))));
+    verifier("questions : aucune valeur invalide", toutes.every((e) => !/NaN|undefined/.test(e.question + (e.intro || ""))));
+
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} contrôles réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    document.getElementById("liste").innerHTML = res.map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : ` — ${r.detail}`}</div>`).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>

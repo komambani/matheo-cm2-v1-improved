@@ -1,0 +1,7 @@
+﻿{
+  "name": "matheo-3d",
+  "private": true,
+  "description": "Compile la scène 3D de Mathéo (Three.js) en un seul fichier léger : app/js/vendor/marche3d.js",
+  "scripts": { "build": "esbuild marche3d.js --bundle --minify --format=esm --target=es2020 --legal-comments=none --outfile=../../app/js/vendor/marche3d.js" },
+  "devDependencies": { "esbuild": "^0.28.0", "three": "^0.186.1" }
+}

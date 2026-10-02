@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="utf-8"><title>Textes prononcés</title></head>
+<body>
+  <p>Textes prononcés par l'application, par notion (sert à générer les voix, voir generer_voix.ps1).</p>
+  <pre id="sortie">…</pre>
+  <script type="module">
+    import { listerTextes } from "../../app/js/textes.js";
+    const index = await fetch("../../app/content/index.json").then((r) => r.json());
+    const resume = [];
+    window.__TEXTES__ = {};
+    window.__ENREGISTRE__ = {};
+    for (const n of index.notions) {
+      const C = await fetch(`../../app/content/${n.fichier}`).then((r) => r.json());
+      const liste = listerTextes(C);
+      window.__TEXTES__[n.id] = liste;
+      resume.push(`${n.id} : ${liste.length} phrases`);
+      // Enregistre la liste dans tools/voix/textes_<id>.json (le serveur local n'accepte que cette écriture).
+      window.__ENREGISTRE__[n.id] = await fetch(`/__sauver_textes?id=${n.id.toLowerCase()}`, { method: "POST", body: JSON.stringify(liste) }).then((r) => r.status).catch(() => 0);
+    }
+    // Éléments transversaux (positionnement, épisode 0, sujet blanc, finale)
+    for (const f of index.extras || []) {
+      const X = await fetch(`../../app/content/${f}`).then((r) => r.json());
+      const cle = f.replace(".json", "");
+      const liste = listerTextes({ ...X, id: X.id });
+      window.__TEXTES__[cle] = liste;
+      resume.push(`${cle} : ${liste.length} phrases`);
+      window.__ENREGISTRE__[cle] = await fetch(`/__sauver_textes?id=${cle.toLowerCase()}`, { method: "POST", body: JSON.stringify(liste) }).then((r) => r.status).catch(() => 0);
+    }
+    document.getElementById("sortie").textContent = resume.join("\n");
+    window.__FINI__ = true;
+  </script>
+</body>
+</html>

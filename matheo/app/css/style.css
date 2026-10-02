@@ -1,0 +1,203 @@
+/* Mathéo – style. Mobile d'abord, hors ligne, polices du système (aucun téléchargement). */
+:root {
+  --nuit: #120d33; --nuit2: #1b1446; --violet: #3a2a7c;
+  --or: #ffd166; --lumiere: #ffe066; --turquoise: #6fe3d8; --terre: #c1440e; --creme: #f6ebd3;
+  --ok: #3ddc84; --oups: #ffb26b; --verre: rgba(255, 255, 255, .09); --bord: rgba(255, 255, 255, .22);
+  --rayon: 20px;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: var(--nuit); color: #fff;
+  font: 19px/1.45 "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+#app { max-width: 520px; margin: 0 auto; min-height: 100dvh; position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  background: radial-gradient(120% 70% at 50% -5%, #4a3597 0%, var(--nuit2) 52%, var(--nuit) 100%); }
+
+/* Ciel étoilé */
+.ciel { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.ciel i { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 6px 1px rgba(255,255,255,.7);
+  animation: scintille 3.8s infinite ease-in-out; }
+@keyframes scintille { 0%, 100% { transform: scale(.7); filter: brightness(.7); } 50% { transform: scale(1.3); filter: brightness(1.4); } }
+
+.ecran { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; padding: 14px 16px 20px; gap: 12px; animation: entree .45s ease both; }
+@keyframes entree { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Barre du haut */
+.barre { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.barre .titre { flex: 1; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+.points { display: flex; gap: 6px; }
+.points b { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.25); transition: background .3s, transform .3s; }
+.points b.fait { background: var(--lumiere); box-shadow: 0 0 8px var(--lumiere); }
+.points b.actuel { background: var(--turquoise); transform: scale(1.4); box-shadow: 0 0 8px var(--turquoise); }
+.rond { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--bord); background: var(--verre); display: grid; place-items: center; font-size: 1.25rem; }
+.rond:active { transform: scale(.94); }
+
+/* Mathéo et ses bulles */
+.matheo { overflow: visible; }
+.matheo .halo { transform-origin: 60px 82px; animation: respire 3.2s ease-in-out infinite; }
+.matheo .pointe { animation: pointe 1.8s ease-in-out infinite; }
+.matheo .pointe.p2 { animation-delay: .9s; }
+@keyframes respire { 0%, 100% { opacity: .75; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes pointe { 0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 5px #fff6a8); } }
+.flotte { animation: flotte 3.4s ease-in-out infinite; }
+@keyframes flotte { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.parle { display: flex; align-items: flex-end; gap: 10px; }
+.parle > .avatar { flex: 0 0 74px; }
+.avatar svg { width: 100%; height: auto; display: block; }
+.bulle { position: relative; flex: 1; background: var(--creme); color: #2b1d4a; border-radius: var(--rayon); padding: 12px 15px 13px;
+  box-shadow: 0 6px 22px rgba(0,0,0,.3); animation: bulle .35s cubic-bezier(.2,1.4,.4,1) both; }
+.bulle::before { content: ""; position: absolute; left: -9px; bottom: 18px; border: 9px solid transparent; border-right-color: var(--creme); border-left: 0; }
+.bulle .qui { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #7a4a1f; margin-bottom: 2px; }
+.bulle.erreur { background: #ffe8d0; }
+.bulle.bravo { background: #e2ffe9; }
+.bulle .ecouter { position: absolute; right: 8px; top: 6px; border: 0; background: transparent; font-size: 1.05rem; opacity: .7; }
+@keyframes bulle { from { opacity: 0; transform: scale(.9) translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Boutons */
+.btn { min-height: 54px; padding: 12px 20px; border-radius: 999px; border: 1px solid var(--bord); background: var(--verre); font-weight: 600; transition: transform .15s, background .2s; }
+.btn:active { transform: scale(.96); }
+.btn[disabled] { opacity: .4; pointer-events: none; }
+.btn.principal { background: linear-gradient(180deg, #ffe48a, #ffbf2e); color: #3a2200; border-color: #ffe48a; box-shadow: 0 6px 22px rgba(255, 191, 46, .4); }
+.btn.large { width: 100%; }
+.actions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+.rangee { display: flex; gap: 10px; }
+.rangee .btn { flex: 1; }
+
+/* Choix de réponses */
+.choix { display: grid; gap: 10px; }
+.choix button { text-align: left; min-height: 52px; padding: 10px 16px; border-radius: 18px; border: 1.5px solid var(--bord); background: var(--verre); font-size: 1.02rem; transition: transform .15s, border-color .2s, background .2s; }
+.choix button:active { transform: scale(.98); }
+.choix button.juste { border-color: var(--ok); background: rgba(61, 220, 132, .22); box-shadow: 0 0 18px rgba(61, 220, 132, .45); }
+.choix button.faux { border-color: var(--oups); background: rgba(255, 178, 107, .16); animation: secoue .4s; }
+@keyframes secoue { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.question { font-size: 1.12rem; font-weight: 600; line-height: 1.32; }
+.niveau { display: inline-block; font-size: .72rem; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: rgba(111, 227, 216, .2); color: var(--turquoise); }
+
+/* Scène et manipulation */
+.scene, .jeu { width: 100%; height: auto; display: block; border-radius: var(--rayon); box-shadow: 0 10px 34px rgba(0,0,0,.4); }
+.jeu { height: 37dvh; min-height: 250px; max-height: 420px; background: radial-gradient(90% 90% at 50% 0%, rgba(255,255,255,.1), rgba(255,255,255,.03)); border: 1px solid var(--bord); touch-action: manipulation; }
+.jeu .m { transition: transform .95s cubic-bezier(.22,.9,.3,1), opacity .4s; transform-box: fill-box; transform-origin: center; pointer-events: none; }
+.jeu .m.pris { filter: drop-shadow(0 0 7px var(--lumiere)); }
+.jeu .lot rect { fill: rgba(255, 255, 255, .06); stroke: rgba(255, 255, 255, .35); stroke-width: 1.5; stroke-dasharray: 5 4; transition: fill .25s, stroke .25s; }
+.jeu .lot.choisi rect { fill: rgba(255, 209, 102, .22); stroke: var(--or); stroke-dasharray: none; stroke-width: 2.5; filter: drop-shadow(0 0 8px rgba(255,209,102,.7)); }
+.jeu .lot { cursor: pointer; }
+.jeu .etiquette { font-size: 11px; fill: #fff; opacity: .8; text-anchor: middle; }
+.jeu .panier-compteur { font-size: 16px; font-weight: 700; fill: var(--lumiere); text-anchor: middle; }
+.poids { animation: respire 3s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+/* Clavier numérique */
+.affichage { min-height: 62px; border-radius: 18px; border: 1.5px solid var(--bord); background: rgba(0,0,0,.25); display: grid; place-items: center; font-size: 2rem; font-weight: 700; letter-spacing: .08em; }
+.clavier { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.clavier button { min-height: 54px; border-radius: 16px; border: 1px solid var(--bord); background: var(--verre); font-size: 1.4rem; font-weight: 600; }
+.clavier button:active { background: rgba(255,255,255,.2); transform: scale(.96); }
+.clavier .ok { background: linear-gradient(180deg, #ffe48a, #ffbf2e); color: #3a2200; }
+
+/* Titre, fiche, fin */
+.accueil { text-align: center; justify-content: center; gap: 14px; }
+.accueil h1 { margin: 0; font-size: 2.6rem; letter-spacing: .04em; text-shadow: 0 0 24px rgba(255, 224, 102, .75); }
+.accueil .sous { opacity: .85; margin: 0; }
+.accueil .grand { width: 190px; margin: 4px auto; }
+.carte { background: var(--creme); color: #2b1d4a; border-radius: var(--rayon); padding: 16px 18px; box-shadow: 0 8px 26px rgba(0,0,0,.35); }
+.carte h2 { margin: 0 0 6px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #7a4a1f; }
+.carte p { margin: 4px 0; }
+.carte .gros { font-size: 1.25rem; font-weight: 700; }
+.etoiles { display: flex; justify-content: center; gap: 8px; font-size: 2.4rem; }
+.etoiles span { filter: grayscale(1) opacity(.35); transition: filter .5s, transform .5s; }
+.etoiles span.on { filter: drop-shadow(0 0 10px #ffd166); transform: scale(1.12); }
+.fragment { width: 210px; margin: 0 auto; display: block; }
+.fragment .halo { transform-origin: 84px 36px; animation: respire 2.4s ease-in-out infinite; }
+.arrive { animation: arrive 1.2s cubic-bezier(.2,1.3,.4,1) both; }
+@keyframes arrive { from { opacity: 0; transform: scale(.2) rotate(-40deg); } to { opacity: 1; transform: none; } }
+.centre { text-align: center; }
+.discret { opacity: .75; font-size: .85rem; }
+.pastille { display: inline-block; padding: 3px 12px; border-radius: 999px; background: rgba(255, 224, 102, .18); color: var(--lumiere); font-weight: 700; font-size: .85rem; }
+
+/* Confettis d'étoiles */
+.gerbe { position: absolute; left: 0; right: 0; top: 0; height: 0; z-index: 5; pointer-events: none; }
+.gerbe i { position: absolute; width: 14px; height: 14px; color: var(--or); animation: monte 1.6s ease-out forwards; }
+@keyframes monte { from { transform: translate(0, 0) scale(.4) rotate(0); opacity: 1; } to { transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--r)); opacity: 0; } }
+
+@media (min-width: 560px) { #app { margin: 16px auto; min-height: calc(100dvh - 32px); border-radius: 28px; box-shadow: 0 0 80px rgba(111,227,216,.15); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition-duration: .01s !important; } }
+:focus-visible { outline: 3px solid var(--turquoise); outline-offset: 2px; }
+
+.ecouter-q { margin-left: 10px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--bord); background: var(--verre); vertical-align: middle; font-size: 1rem; }
+
+/* Vidéo : tableau à la craie, lecteur simple */
+.video .tableau { width: 100%; height: auto; display: block; border-radius: 14px; box-shadow: 0 10px 34px rgba(0,0,0,.45); border: 5px solid #8a5a2b; background: #1f3d36; }
+.video .el { opacity: 0; transition: opacity .6s ease; }
+.video .el.vu { opacity: 1; }
+.video .gal { transition: transform 1.3s cubic-bezier(.3,.8,.3,1), opacity .6s ease; }
+.video .gal.pris circle:first-child { filter: drop-shadow(0 0 6px #ffe066); stroke: #ffe066; }
+.sous-titre { min-height: 3.3em; margin-top: 10px; padding: 8px 12px; border-radius: 12px; background: rgba(0,0,0,.45); text-align: center; font-weight: 600; line-height: 1.35; }
+.lecteur { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.barre-v { flex: 1; height: 8px; border-radius: 999px; background: rgba(255,255,255,.2); overflow: hidden; }
+.barre-v i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--turquoise), var(--lumiere)); }
+
+/* BD */
+.case-bd { width: 100%; height: auto; display: block; border-radius: 16px; border: 3px solid #f6ebd3; box-shadow: 0 10px 34px rgba(0,0,0,.45); background: #fff; }
+.legende { background: var(--lumiere); color: #3a2200; padding: 7px 14px; border-radius: 10px; font-weight: 700; text-align: center; }
+.bd-paroles { display: flex; flex-direction: column; gap: 10px; }
+.bd-paroles .avatar { flex-basis: 58px; }
+
+/* Carte des aventures */
+.cartes { display: grid; gap: 10px; width: 100%; margin-top: 8px; text-align: left; }
+.notion { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 18px; border: 1.5px solid var(--bord); background: var(--verre); min-height: 62px; }
+.notion:active { transform: scale(.98); }
+.notion .code { font-weight: 800; color: var(--turquoise); }
+.notion .nom { font-weight: 600; }
+.notion .etat { font-size: .85rem; opacity: .85; }
+.notion.fait { border-color: var(--lumiere); box-shadow: 0 0 16px rgba(255,224,102,.25); }
+
+/* Schémas et choix en images */
+.schema { background: rgba(0,0,0,.25); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 8px; }
+.schema svg, .choix button .visuel { display: block; width: 100%; height: auto; }
+.choix.visuels { grid-template-columns: repeat(2, 1fr); }
+.choix.visuels button { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.jeu-fraction { height: auto; max-height: 280px; min-height: 0; background: rgba(0,0,0,.2); border: 1px solid var(--bord); border-radius: var(--rayon); display: block; width: 100%; }
+.jeu-fraction .part { transition: fill .25s; }
+.phrases { display: grid; gap: 8px; }
+.phrase { text-align: left; padding: 10px 14px; border-radius: 14px; border: 1.5px solid var(--bord); background: var(--verre); min-height: 48px; }
+.phrase.pris { border-color: var(--or); background: rgba(255,209,102,.2); box-shadow: 0 0 14px rgba(255,209,102,.4); }
+
+.actions.libre { margin-top: 4px; }
+
+/* Carte : domaines, conseils, tableau adulte */
+.cartes h3.domaine { margin: 14px 0 2px; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--turquoise); }
+.conseil { font-style: normal; font-size: .68rem; font-weight: 800; padding: 1px 8px; border-radius: 999px; background: var(--lumiere); color: #3a2200; vertical-align: middle; }
+.notion.debut { border-color: var(--lumiere); box-shadow: 0 0 18px rgba(255,224,102,.35); }
+.lien { background: none; border: 0; color: rgba(255,255,255,.55); text-decoration: underline; margin-top: 10px; padding: 8px; font-size: .8rem; }
+.tab { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.tab th, .tab td { text-align: left; padding: 4px 6px; border-bottom: 1px solid rgba(43,29,74,.15); }
+.choix button.choisi { border-color: var(--turquoise); background: rgba(111,227,216,.18); }
+
+/* Accessibilité : zones tactiles d'au moins 44 px */
+.bulle .ecouter { width: 44px; height: 44px; right: 2px; top: 2px; display: grid; place-items: center; }
+.ecouter-q { width: 44px; height: 44px; }
+.lien { min-height: 44px; padding: 10px 16px; }
+.bulle { padding-right: 52px; }
+
+/* ---------- Chemin d'étoiles (carte des aventures) ---------- */
+.accueil > h3.domaine { margin: 26px 0 6px; font-size: .9rem; letter-spacing: .14em; text-transform: uppercase; color: var(--turquoise); text-shadow: 0 0 12px rgba(111,227,216,.5); }
+.cartes.depart { grid-template-columns: 1fr; }
+.chemin { display: flex; flex-direction: column; width: 100%; max-width: 440px; margin: 0 auto; padding: 4px 0 8px; }
+.notion.etoile-n { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: 0; box-shadow: none; min-height: 0; width: 46%; padding: 6px 4px; text-align: center; position: relative; }
+.notion.etoile-n.g { align-self: flex-start; margin-left: 4%; }
+.notion.etoile-n.d { align-self: flex-end; margin-right: 4%; }
+.etoile-n .astre { display: grid; place-items: center; width: 74px; height: 74px; font-size: 1.5rem; font-weight: 800; color: #cfd6ff; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #5b66c9, #2b2f78 70%); border: 2px solid rgba(160,175,255,.55); box-shadow: 0 0 18px rgba(120,140,255,.35); }
+.etoile-n .nom { font-size: .88rem; font-weight: 600; line-height: 1.2; }
+.etoile-n .etat { font-size: .8rem; min-height: 1em; color: var(--lumiere); }
+.etoile-n.fait .astre { font-size: 2.2rem; color: #5a3b00; background: radial-gradient(circle at 35% 30%, #fff3a8, #ffc933 70%); border-color: #fff0a0; box-shadow: 0 0 26px rgba(255,214,80,.75); }
+.etoile-n.prochaine .astre { color: #fff; background: radial-gradient(circle at 35% 30%, #7df0e4, #1fae9e 70%); border-color: #bffcf5; animation: pulse 1.6s ease-in-out infinite; }
+.etoile-n.prochaine .etat { font-weight: 700; }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 14px rgba(111,227,216,.6); transform: scale(1); } 50% { box-shadow: 0 0 34px rgba(111,227,216,.95); transform: scale(1.09); } }
+.piste { width: 100%; height: 46px; margin: -4px 0; overflow: visible; }
+.piste path { fill: none; stroke: rgba(170,185,255,.55); stroke-width: 2.5; stroke-dasharray: 3 7; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+@media (prefers-reduced-motion: reduce) { .etoile-n.prochaine .astre { animation: none; } }
+.boss-nuage { display: grid; place-items: center; margin: 4px 0; }
+.boss-nuage svg { width: 170px; height: auto; filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+
+/* ---------- Scène 3D du défi ---------- */
+.scene3d { width: 100%; height: clamp(230px, 36vh, 340px); border-radius: 18px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,.4), 0 0 0 1.5px rgba(255,255,255,.14); background: #3a2150; flex: none; }

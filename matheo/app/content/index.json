@@ -1,0 +1,82 @@
+{
+    "notions":  [
+                    {
+                        "id":  "N10",
+                        "fichier":  "n10.json",
+                        "titre":  "Multiplier des entiers",
+                        "domaine":  "Calcul"
+                    },
+                    {
+                        "id":  "N11",
+                        "fichier":  "n11.json",
+                        "titre":  "Diviser des entiers",
+                        "domaine":  "Calcul"
+                    },
+                    {
+                        "id":  "N17",
+                        "fichier":  "n17.json",
+                        "titre":  "Comprendre une fraction",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N18",
+                        "fichier":  "n18.json",
+                        "titre":  "Représenter une fraction",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N19",
+                        "fichier":  "n19.json",
+                        "titre":  "Lire et écrire une fraction",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N20",
+                        "fichier":  "n20.json",
+                        "titre":  "Comparer des fractions",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N21",
+                        "fichier":  "n21.json",
+                        "titre":  "Fractions équivalentes",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N22",
+                        "fichier":  "n22.json",
+                        "titre":  "Prendre une fraction d\u0027une quantité",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N23",
+                        "fichier":  "n23.json",
+                        "titre":  "Résoudre des problèmes avec des fractions",
+                        "domaine":  "Fractions"
+                    },
+                    {
+                        "id":  "N62",
+                        "fichier":  "n62.json",
+                        "titre":  "Repérer les données utiles",
+                        "domaine":  "Résolution de problèmes"
+                    },
+                    {
+                        "id":  "N63",
+                        "fichier":  "n63.json",
+                        "titre":  "Identifier ce qu\u0027on cherche",
+                        "domaine":  "Résolution de problèmes"
+                    },
+                    {
+                        "id":  "N64",
+                        "fichier":  "n64.json",
+                        "titre":  "Choisir l\u0027opération",
+                        "domaine":  "Résolution de problèmes"
+                    }
+                ],
+    "extras":  [
+                   "positionnement.json",
+                   "episode0.json",
+                   "cep_blanc1.json",
+                   "finale_fractions.json"
+               ]
+}

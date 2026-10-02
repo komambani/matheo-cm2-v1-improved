@@ -1,0 +1,29 @@
+{
+  "id": "CEP1",
+  "titre": "Prépare le CEP : sujet blanc 1 (fractions et problèmes)",
+  "src": "architecte-v0.2 : sujet blanc écrit par l'architecte, inspiré des 12 notions de la V1 ; il ne reproduit aucune épreuve officielle ; à faire valider par un enseignant béninois.",
+  "consigne": "Dix questions. Tu réponds sans aide, comme à l'examen. À la fin, Mathéo corrige et t'explique chaque erreur.",
+  "questions": [
+    { "id": "C01", "domaine": "Fractions", "niveau": "A", "question": "Quelle fraction de la barre est coloriée ?", "visuel": { "t": "barre", "den": 8, "num": 3, "alt": "Une barre de 8 parts dont 3 sont coloriées" }, "bonne": "3/8",
+      "mauvaises": [ { "t": "8/3", "e": "E2", "retour": "Bip ! Le haut compte les parts coloriées : 3. Le bas compte toutes les parts : 8." }, { "t": "3/5", "e": "E5", "retour": "Bip ! 5, ce sont les parts non coloriées. Le bas compte toutes les parts : 8." }, { "t": "5/8", "e": "E5", "retour": "Bip ! 5/8, ce sont les parts non coloriées. Il y a 3 parts coloriées." } ] },
+    { "id": "C02", "domaine": "Fractions", "niveau": "A", "question": "Comment lit-on 5/6 ?", "bonne": "cinq sixièmes",
+      "mauvaises": [ { "t": "cinq six", "e": "E6", "retour": "Bip ! Le bas se lit avec un mot spécial : sixièmes." }, { "t": "six cinquièmes", "e": "E2", "retour": "Bip ! On lit d'abord le haut : cinq." }, { "t": "cinq quarts", "e": "E6", "retour": "Bip ! Quarts, c'est pour le bas 4. Ici, le bas est 6 : sixièmes." } ] },
+    { "id": "C03", "domaine": "Fractions", "niveau": "B", "question": "Quel signe met-on ? 2/7 … 5/7", "bonne": "<",
+      "mauvaises": [ { "t": ">", "e": "E2", "retour": "Bip ! Les parts ont la même taille. 2 parts sont moins que 5 parts : 2/7 est plus petit." }, { "t": "=", "e": "E1", "retour": "Bip ! 2 et 5 ne sont pas pareils : les fractions ne sont pas égales." }, { "t": "On ne peut pas savoir", "e": "E7", "retour": "Bip ! On peut savoir : mêmes parts, 2 sont moins que 5." } ] },
+    { "id": "C04", "domaine": "Fractions", "niveau": "B", "question": "2/5 = ?/10", "bonne": "4",
+      "mauvaises": [ { "t": "3", "e": "E1", "retour": "Bip ! On n'ajoute pas 1. Le bas double (5 × 2 = 10), le haut aussi : 2 × 2 = 4." }, { "t": "2", "e": "E2", "retour": "Bip ! Tu as gardé le haut. Il doit doubler aussi : 4." }, { "t": "10", "e": "E1", "retour": "Bip ! Le haut double : 2 × 2 = 4." } ] },
+    { "id": "C05", "domaine": "Fractions", "niveau": "B", "question": "Combien font les 3/4 de 36 ?", "bonne": "27",
+      "mauvaises": [ { "t": "9", "e": "E5", "retour": "Bip ! 9, c'est la taille d'une part. 3/4 veut dire 3 parts : 9 × 3 = 27." }, { "t": "12", "e": "E2", "retour": "Bip ! Tu as partagé avec le 3. On partage avec le bas : 36 ÷ 4 = 9, puis 9 × 3." }, { "t": "108", "e": "E8", "retour": "Bip ! 108 vient de 36 × 3. Une partie du tout est plus petite que 36." } ] },
+    { "id": "C06", "domaine": "Fractions", "niveau": "C", "question": "Mamie a 48 mangues. Elle en vend 1/6. Combien de mangues vend-elle ?", "bonne": "8",
+      "mauvaises": [ { "t": "6", "e": "E2", "retour": "Bip ! 6 est le bas de la fraction. On partage 48 en 6 : 48 ÷ 6 = 8." }, { "t": "40", "e": "E9", "retour": "Bip ! 40, c'est ce qui reste. La question demande ce qu'elle vend : 8." }, { "t": "288", "e": "E8", "retour": "Bip ! 288 vient de 48 × 6. Une partie du tout est plus petite." } ] },
+    { "id": "C07", "domaine": "Problèmes", "niveau": "C", "question": "Un champ mesure 120 mètres. Mamie plante du maïs sur 1/3 et du manioc sur 1/4. Quelle longueur reste libre ?", "bonne": "50 mètres",
+      "mauvaises": [ { "t": "70 mètres", "e": "E9", "retour": "Bip ! 70 m, c'est la partie plantée : 40 + 30. La question demande ce qui reste libre : 120 − 70." }, { "t": "40 mètres", "e": "E5", "retour": "Bip ! 40 m, c'est seulement le maïs. Il y a aussi le manioc (30 m)." }, { "t": "30 mètres", "e": "E5", "retour": "Bip ! 30 m, c'est seulement le manioc. Il y a aussi le maïs (40 m)." } ] },
+    { "id": "C08", "domaine": "Problèmes", "niveau": "B", "question": "Kola a 18 billes rouges et 7 billes bleues. Il perd 5 billes rouges. Combien de billes rouges lui reste-t-il ?", "bonne": "13",
+      "mauvaises": [ { "t": "20", "e": "E1", "retour": "Bip ! 20 vient de 18 + 7 − 5 : tu as utilisé les billes bleues. On cherche les rouges : 18 − 5." }, { "t": "23", "e": "E5", "retour": "Bip ! 23 vient de 18 + 5. Il perd des billes : on enlève." }, { "t": "2", "e": "E1", "retour": "Bip ! 2 vient de 7 − 5 : ce sont les billes bleues. On cherche les rouges : 18 − 5." } ] },
+    { "id": "C09", "domaine": "Calcul", "niveau": "B", "question": "Une charrette porte 24 sacs. Kola fait 7 voyages. Combien de sacs a-t-il portés ?", "bonne": "168",
+      "mauvaises": [ { "t": "31", "e": "E8", "retour": "Bip ! 31 vient de 24 + 7. On répète 24 sacs, 7 fois : on multiplie." }, { "t": "148", "e": "E5", "retour": "Bip ! Tu as oublié la retenue. 4 × 7 = 28 : j'écris 8 et je retiens 2. Puis 2 × 7 = 14, plus 2 = 16 : 168." }, { "t": "3", "e": "E8", "retour": "Bip ! 3 vient de 24 ÷ 7. On répète 24 sacs, 7 fois : on multiplie." } ] },
+    { "id": "C10", "domaine": "Calcul", "niveau": "B", "question": "Combien font 156 ÷ 4 ?", "bonne": "39",
+      "mauvaises": [ { "t": "40", "e": "E3", "retour": "Bip ! 40 × 4 = 160, pas 156. Le résultat est 39." }, { "t": "624", "e": "E8", "retour": "Bip ! 624 vient de 156 × 4. Ici, on divise : 39 × 4 = 156." }, { "t": "34", "e": "E3", "retour": "Bip ! Vérifie : 34 × 4 = 136, pas 156. Le résultat est 39." } ] }
+  ],
+  "controles": [ { "expr": "36/4*3", "attendu": 27 }, { "expr": "48/6", "attendu": 8 }, { "expr": "120/3+120/4", "attendu": 70 }, { "expr": "120-70", "attendu": 50 }, { "expr": "18-5", "attendu": 13 }, { "expr": "24*7", "attendu": 168 }, { "expr": "156/4", "attendu": 39 }, { "expr": "5*2", "attendu": 10 } ]
+}

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Scène 3D du défi N10</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}iframe{width:390px;height:780px;border:1px solid #ccc;float:right;margin-left:16px}</style>
+</head>
+<body>
+  <h1>Défi N10 avec la scène 3D (automatique)</h1>
+  <iframe id="app"></iframe>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    // Joue le défi de N10 avec la 3D ACTIVE (pas de ?test) : chaque étape réussie doit faire avancer la scène,
+    // la fin doit allumer l'étoile, et l'image doit réellement contenir des pixels colorés (pas un écran noir).
+    // Si cet appareil ne sait pas faire de 3D, le test le dit (il ne peut alors rien vérifier).
+    const cadre = document.getElementById("app");
+    cadre.src = "../app/?r=" + Date.now();
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const nb = (s) => (s || "").replace(/ /g, " ").replace(/\s+/g, " ").trim();
+    const res = [];
+    const verifier = (nom, cond, detail = "") => res.push({ nom, ok: !!cond, detail: cond ? "" : String(detail).slice(0, 220) });
+    await new Promise((r) => (cadre.onload = r));
+    const w = cadre.contentWindow, d = cadre.contentDocument;
+    w.localStorage.clear();
+    await sleep(900);
+    const C = await (await fetch("../app/content/n10.json")).json();
+    verifier("Le défi de N10 déclare une scène 3D", C.defi.type === "etapes3d" && C.defi.scene3d === "marche", JSON.stringify(C.defi.type));
+
+    const tous = (sel) => [...d.querySelectorAll(sel)];
+    const btn = (sel, t) => tous(sel).find((b) => nb(b.textContent) === nb(t));
+    const attendreSel = async (sel, ms = 5000) => { for (let t = 0; t < ms; t += 100) { if (d.querySelector(sel)) return true; await sleep(100); } return false; };
+    const nombre = async (v) => { for (const c of String(v)) { btn(".clavier button", c).click(); await sleep(25); } btn(".clavier button", "✓").click(); await sleep(250); };
+    const rendre = (n = 1) => { for (let i = 0; i < n; i++) w.__scene3d.rendre(); };
+
+    await w.__matheo.aller("defi", "N10");
+    await attendreSel("#scene3d canvas", 8000);
+    const dispo = !!w.__scene3d;
+    verifier("La scène 3D est affichée (sinon : appareil sans 3D, test non applicable)", dispo, "pas de __scene3d");
+    if (dispo) {
+      rendre(3);
+      verifier("Au départ : aucun sac dans la charrette", w.__scene3d.etat().charges === 0 && w.__scene3d.etat().total === 282);
+      // l'image n'est pas vide : on lit quelques pixels du canvas (le ciel est coloré, jamais noir)
+      const c = d.querySelector("#scene3d canvas"); const gl = c.getContext("webgl2") || c.getContext("webgl");
+      const px = [0.5, 0.25, 0.75].map((f) => w.__scene3d.lirePixel(Math.floor(c.width * f), Math.floor(c.height * 0.9)));
+      verifier("L'image n'est pas vide (pixels colorés)", px.some((p) => p[0] + p[1] + p[2] > 60), JSON.stringify(px));
+
+      // étape 1 : choix de l'opération (mauvaise puis bonne)
+      await attendreSel(".choix button");
+      btn(".choix button", "6 + 47").click(); await sleep(300);
+      verifier("Une erreur ne fait pas avancer la scène", w.__scene3d.etat().lances === 0, JSON.stringify(w.__scene3d.etat()));
+      btn(".choix button", "6 × 47").click(); await sleep(1200);
+      rendre(30);
+      verifier("Étape 1 réussie : des sacs partent dans la charrette", w.__scene3d.etat().lances > 0, JSON.stringify(w.__scene3d.etat()));
+      const apres1 = w.__scene3d.etat().lances;
+
+      // estimation : 300
+      await attendreSel(".clavier"); await nombre(300); await sleep(400);
+      rendre(30);
+      verifier("L'avancement augmente à chaque étape", w.__scene3d.etat().lances > apres1, `${apres1} -> ${w.__scene3d.etat().lances}`);
+
+      // multiplication posée : 47 × 6 (2 puis 8 puis ... selon les micro-étapes) : on suit les micro-étapes du moteur
+      const { developper } = await import("../app/js/defis/pose.js");
+      const ST = (C.defi.etapes || []).flatMap(developper);
+      for (const s of ST.slice(2)) {
+        if (s.type === "nombre") { await attendreSel(".clavier"); await nombre(s.reponse); }
+        else if (s.type === "choix") { await attendreSel(".choix button"); btn(".choix button", s.options.find((o) => o.ok).t).click(); await sleep(900); }
+        await sleep(200);
+      }
+      await attendreSel("#suite", 8000);
+      rendre(450);
+      const e = w.__scene3d.etat();
+      verifier("Fin du défi : les 282 sacs sont dans la charrette", e.charges === 282, JSON.stringify(e));
+      verifier("Fin du défi : l'étoile est allumée", e.etoile === true);
+      verifier("Le bouton « Continuer » apparaît", !!d.querySelector("#suite"));
+      // quitter l'écran libère la carte graphique
+      d.querySelector("#suite").click(); await sleep(1500);
+      verifier("Après avoir quitté le défi, la scène est détruite", !d.querySelector("#scene3d canvas") && !w.__scene3d, `${!!d.querySelector("#scene3d canvas")} ${!!w.__scene3d}`);
+    }
+
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} contrôles réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    document.getElementById("liste").innerHTML = res.map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : ` — ${r.detail}`}</div>`).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>

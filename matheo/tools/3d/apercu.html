@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aperçu de la scène 3D</title>
+  <style>
+    body { margin: 0; background: #1b1440; color: #fff; font: 15px system-ui; }
+    #hote { width: 100vw; height: 70vh; }
+    .barre { display: flex; gap: 8px; padding: 10px; flex-wrap: wrap; }
+    button { font: inherit; padding: 8px 14px; border-radius: 10px; border: 0; background: #ffd166; }
+    #info { padding: 0 10px; opacity: .8; }
+  </style>
+</head>
+<body>
+  <div id="hote"></div>
+  <div class="barre">
+    <button data-p="0.25">25 %</button><button data-p="0.5">50 %</button><button data-p="1">100 %</button>
+    <button id="fin">Tout charger</button><button id="etoile">Étoile</button>
+  </div>
+  <div id="info"></div>
+  <script type="module">
+    import { creerMarche, peut3D } from "../../app/js/vendor/marche3d.js";
+    const info = document.getElementById("info");
+    if (!peut3D()) info.textContent = "3D non disponible sur cet appareil.";
+    else {
+      const m = creerMarche(document.getElementById("hote"));
+      window.__m = m;
+      document.querySelectorAll("[data-p]").forEach((b) => b.addEventListener("click", () => m.progres(parseFloat(b.dataset.p))));
+      document.getElementById("fin").addEventListener("click", () => { m.finir(); m.rendre(); });
+      document.getElementById("etoile").addEventListener("click", () => m.etoile());
+      setInterval(() => { const e = m.etat(); info.textContent = `Sacs dans la charrette : ${e.charges} / ${e.total} — canvas ${e.canvas}`; }, 300);
+    }
+  </script>
+</body>
+</html>

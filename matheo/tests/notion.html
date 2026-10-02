@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Parcours d'une notion</title>
+  <style>body{font:15px system-ui;margin:16px}.ok{color:#14803c}.ko{color:#b42318;font-weight:600}iframe{width:390px;height:780px;border:1px solid #ccc;float:right;margin-left:16px}</style>
+</head>
+<body>
+  <h1>Parcours élève d'une notion (automatique) <small id="qui"></small></h1>
+  <iframe id="app"></iframe>
+  <p id="resume">En cours…</p>
+  <div id="liste"></div>
+  <script type="module">
+    // Joue une notion décrite en données : erreurs volontaires (messages exacts attendus), puis bonnes réponses.
+    const id = new URLSearchParams(location.search).get("id") || "N17";
+    document.getElementById("qui").textContent = id;
+    const cadre = document.getElementById("app");
+    cadre.src = "../app/?test=1";
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const nb = (s) => (s || "").replace(/ /g, " ").replace(/\s+/g, " ").trim();
+    const res = [];
+    const verifier = (nom, cond, detail = "") => res.push({ nom, ok: !!cond, detail: cond ? "" : String(detail).slice(0, 220) });
+    await new Promise((r) => (cadre.onload = r));
+    const w = cadre.contentWindow, d = cadre.contentDocument;
+    w.localStorage.clear();
+    await sleep(700);
+    const index = await (await fetch("../app/content/index.json")).json();
+    const C = await (await fetch("../app/content/" + index.notions.find((n) => n.id === id).fichier)).json();
+
+    const sans = (e) => { if (!e) return ""; const k = e.cloneNode(true); k.querySelectorAll(".qui,.ecouter,.ecouter-q").forEach((x) => x.remove()); return nb(k.textContent); };
+    const txt = () => sans(d.querySelector(".bulle"));
+    const question = () => sans(d.querySelector(".question"));
+    const tous = (sel) => [...d.querySelectorAll(sel)];
+    const btn = (sel, t) => { const l = tous(sel); return l.find((b) => nb(b.textContent) === nb(t)) || l.find((b) => nb(b.textContent).includes(nb(t))); };
+    const parAlt = (alt) => tous(".choix button").find((b) => b.innerHTML.includes(`aria-label="${alt}"`));
+    const clic = (e) => e.dispatchEvent(new w.MouseEvent("click", { bubbles: true }));
+    const cle = async (s) => { for (const c of String(s)) { btn(".clavier button", c).click(); await sleep(25); } };
+    const nombre = async (v) => { await cle(v); btn(".clavier button", "✓").click(); await sleep(250); };
+    const attendreSel = async (sel, ms = 4000) => { for (let t = 0; t < ms; t += 100) { if (d.querySelector(sel)) return true; await sleep(100); } return false; };
+
+    // Clique sur « Suite/Continuer » dès qu'il existe (patient : un onglet masqué ralentit les temporisations).
+    const suivant = async () => { await attendreSel("#suite", 15000); const b = d.querySelector("#suite"); if (!b) throw new Error("bouton Suite introuvable"); b.click(); };
+
+    // ---------- Mission ----------
+    w.__matheo.aller("mission", id); await sleep(500);
+    verifier("Mission : une illustration est affichée", !!d.querySelector("svg.scene, svg.case-bd"));
+    for (let i = 0; i < C.mission.length; i++) {
+      verifier(`Mission ${i + 1} : texte exact`, txt().endsWith(nb(C.mission[i].texte)), txt());
+      await suivant(); await sleep(350);
+    }
+
+    // ---------- BD ----------
+    for (let i = 0; i < C.bd.cases.length; i++) {
+      const c = C.bd.cases[i];
+      const bulles = tous(".bd-paroles .bulle").map((b) => sans(b));
+      verifier(`BD case ${c.n} : textes exacts`, JSON.stringify(bulles) === JSON.stringify(c.bulles.map((b) => nb(b.texte))), JSON.stringify(bulles));
+      verifier(`BD case ${c.n} : image présente`, !!d.querySelector(".bd-case svg"));
+      if (c.legende) verifier(`BD case ${c.n} : légende exacte`, nb(d.querySelector(".legende").textContent) === nb(c.legende));
+      await suivant(); await sleep(350);
+    }
+
+    // ---------- Vidéo ----------
+    verifier("Vidéo : lecteur et tableau", !!d.querySelector(".video .tableau") && !!d.querySelector("#v-play"));
+    await sleep(1400);
+    verifier("Vidéo : première phrase en sous-titre", nb(d.querySelector("#v-st").textContent) === nb(C.video.segments[0].parties[0].texte), nb(d.querySelector("#v-st").textContent));
+    await suivant(); await sleep(500);
+
+    // ---------- Défi ----------
+    verifier("Défi : énoncé exact", question() === nb(C.defi.enonce), question());
+    const { developper } = await import("../app/js/defis/pose.js");
+    const ST = (C.defi.etapes || []).flatMap(developper);
+    for (const [k, s] of ST.entries()) {
+      const n = `Défi étape ${k + 1} (${s.type})`;
+      if (s.type === "choix") {
+        await attendreSel(".choix button");
+        const faux = s.options.find((o) => !o.ok);
+        const cible = faux.visuel ? parAlt(faux.visuel.alt) : btn(".choix button", faux.t);
+        verifier(`${n} : option fausse trouvée`, !!cible);
+        if (cible) { cible.click(); await sleep(250); verifier(`${n} : message d'erreur exact`, txt() === nb(faux.retour), txt()); }
+        const bon = s.options.find((o) => o.ok);
+        const bt = bon.visuel ? parAlt(bon.visuel.alt) : btn(".choix button", bon.t);
+        verifier(`${n} : bonne option trouvée`, !!bt); if (bt) { bt.click(); await sleep(900); }
+      } else if (s.type === "construire") {
+        await attendreSel(".choix button");
+        const mauvais = s.options_den.find((v) => v !== s.den);
+        btn(".choix button", `Partager en ${mauvais} parts égales`).click(); await sleep(250);
+        const attendu = mauvais === s.num ? s.retour_partage_haut : s.retour_partage;
+        verifier(`${n} : partage faux → message exact`, txt() === nb(attendu), txt());
+        btn(".choix button", `Partager en ${s.den} parts égales`).click(); await sleep(500);
+        verifier(`${n} : ${s.den} parts dessinées`, tous(".jeu-fraction .part").length === s.den, tous(".jeu-fraction .part").length);
+        const parts = tous(".jeu-fraction .part");
+        const trop = s.num + 1 <= s.den ? s.num + 1 : s.num - 1;
+        for (let i = 0; i < trop; i++) { clic(parts[i]); await sleep(40); }
+        d.querySelector("#valider-col").click(); await sleep(250);
+        verifier(`${n} : mauvais nombre de parts → message exact`, txt() === nb(trop > s.num ? s.retour_trop : s.retour_peu), txt());
+        for (let i = 0; i < trop; i++) { clic(parts[i]); await sleep(40); }
+        for (let i = 0; i < s.num; i++) { clic(parts[i]); await sleep(40); }
+        d.querySelector("#valider-col").click(); await sleep(900);
+        if (s.voix_fin) verifier(`${n} : voix de fin exacte`, txt() === nb(s.voix_fin), txt());
+      } else if (s.type === "subdiviser") {
+        await attendreSel(".choix button");
+        const faux = s.options.find((k) => k !== s.facteur);
+        btn(".choix button", `Couper chaque part en ${faux}`).click(); await sleep(250);
+        verifier(`${n} : mauvais découpage → message exact`, txt() === nb((s.retours && s.retours[faux]) || s.retour_defaut), txt());
+        btn(".choix button", `Couper chaque part en ${s.facteur}`).click(); await sleep(700);
+        verifier(`${n} : ${s.den * s.facteur} parts dessinées, quantité coloriée conservée`, tous(".jeu-fraction .part").length === s.den * s.facteur && tous(".jeu-fraction .part").filter((p) => p.getAttribute("fill") !== "rgba(255,255,255,.14)").length === s.num * s.facteur, `${tous(".jeu-fraction .part").length}`);
+        await sleep(2600);
+      } else if (s.type === "fraction") {
+        await attendreSel(".clavier");
+        const inverse = s.den !== s.num;
+        if (inverse) { await nombre(s.den); verifier(`${n} : haut = bas → message exact`, txt() === nb(s.retour_inverse), txt()); }
+        await nombre(s.num);
+        await attendreSel(".clavier");
+        if (inverse) { await nombre(s.num); verifier(`${n} : bas = haut → message exact`, txt() === nb(s.retour_inverse_bas), txt()); }
+        await nombre(s.den); await sleep(300);
+      } else if (s.type === "nombre") {
+        await attendreSel(".clavier");
+        const e = (s.erreurs || [])[0];
+        if (e) { await nombre(e.reponses[0]); verifier(`${n} : erreur ${e.reponses[0]} → message exact`, txt() === nb(e.texte), txt()); }
+        await nombre(s.reponse); await sleep(300);
+      } else if (s.type === "selection") {
+        await attendreSel(".phrase");
+        const ph = tous(".phrase");
+        const inutile = ph.findIndex((_, i) => !s.utiles.includes(i));
+        if (inutile >= 0) { s.utiles.forEach((i) => ph[i].click()); ph[inutile].click(); d.querySelector("#valider-sel").click(); await sleep(250); verifier(`${n} : information inutile → message exact`, txt() === nb(s.retour_trop || "Bip ! Une de ces informations ne sert pas. Relis la question."), txt()); ph[inutile].click(); }
+        else s.utiles.forEach((i) => ph[i].click());
+        d.querySelector("#valider-sel").click(); await sleep(400);
+      }
+    }
+    await attendreSel("#suite", 15000);
+    verifier("Défi : réussite exacte", txt() === nb(C.defi.reussite), txt());
+    await suivant(); await sleep(500); // le défi mène maintenant au quiz
+
+    // ---------- Quiz ----------
+    await sleep(200);
+    for (let i = 0; i < C.quiz.length; i++) {
+      const q = C.quiz[i];
+      verifier(`Quiz ${q.id} : question exacte`, question() === nb(q.question), question());
+      const m = q.mauvaises[0];
+      const cm = m.visuel ? parAlt(m.visuel.alt) : btn("#choix button", m.t);
+      verifier(`Quiz ${q.id} : option fausse trouvée`, !!cm, m.t);
+      if (cm) { cm.click(); await sleep(250); verifier(`Quiz ${q.id} : explication exacte`, txt() === nb(m.retour || (q.retour && q.retour[m.e])), txt()); }
+      const cb = q.bonne_visuel ? parAlt(q.bonne_visuel.alt) : btn("#choix button", q.bonne);
+      verifier(`Quiz ${q.id} : bonne option trouvée`, !!cb, q.bonne);
+      if (cb) { cb.click(); await sleep(250); }
+      await suivant(); await sleep(450);
+    }
+
+    // ---------- Boss ----------
+    verifier("Boss : question exacte", question() === nb(C.boss.question), question());
+    const bm = C.boss.mauvaises[0];
+    btn("#choix button", String(bm.valeur ?? bm.t)).click(); await sleep(250);
+    verifier("Boss : erreur → message exact", txt() === nb(bm.retour), txt());
+    btn("#choix button", String(C.boss.reponse)).click(); await sleep(2800);
+
+    // ---------- Fin et sauvegarde ----------
+    verifier("Étoile rallumée", nb(d.querySelector(".barre .titre").textContent).includes("Étoile"));
+    const s = JSON.parse(w.localStorage.getItem("matheo.v1"));
+    const k = id.toLowerCase();
+    verifier("Sauvegarde : notion terminée avec fragment", s[k] && s[k].fini && s[k].fragment, JSON.stringify(s));
+    verifier("Sauvegarde : aucun nom ni identifiant", !/nom"|prenom|email|id_/i.test(JSON.stringify(s)), JSON.stringify(s));
+    d.querySelector("#fiche").click(); await sleep(300);
+    verifier("Fiche de révision : l'essentiel", nb(d.body.innerText).includes(nb(C.essentiel)), "");
+
+    // ---------- Remédiation (parcours guidé) ----------
+    w.__matheo.aller("remediation", id); await sleep(600);
+    verifier("Remédiation : le parcours démarre", !!d.querySelector("#zone-jeu"));
+
+    const echecs = res.filter((r) => !r.ok);
+    document.getElementById("resume").textContent = `${res.length - echecs.length}/${res.length} contrôles réussis` + (echecs.length ? ` — ${echecs.length} ÉCHEC(S)` : "");
+    document.title = echecs.length ? "ECHEC" : "OK";
+    document.getElementById("liste").innerHTML = res.map((r) => `<div class="${r.ok ? "ok" : "ko"}">${r.ok ? "✓" : "✗"} ${r.nom}${r.ok ? "" : ` — ${r.detail}`}</div>`).join("");
+    window.__RESULTATS__ = res;
+  </script>
+</body>
+</html>
